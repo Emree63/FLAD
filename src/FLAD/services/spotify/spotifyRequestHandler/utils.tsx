@@ -36,12 +36,6 @@ export class RequestHandler {
         }
         catch(error : any){
             const errorMessage = error.response.data?.error?.message;
-            if (errorMessage === "Invalid access token" || errorMessage === "The access token expired") {
-                throw new Error;
-            }
-            else{
-                throw new Error;
-            }
         }
     }
 }

@@ -37,7 +37,7 @@ export default function SettingProfil() {
 
 
     const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],

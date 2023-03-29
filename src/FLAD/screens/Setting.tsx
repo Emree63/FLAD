@@ -3,12 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import normalize from '../components/Normalize';
 import { ScrollView, Switch, TextInput } from 'react-native-gesture-handler';
 import CardMusic from '../components/CardMusic';
 import { ChangeMode, DeleteToken } from '../redux/thunk/authThunk';
-import { useSelector } from 'react-redux';
 import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
 import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
 
@@ -327,7 +326,7 @@ export default function Setting() {
                         </View>
 
                         <View style={styles.musicActually}>
-                            <CardMusic image="{currentMusic.image}" title="{currentMusic.title}" description="PNL" />
+                            <CardMusic image={currentMusic.image} title={currentMusic.title} description="PNL" id='1' />
                             <Image source={require("../assets/images/FladyShadow.png")} style={styles.mascot} />
                         </View>
 

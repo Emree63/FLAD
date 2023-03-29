@@ -72,7 +72,6 @@ export default function Login() {
         },
         body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=https://auth.expo.io/@anonymous/FLAD-7eafd441-fd6b-4fb6-924c-ec2b0ed5ce6d`,
       });
-      const responseJson = await response.json()
     } catch (err) {
       console.error(err)
     }

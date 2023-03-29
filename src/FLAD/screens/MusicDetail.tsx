@@ -72,8 +72,6 @@ const MusicDetail = ({ route }) => {
             //@ts-ignore
             await sound.stopAsync();
         }
-        else {
-        }
     };
     useEffect(() => {
         return sound ? () => {
