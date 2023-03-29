@@ -6,23 +6,14 @@ import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Buffer } from 'buffer';
 import * as SecureStore from 'expo-secure-store';
 
-
-//generate random string
 export const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKey'
 
 WebBrowser.maybeCompleteAuthSession()
 
-// Endpoint
 const discovery = {
   authorizationEndpoint: 'https://accounts.spotify.com/authorize',
   tokenEndpoint: 'https://accounts.spotify.com/api/token',
 };
-
-// save the spotifyToken
-async function save(key: string, value: string) {
-  await SecureStore.setItemAsync(key, value)
-}
-
 
 export default function Login() {
   const [request] = useAuthRequest(
@@ -42,7 +33,6 @@ export default function Login() {
 
   const scopesArr = ['user-read-private', 'user-read-email', 'user-read-playback-state', 'user-read-currently-playing', 'user-read-recently-played', 'playlist-modify-public', 'ugc-image-upload', 'user-modify-playback-state'];
   const scopes = scopesArr.join(' ');
-  //work so use this for my implementation
   const getAuthorizationCode = async () => {
     try {
       const redirectUrl = "https://auth.expo.io/@anonymous/FLAD-7eafd441-fd6b-4fb6-924c-ec2b0ed5ce6d"
@@ -64,7 +54,7 @@ export default function Login() {
   const getTokens = async () => {
     try {
       const authorizationCode = await getAuthorizationCode()
-      const response = await fetch('https://accounts.spotify.com/api/token', {
+      await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           Authorization: 'Basic ' + (Buffer.from('1f1e34e4b6ba48b388469dba80202b10' + ':' + '779371c6d4994a68b8dd6e84b0873c82').toString('base64')),

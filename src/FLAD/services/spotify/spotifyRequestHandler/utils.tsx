@@ -34,9 +34,7 @@ export class RequestHandler {
             });
         return resp;
         }
-        catch(error : any){
-            const errorMessage = error.response.data?.error?.message;
-        }
+        catch(error : any){}
     }
 }
 

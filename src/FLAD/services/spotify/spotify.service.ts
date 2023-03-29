@@ -67,7 +67,7 @@ export default class SpotifyService implements IspotifyService {
 	}
 
 	public async searchMusic(text: string): Promise<Music[]> {
-		var requestData: string = '/search';
+		const requestData: string = '/search';
 		const fetchOptions: FetchOptions = {
 			params: {
 				q: text,
@@ -114,7 +114,6 @@ export default class SpotifyService implements IspotifyService {
 		};
 		const respMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, fetchOptions, this.token);
 		console.log(respMusic.data);
-		return;
 	}
 
 	public async getSimilarTrack(musicId: string, limit: number = 1, market?: string): Promise<Music[]> {
@@ -122,7 +121,7 @@ export default class SpotifyService implements IspotifyService {
 			'?limit=' + limit +
 			'&market=FR' +
 			'&seed_tracks=' + musicId;
-		var respSimilarMusic;
+		let respSimilarMusic;
 		try {
 			respSimilarMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, {}, this.token);
 		} catch (error) {
