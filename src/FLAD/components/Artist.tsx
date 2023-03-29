@@ -9,7 +9,6 @@ const { width } = Dimensions.get("window");
 const SIZE = width / 3;
 import { Feather as Icon } from "@expo/vector-icons";
 import Music from "../Model/Music";
-import { State } from "react-native-gesture-handler";
 import { useState } from "react";
 
 

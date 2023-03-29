@@ -12,7 +12,6 @@ export class MusicMinimal {
 		this.image = image;
 		this.id = id;
 	}
-
 }
 
 export default class SpotifyService implements IspotifyService {
@@ -77,8 +76,6 @@ export default class SpotifyService implements IspotifyService {
 		};
 		const respMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, fetchOptions, this.token);
 
-		if (respMusic.status != 200) {
-		}
 		const tracksData = respMusic?.data?.tracks?.items;
 		if (!tracksData || !Array.isArray(tracksData)) {
 			return [];
@@ -92,27 +89,18 @@ export default class SpotifyService implements IspotifyService {
 	public async getMusicMoreDetails(idMusic: string): Promise<string> {
 		let requestData: string = '/audio-features/' + idMusic;
 		const respMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, undefined, this.token);
-		if (respMusic.status != 200) {
-		}
-
 		return respMusic.data.audio_features.tempo;
 	}
 
 	public async getRelatedArtist(idArtist: string): Promise<string> {
 		let requestData: string = '/artists/' + idArtist + '/related-artists';
 		const respMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, undefined, this.token);
-		if (respMusic.status != 200) {
-		}
-
 		return respMusic.data.audio_features.tempo;
 	}
 
 	public async getArtistTopTracks(idArtist: string): Promise<string> {
 		let requestData: string = '/artists/' + idArtist + '/top-tracks';
 		const respMusic = await this.spotifyRequestHandler.spotifyFetch(requestData, undefined, this.token);
-		if (respMusic.status != 200) {
-		}
-
 		return respMusic.data.audio_features.tempo;
 	}
 

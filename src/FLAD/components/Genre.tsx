@@ -23,47 +23,13 @@ export const ArtistLayout = () => {
           artist={artist}
           key={artist.title}
           onPress={() => {
-            // artists.splice(i, 1);
-            // // 2 implementation
             const tmppArtist = new Music("Kratos", "PNL", "https://upload.wikimedia.org/wikipedia/en/a/a0/PNL_-_Dans_la_l%C3%A9gende.png");
-
-            // const existingObjIndex = selectedArtists.findIndex(obj => obj.title === tmppArtist.title);
-            // if (existingObjIndex === -1) {
-            //     selectedArtists.push(tmppArtist);
-            // } else {
-            //     selectedArtists.splice(existingObjIndex, 1);
-            // }
-            // setSelectedArtists([...selectedArtists]);
-            // 1 implementation
-            // setSelectedArtists(selectedArtists.findIndex(obj => obj.title === tmppArtist.title) === -1
-            // ? [...selectedArtists, tmppArtist]   
-            // : selectedArtists.filter(obj => obj.title !== tmppArtist.title))
-            // 3 implementations
-            // use the selectedProps of the Artist Component
-            // then when we need to finish 
-            //  onPress{ () => setSelectedArtists([...selectedArtists,artists.filter(artist => artist.selected)])}
 
             artists.push(tmppArtist);
             setArtists([...artists]);
           }}
         />
       ))}
-      {/* <FlatList
-            data={artists}
-            // need to reverse colums oreder
-            numColumns = {3}
-            renderItem={({ item }) => (
-                <Artist
-            artist={item}
-            key={item.title}
-            onPress={() => {
-                artists.push(new Music("Kratos", "PNL", "https://upload.wikimedia.org/wikipedia/en/a/a0/PNL_-_Dans_la_l%C3%A9gende.png"));
-                setArtists([...artists]);
-            }}/>
-            )}
-            keyExtractor={(item: Music) => item.title }
-            // ListEmptyComponent = {}
-            /> */}
 
     </ScrollView>
 
