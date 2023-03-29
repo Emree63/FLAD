@@ -10,7 +10,7 @@ import { SharedElement } from 'react-navigation-shared-element';
 import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
 import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
 
-export default function favoritePage() {
+export default function FavoritePage() {
     //Dark Mode
     const isDark = useSelector(state => state.userReducer.dark);
     const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;

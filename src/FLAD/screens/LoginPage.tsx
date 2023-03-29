@@ -14,7 +14,7 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback>
 )
 
-export default function loginPage() {
+export default function LoginPage() {
     const [sound, setSound] = useState<Audio.Sound>();
     const [rememberMe, setRememberMe] = useState(false);
     const navigation = useNavigation();

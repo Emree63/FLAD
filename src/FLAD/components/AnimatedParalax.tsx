@@ -3,7 +3,7 @@ import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle 
 
 const halfPi = Math.PI / 2;
 
-const AnimatedParalax = ({ }) => {
+export default function AnimatedParalax() {
     const sensor = useAnimatedSensor(SensorType.ROTATION);
     const styleAniamatedImage = useAnimatedStyle(() => {
         const { pitch, roll } = sensor.sensor.value;
@@ -42,6 +42,3 @@ const AnimatedParalax = ({ }) => {
 
     );
 };
-
-
-export default AnimatedParalax;

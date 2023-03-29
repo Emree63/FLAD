@@ -65,7 +65,6 @@ export default class SpotifyService implements IspotifyService {
 			}
 		};
 		throw new Error("not Implemented")
-		return;
 	}
 
 	public async searchMusic(text: string): Promise<Music[]> {

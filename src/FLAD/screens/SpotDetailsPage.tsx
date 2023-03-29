@@ -77,11 +77,7 @@ const SpotDetailsPage = ({ route }) => {
   const id = '0cFS3AMF9Lhj3CNoFvwjvY'
 
   const getCurrentTrack = async () => {
-    try {
-      theService.getMusicById(id)
-    } catch (err) {
-      console.error(err);
-    }
+      theService.getMusicById(id);
   }
 
   return (
