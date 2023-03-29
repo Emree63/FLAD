@@ -6,11 +6,11 @@ import LocationSchema from "../database/schema/LocationSchema";
 class LocationService {
     private locationCollection = LocationSchema;
     // private API_KEY : string = "AIzaSyBFCEAtmhZ8jvw84UTQvX3Aqpr66GVqB_A";
-    public async getNearUser(idFlad : string, latitude : number, longitude : number, currentMusicId: string)
+    public async getNearUser(idFlad : string, musicId : string,latitude : number, longitude : number)
     {
         await this.locationCollection.findOneAndUpdate(
             { idFlad },
-            { idFlad, latitude, longitude, currentMusicId },
+            { idFlad, musicId, latitude, longitude },
             { upsert: true }
         );
 
@@ -22,26 +22,25 @@ class LocationService {
 
         let dbUsersList:UserLocation[] = [];
         snapshot.forEach(doc => {
-            dbUsersList.push(new UserLocation(doc.idFlad,doc.latitude,doc.longitude, doc.currentMusicId));
+            dbUsersList.push(new UserLocation(doc.idFlad,doc.musicId,doc.latitude,doc.longitude));
           console.log(doc.idFlad, '=>', doc);
         });
             // missing the curent music
-            let listUser: {userid: string, music : string}[] = [];                                                             
+            let listUser: string[] = [];   
+            const listUser2: Record<string, string> = {};
             dbUsersList.forEach(user => {
                 console.log(user);
                 const dist = this.distanceBetween(latitude , longitude , user.latitude, user.longitude);    
                 console.log(user.uuid,dist);
                 if (dist <= 100) {                                                  
     
-                    listUser.push({userid : user.uuid, music : user.currentMusicId});             
-    
+                    listUser.push(user.uuid);             
+                    listUser2[user.uuid] = user.musicId;
                 }
             }); 
             
-            
-    
-                
-            return listUser;                                                          
+         
+            return{ listUser, listUser2};                                                          
             // $listUser[] = {userID,idMusic};             
        
     }

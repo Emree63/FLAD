@@ -21,8 +21,7 @@ class SpotifyController implements Controller {
         // this.router.post(`${this.path}`,this.createTask);
         this.router.get(`${this.path}/exchange`,this.login);
         this.router.get(`${this.path}/callback`,this.getAccessToken);
-        // this.router.post(`${this.path}/refresh`,this.getRefreshToken);
-        // this.router.get(`${this.path}/play/:musicId`, this.getMusic);
+        this.router.post(`${this.path}/refresh`,this.getRefreshToken);
         this.router.get(`${this.path}/spot`, this.getSpot);
         
     }
@@ -32,8 +31,8 @@ class SpotifyController implements Controller {
      private readonly API_URL = "https://accounts.spotify.com/api/token";
      private readonly CLIENT_ID = "1f1e34e4b6ba48b388469dba80202b10";
      private readonly CLIENT_SECRET = "779371c6d4994a68b8dd6e84b0873c82";
-     private readonly CLIENT_CALLBACK_URL = "https://auth.expo.io/@thed47/FLAD//callback";
-     private readonly CALLBACK_URL = "http://localhost:8080/api/spotify/callback";
+    //  private readonly CLIENT_CALLBACK_URL = "https://auth.expo.io/@thed47/FLAD//callback";
+     private readonly CALLBACK_2 = 'https://flad-api-production.up.railway.app/api/spotify/callback';
      private readonly SCOPES ='user-read-private user-read-email user-read-playback-state user-read-currently-playing user-read-recently-played playlist-modify-public ugc-image-upload user-modify-playback-state';
      private readonly ENCRYPTION_SECRET = new CryptString(16);
 
@@ -43,7 +42,7 @@ class SpotifyController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
 
-      console.log("useeeee");
+      console.log("useeeee== login");
         try {
             // const params = req.body;
             // if (!params.refresh_token) {
@@ -54,17 +53,26 @@ class SpotifyController implements Controller {
           
             // this.spotifyRequest({
             //   grant_type: "authorization_code",
-            //   redirect_uri: this.CLIENT_CALLBACK_URL,
+            //   redirect_uri: this.CLIENT_CALLBACK_2,
             //   // code: params.code
             // })
+            console.log("aloorrr si c'est niquuuuuuuuuuuueeee" +this.CALLBACK_2+ "gennnnnnnnnrree vraiiiiiiiment ");
             res.redirect('https://accounts.spotify.com/authorize?' +
-            querystring.stringify({
+            qs.stringify({
               response_type: 'code',
               client_id: this.CLIENT_ID,
               scope: this.SCOPES,
-              redirect_uri: this.CALLBACK_URL,
-              state: this.ENCRYPTION_SECRET.stringCrypt
+              redirect_uri: this.CALLBACK_2,
+              // state: this.ENCRYPTION_SECRET.stringCrypt
             }));
+            
+            // '?response_type=code' +
+            // '&client_id=' +
+            // "1f1e34e4b6ba48b388469dba80202b10" +
+            // (this.SCOPES ? '&scope=' + encodeURIComponent(this.SCOPES) : '') +
+            // '&redirect_uri=' +
+            // encodeURIComponent(this.CALLBACK_2)
+            // );
             // .then(session => {
             //   let result = {
             //     "access_token": session.access_token,
@@ -137,10 +145,7 @@ class SpotifyController implements Controller {
         
       }    
     
-    public getMusic() : null{
-
-      return null;
-    }
+  
 
     public getSpot = async (
       req: Request,
@@ -179,7 +184,7 @@ class SpotifyController implements Controller {
       res: Response,
       next: NextFunction
   ): Promise<Response | void> => {
-      
+    console.log("useeeee== accesToken");
     var code  = req.query.code;
     var state = req.query.state || null;
     // var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -188,7 +193,7 @@ class SpotifyController implements Controller {
       url: 'https://accounts.spotify.com/api/token',
       data: qs.stringify({
         code: code,
-        redirect_uri: this.CALLBACK_URL,
+        redirect_uri: this.CALLBACK_2,
         grant_type: 'authorization_code'
       }),
       headers: {
@@ -198,20 +203,30 @@ class SpotifyController implements Controller {
       json: true
     };
     try {
-      console.log('presssquuueee');
     var resp = await axios(authOptions);
     if (resp.status === 200) {
-      console.log(resp);
       console.log('oon esttt laaa');
       var access_token = resp.data.access_token;
+      var expiration =resp.data.expires_in;
+      var refresh = resp.data.refresh_token
       console.log(access_token);
-      // should redirect res.redirect('/')
-      res.json("ok");
+    //   res.send({
+    //     "access_token": access_token,
+    //     "expires_in": expiration,
+    //     "refresh" : refresh
+    // });
+
+    res.redirect('/#'+
+    qs.stringify({
+      "access_token": access_token,
+      "expires_in": expiration,
+      "refreshuyjfguk" : refresh
+    }));
     }
     } catch (error) {
       console.log('heuuuuuuuuuuuuuuuuuuuuubizzzaaarrreeee');
       console.log(error);
-      next(new HttpException(400, 'On peut pas te connecter mec'));
+      next(new HttpException(400, 'On peut pas te connecter mec'+ error.message));
     }
     
 

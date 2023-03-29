@@ -212,16 +212,17 @@ class UserController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const longitude =  Number(req.body.longitude);
-            const latitude =  Number(req.body.latitude);
+            const longitude =  Number(req.params.longitude);
+            const latitude =  Number(req.params.latitude);
             //verify::val_int(){
+                console.log('woooooooooooooo' + req);
             if (isNaN(longitude) || isNaN(latitude)) {
                 console.log('Impossible de convertir la chaîne en nombre');
             }
             //}
-            const currentMusicId = req.body.currentMusicId;
-            const userId = req.user.idFlad;            
-            const data = await this.locationService.getNearUser(userId,latitude,longitude, currentMusicId);
+            const userId = req.user.idFlad;
+            const musicId = req.params.currentMusic;        
+            const data = await this.locationService.getNearUser(userId,musicId,latitude,longitude,);
             console.log(data);
             res.status(201).send(data);
 

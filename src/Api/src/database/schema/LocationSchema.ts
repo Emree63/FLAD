@@ -9,7 +9,10 @@ const locationSchema = new Schema(
             required: true,
             unique: true,
         },
-       
+        musicId: {
+            type: String,
+            required: true,
+        },
         latitude: {
             type: Number,
             required: true,
@@ -18,9 +21,6 @@ const locationSchema = new Schema(
             type: Number,
             required: true,
         },
-        currentMusicId : {
-            type: String,
-        }
         
         
     },
@@ -33,7 +33,7 @@ export default model<ILocation>('Location', locationSchema);
 
 export interface ILocation extends Document {
     idFlad: string;
+    musicId : string;
     latitude : number;
     longitude: number;
-
 }
