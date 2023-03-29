@@ -137,6 +137,10 @@ class SpotifyController implements Controller {
         
       }    
     
+    public getMusic() : null{
+
+      return null;
+    }
 
     public getSpot = async (
       req: Request,
