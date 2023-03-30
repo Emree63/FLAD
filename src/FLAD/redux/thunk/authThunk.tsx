@@ -124,6 +124,7 @@ export const ChangeMode = (value: boolean) => {
 export const ChangeImageUserCurrent = (value: ImagePicker) => {
   //@ts-ignore
   return async dispatch => {
+    //@ts-ignore
     dispatch(userChangeImage(value));
   }
 }

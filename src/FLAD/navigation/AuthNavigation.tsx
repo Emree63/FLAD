@@ -38,8 +38,9 @@ export default function AuthNavigation() {
       const currentValue = await AsyncStorage.getItem('dark');
       if (currentValue !== null) {
         const newValue = JSON.stringify(JSON.parse(currentValue));
+        //@ts-ignore
         dispatch(ChangeMode(JSON.parse(newValue)))
-      }
+      } 
     } catch (error) {
       console.log(`Une erreur s'est produite lors de la mise à jour de la valeur booléenne pour la clé 'dark': `, error);
     }

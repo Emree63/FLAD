@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, FlatList, ScrollView, TouchableOpacity, TouchableHighlight, SafeAreaView } from 'react-native';
+import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity, TouchableHighlight, SafeAreaView } from 'react-native';
 import CardMusic from '../components/CardMusic';
 import normalize from '../components/Normalize';
 import Music from '../Model/Music'

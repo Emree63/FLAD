@@ -6,9 +6,9 @@ export default function SpotNavigation() {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName="ConversationList">
+    <Stack.Navigator initialRouteName="Conversation" screenOptions={{ gestureEnabled: true, headerShown: false, cardOverlayEnabled: true, cardStyle: { backgroundColor: "transparent" } }}>
       <Stack.Screen
-        name="ConversationList"
+        name="Conversation"
         component={Conversation}
       />
 
