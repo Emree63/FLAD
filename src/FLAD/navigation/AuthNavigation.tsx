@@ -1,5 +1,5 @@
 import Navigation from './Navigation';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StartNavigation from './StartNavigation';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { ChangeMode, getRefreshToken } from '../redux/thunk/authThunk';
 import * as Location from 'expo-location';
-import { theService } from '../App';
+import SpotifyService from '../services/spotify/spotify.service';
 import { getCurrentUserMusic } from '../redux/thunk/spotThunk';
 import Music from '../Model/Music';
 
@@ -94,8 +94,11 @@ export default function AuthNavigation() {
       {isLogin ? (
         <Navigation />
       ) :
-        <StartNavigation />
+        <Navigation />
       }
     </SafeAreaProvider>
   )
 }
+
+const theService = new SpotifyService('BQC0rAGJvxTt4-24P-nda6qP9iXYCql2eApnUAoEbZZkKemJ11cU3Nx-I_tKVX0FwEgFbIbSIuaVvxOapRVJq2z1Htyy3XQ5jIYNsrhrnp3KTCfppamAjxgDTf6khBrNGTxe6CNKBsMhc5IRnphey5Td2zJPvGMwnFFfMQdCtVAVsCNK7kPKlCAaf_kRMAoPn30Qk4RD45XmwtZIwQg7X0J4beGuHSiBf0MRjhsnFEW89GxVm8YuIVwgrDbF3izfPR0AlqS4IMJT5m4pEA72lYEwp1JnSDVsafILzmksaqG-11H3WAsWIENrOIu_j7qNgbvYwmUWXOrYmeWBkQ');
+

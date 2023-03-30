@@ -31,7 +31,7 @@ export default function SettingProfil() {
 
     useEffect(() => {
         console.log(UserCurrent.image);
-      });
+    });
 
     const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
@@ -262,7 +262,9 @@ export default function SettingProfil() {
             <SafeAreaView style={styles.mainSafeArea}>
                 <ScrollView>
                     <View style={styles.container}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+                        <TouchableOpacity
+                            // @ts-ignore
+                            onPress={() => navigation.navigate('Setting')}>
                             <View style={styles.exit}>
                                 <Image style={styles.buttonSetting} source={require('../assets/icons/icons/buttonProfil_Inverse.png')} />
                                 <Text style={styles.textExit}>Exit</Text>

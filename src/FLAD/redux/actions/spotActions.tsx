@@ -6,13 +6,13 @@ import { spotTypes } from "../types/spotTypes";
 export const setSpotList = (spotList: Spot[]) => {
   return {
     type: spotTypes.FETCH_SPOT,
-    playload: spotList,
+    payload: spotList,
   };
 }
 
 export const setUserCurrentMusic = (currentMusic: Music) => {
   return {
     type: spotifyTypes.GET_USER_CURRENT_MUSIC,
-    playload: currentMusic,
+    payload: currentMusic,
   };
 }

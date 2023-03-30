@@ -1,15 +1,15 @@
 import Music from "../../Model/Music";
 import { favoritesTypes } from "../types/favoritesTypes";
 
-export const getFavoritesMusic = (favoritesMusic: Music[]) => {
+export const getFavoritesMusic = (music: Music[]) => {
   return {
     type: favoritesTypes.GET_FAVORITE_MUSICS,
-    playload: favoritesMusic,
+    payload: music,
   };
 }
-export const addFavoritesMusic = (favoritesMusic: Music) => {
+export const addFavoritesMusic = (music: Music) => {
   return {
     type: favoritesTypes.ADD_FAVORITE_MUSICS,
-    playload: favoritesMusic,
+    payload: music,
   };
 }

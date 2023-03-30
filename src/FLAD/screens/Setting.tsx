@@ -27,9 +27,10 @@ export default function Setting() {
         textInputRef.current?.focus();
     };
 
+    // @ts-ignore
     const currentMusic = useSelector(state => state.appReducer.userCurrentMusic);
 
-    //Dark Mode
+    // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
     const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
@@ -40,6 +41,7 @@ export default function Setting() {
             if (currentValue !== null) {
                 const newValue = JSON.stringify(!JSON.parse(currentValue));
                 await AsyncStorage.setItem('dark', newValue);
+                // @ts-ignore
                 dispatch(ChangeMode(JSON.parse(newValue)))
             }
         } catch (error) {
@@ -263,7 +265,11 @@ export default function Setting() {
                                 <Path d="M9.5 13.0625C10.2874 13.0625 11.0425 12.7497 11.5992 12.193C12.156 11.6362 12.4688 10.8811 12.4688 10.0938V4.15625C12.4688 3.36889 12.156 2.61378 11.5992 2.05703C11.0425 1.50028 10.2874 1.1875 9.5 1.1875C8.71264 1.1875 7.95753 1.50028 7.40078 2.05703C6.84403 2.61378 6.53125 3.36889 6.53125 4.15625V10.0938C6.53125 10.8811 6.84403 11.6362 7.40078 12.193C7.95753 12.7497 8.71264 13.0625 9.5 13.0625Z" fill="#828288" />
                             </Svg>
                         </View>
-                        <TouchableOpacity onPress={() => navigation.navigate('SettingProfil')}>
+
+                        <TouchableOpacity 
+                            // @ts-ignore
+                            onPress={() => navigation.navigate('SettingProfil')}
+                            >
                             <View style={styles.profil}>
                                 <Image source={require('../assets/icons/icons/IconProfil.png')} style={styles.imageProfil} />
                                 <View style={styles.profilContainer}>
@@ -326,7 +332,7 @@ export default function Setting() {
                         </View>
 
                         <View style={styles.musicActually}>
-                            <CardMusic image={currentMusic.image} title={currentMusic.title} description="PNL" id='1' />
+                            <CardMusic image="{currentMusic.image}" title="{currentMusic.title}" description="PNL" id='1' />
                             <Image source={require("../assets/images/FladyShadow.png")} style={styles.mascot} />
                         </View>
 

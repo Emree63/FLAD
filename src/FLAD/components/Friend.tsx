@@ -12,7 +12,8 @@ type UserProps = {
 }
 
 
-export default function User() {
+export default function Friend() {
+    // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
     const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;

@@ -36,6 +36,7 @@ export default function InscriptionPage() {
   const [sound, setSound] = useState<Audio.Sound>();
   const navigation = useNavigation();
   const [spotifyToken, setSpotifyToken] = useState('');
+  // @ts-ignore
   const failedSignup = useSelector(state => state.userReducer.failedSignup);
 
   async function playSound() {

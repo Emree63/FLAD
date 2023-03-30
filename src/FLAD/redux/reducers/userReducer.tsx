@@ -17,10 +17,10 @@ const initialState = {
 const userReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case userTypes.RESTORE_TOKEN:
-      const resp = (action.playload == "" ? false : true)
+      const resp = (action.payload == "" ? false : true)
       return {
         ...state,
-        userFladToken: action.playload,
+        userFladToken: action.payload,
         loading: true,
         isLogedIn: resp,
       };
@@ -28,7 +28,7 @@ const userReducer = (state = initialState, action: any) => {
       AsyncStorage.setItem('dark', JSON.stringify(false)).then(() => { });
       return {
         ...state,
-        user: action.playload,
+        user: action.payload,
         failedLogin: false,
         isLogedIn: true,
         dark: false
@@ -37,7 +37,7 @@ const userReducer = (state = initialState, action: any) => {
       AsyncStorage.setItem('dark', JSON.stringify(false)).then(() => { });
       return {
         ...state,
-        user: action.playload,
+        user: action.payload,
         failedSignup: false,
         isLogedIn: true,
         dark: false
@@ -52,14 +52,14 @@ const userReducer = (state = initialState, action: any) => {
     case userTypes.SAVE_SPOTIFY:
       return {
         ...state,
-        userSpotifyToken: action.playload,
+        userSpotifyToken: action.payload,
       };
     case userTypes.CHANGE_ERROR_LOGIN:
       return { ...state, failedLogin: true }
     case userTypes.CHANGE_ERROR_SIGNUP:
       return { ...state, failedSignup: true }
     case userTypes.CHANGE_MODE:
-      return { ...state, dark: action.playload }
+      return { ...state, dark: action.payload }
     default:
       return state;
   }

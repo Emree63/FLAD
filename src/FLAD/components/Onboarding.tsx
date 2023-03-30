@@ -66,7 +66,6 @@ export default function Onboarding() {
             right: 10
         },
         modalContent: {
-
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -77,8 +76,7 @@ export default function Onboarding() {
             alignItems: 'center'
         },
         backgroundImage: {
-            flex: 1,
-            width: '100%',
+            width: '103%',
             height: '100%',
         },
         imageButton: {
@@ -164,7 +162,7 @@ export default function Onboarding() {
                 <Paginator data={slides} scrollX={scrollX} />
                 <NextButton scrollTo={scrollTo} percentage={(currentIndex + 1) * (100 / slides.length)} />
             </View>
-            <Modal animationType="slide" visible={isModalVisible} transparent={true} presentationStyle={'pageSheet'}>
+            <Modal animationType="slide" visible={isModalVisible} presentationStyle={'pageSheet'}>
                 <View style={styles.modalContent}>
                     <ImageBackground source={require("../assets/images/Background_Start_Page.png")} style={styles.backgroundImage}>
                         <View style={styles.modalView}>
@@ -186,11 +184,19 @@ export default function Onboarding() {
                                 }}>
                                 <Text style={styles.text}>CONTINUER AVEC SPOTIFY</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.buttonInscription} onPress={() => { handleModal(); navigation.navigate('Register'); }}>
+                            <TouchableOpacity
+                                style={styles.buttonInscription}
+                                // @ts-ignore
+                                onPress={() => { handleModal(); navigation.navigate('Register'); }}
+                            >
                                 <Text style={styles.text}>S’INSCRIRE MAINTENANT</Text>
                             </TouchableOpacity>
                             <Image source={require("../assets/images/Flady.gif")} style={styles.mascot} />
-                            <TouchableOpacity style={styles.button2Connection} onPress={() => { handleModal(); navigation.navigate('Login'); }}>
+                            <TouchableOpacity
+                                style={styles.button2Connection}
+                                // @ts-ignore
+                                onPress={() => { handleModal(); navigation.navigate('Login'); }}
+                            >
                                 <Text style={styles.text}>SE CONNECTER</Text>
                             </TouchableOpacity>
                         </View>

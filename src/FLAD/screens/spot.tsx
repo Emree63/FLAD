@@ -57,6 +57,7 @@ export default function SpotPage() {
   const { width: wWidht } = Dimensions.get("window");
   const hapti = (card: Spot) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+    // @ts-ignore
     navigator.navigate("DetailsSpot", { "music": card.music })
   };
   return (
