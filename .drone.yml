@@ -29,6 +29,7 @@ steps:
   #container deployment
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    commands: ip addr
     environment:
         IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
         CONTAINERNAME: flady-container
