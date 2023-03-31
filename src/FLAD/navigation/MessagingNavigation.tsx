@@ -1,8 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Conversation from '../screens/Conversation'
+import Chat from '../screens/Chat';
 
-export default function SpotNavigation() {
+export default function MessagingNavigation() {
   const Stack = createStackNavigator();
 
   return (
@@ -11,7 +12,13 @@ export default function SpotNavigation() {
         name="Conversation"
         component={Conversation}
       />
-
+      <Stack.Screen
+        name="Chat"
+        component={Chat}
+        options = {{
+          headerShown: true
+        }}
+      />
     </Stack.Navigator>
   )
 }

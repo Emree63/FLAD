@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
@@ -9,6 +10,8 @@ export default function ConversationList() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
+
+    const navigation = useNavigation();
 
     const friends = [
         { id: 1, name: "Lucas", lastMessage: "J'en ai marre de provot", source: require('../assets/images/jul.png') },
@@ -54,7 +57,7 @@ export default function ConversationList() {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         // @ts-ignore
-                        onPress={() => navigation.navigate('Message')}>
+                        onPress={() => navigation.navigate('Chat')}>
                         <Friend image={item.source} name={item.name} lastMessage={item.lastMessage} />
                     </TouchableOpacity>
                 )}
