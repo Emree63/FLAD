@@ -41,8 +41,8 @@ steps:
   - name: docker-build-and-push-mqtt-broker
     image: plugins/docker
     settings:
-      dockerfile: src/Api/Mqtt/Dockerfile
-      context: src/Api/Mqtt
+      dockerfile: src/Mqtt/Dockerfile
+      context: src/Mqtt
       registry: hub.codefirst.iut.uca.fr
       repo: hub.codefirst.iut.uca.fr/emre.kartal/flad:2
       username:
