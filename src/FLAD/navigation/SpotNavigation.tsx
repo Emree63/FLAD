@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SpotPage from '../screens/spot'
+import SpotPage from '../screens/Spot'
 import MusicDetail from '../screens/MusicDetail';
 
 
@@ -16,7 +16,7 @@ export default function SpotNavigation() {
     }}
     >
       <Stack.Screen
-        name="Spots"
+        name="SpotsPage"
         component={SpotPage}
       />
       <Stack.Screen

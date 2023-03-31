@@ -1,12 +1,17 @@
 export default class Artist {
     private id: string;
     private name: string;
-    private url: string; // Image.source
+    private _url: string; // Image.source
 
     constructor(id: string, name: string, url: string) {
         this.id = id;
         this.name = name;
-        this.url = url;
+        this._url = url;
     }
+
+    get url(): string {
+        return this.url;
+    }
+    
 
 }

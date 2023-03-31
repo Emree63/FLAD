@@ -3,6 +3,7 @@ import { View, StyleSheet, Animated, useWindowDimensions } from 'react-native';
 
 import normalize from '../components/Normalize';
 
+// @ts-ignore
 export default function Paginator({ data, scrollX }) {
     const { width } = useWindowDimensions();
 

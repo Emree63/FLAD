@@ -180,7 +180,9 @@ const MusicDetail = ({ route }) => {
                     {simularMusic.length !== 0 && (
                         <HorizontalFlatList title={'Similar'} data={simularMusic}>
                             {(props) => (
-                                <Pressable onLongPress={() => { navigator.navigate("MusicDetail", { "music": props }) }} >
+                                <Pressable
+                                    // @ts-ignore
+                                    onLongPress={() => { navigator.navigate("MusicDetail", { "music": props }) }} >
                                     <LittleCard image={props.image} title={props.title} />
                                 </Pressable>
                             )}

@@ -17,20 +17,20 @@ export const setLoginState = (userJson: any) => {
   const user = new User(userJson.data.idFlad, userJson.data.idSpotify, userJson.data.email, new Date(), userJson.data.name, require('../../assets/images/jul.png'));
   return {
     type: userTypes.LOGIN,
-    playload: user
+    payload: user
   };
 }
 
 export const restoreToken = (token: string) => {
   return {
     type: userTypes.RESTORE_TOKEN,
-    playload: token
+    payload: token
   };
 }
 export const userSignUp = (user: User) => {
   return {
     type: userTypes.LOGIN,
-    playload: user
+    payload: user
   };
 }
 
@@ -43,7 +43,7 @@ export const UserLogout = () => {
 export const userChangeMode = (value: boolean) => {
   return {
     type: userTypes.CHANGE_MODE,
-    playload: value
+    payload: value
   };
 }
 

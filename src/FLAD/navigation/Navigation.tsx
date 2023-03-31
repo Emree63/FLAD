@@ -9,7 +9,7 @@ import normalize from '../components/Normalize';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SpotNavigation from './SpotNavigation';
-import Login from '../screens/login';
+import MessagingNavigation from './MessagingNavigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
 import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
@@ -66,12 +66,12 @@ export default function Navigation() {
             headerShown: false,
             tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="heart" color={color} /></View>,
           }} />
-        <BottomTabNavigator.Screen name="Messages" component={Login}
+        <BottomTabNavigator.Screen name="Messages" component={MessagingNavigation}
           options={{
             headerShown: false,
             tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="comment" color={color} /></View>,
           }} />
-        <BottomTabNavigator.Screen name="Setting" component={SettingNavigation}
+        <BottomTabNavigator.Screen name="Settings" component={SettingNavigation}
           options={{
             headerShown: false,
             tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="cog" color={color} /></View>,
