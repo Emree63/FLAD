@@ -89,6 +89,17 @@ Tout d'abord, il faut fournir votre *adresse e-mail* et votre *nom Spotify* aux 
 
 Vous serez normalement redirigé sur la page Spotify où vous devrez vous connecter. Une fois connecté, entrez votre nom, votre adresse e-mail et votre mot de passe en tant qu'utilisateur FLAD (n'oubliez pas ces informations car vous en aurez besoin pour vous connecter). Ensuite, cliquez sur le bouton ```suivant``` et bienvenue sur l'application !
 
+## Visuel de l'Application
+
+<div align = center>
+
+<img src="doc/Images/Real_HomePage.png" width="250" >
+<img src="doc/Images/Real_FavoritePage.png" width="250" >
+<img src="doc/Images/Real_ConversationPage.png" width="250" >
+<img src="doc/Images/Real_SettingPage.png" width="250" >
+
+</div>
+
 ## Environnement de Travail
 
 Notre environnement de travail se base sur plusieurs outils et langages :👇
