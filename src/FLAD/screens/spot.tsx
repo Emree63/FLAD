@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, StyleSheet, ImageBackground, Pressable, TouchableOpacity, SafeAreaView } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, ImageBackground, Image, Pressable, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
@@ -45,6 +45,7 @@ export default function SpotPage() {
     likeButtonref.current?.play(0, 55);
     likeButtonref.current?.play(55, 0);
   }, [])
+  
   const dispatch = useDispatch();
 
   function addLike(music: Music) {
@@ -122,10 +123,10 @@ export default function SpotPage() {
             <View style={{ flex: 1, flexDirection: 'row', alignItems: "flex-start", justifyContent: 'center' }}>
               <Animated.View style={{ flexDirection: 'row', width: '92%', alignItems: "center", justifyContent: 'space-evenly' }}>
                 <TouchableOpacity style={styles.button} onPress={onLike}>
-                  <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
+                  <Image source={require("../assets/icons/icons/icon_dislike_no_text.png")} style={{width: '45%', height: '40%'}}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={onLike}>
-                  <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
+                  <Image source={require("../assets/icons/icons/icon_discovery_no_text.png")} style={{width: '58%', height: '50%', marginLeft: '7%'}}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={onLike}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} speed={2} source={Lotties.likeAnimation} style={styles.lottie} />
