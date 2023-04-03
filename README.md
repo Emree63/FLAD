@@ -4,6 +4,21 @@
 
 </div>
 
+<div align = center>
+
+---
+
+&nbsp; ![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
+&nbsp; ![Docker](https://img.shields.io/badge/Docker-2496ED.svg?style=for-the-badge&logo=Docker&logoColor=white)
+&nbsp; ![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+&nbsp; ![Spotify Api](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)
+&nbsp; ![TypeScript](https://img.shields.io/badge/TypeScript-000?style=for-the-badge&logo=typescript&logoColor=white&color=blue)
+&nbsp; ![JavaScript](https://img.shields.io/badge/JavaScript-000?style=for-the-badge&logo=javascript&logoColor=white&color=yellow)
+
+---
+
+</div>
+
 **Nom de l’application** : FLAD :musical_note:
 </br>
 
@@ -97,25 +112,6 @@ Vous serez normalement redirigé sur la page Spotify où vous devrez vous connec
 <img src="doc/Images/Real_FavoritePage.png" width="250" >
 <img src="doc/Images/Real_ConversationPage.png" width="250" >
 <img src="doc/Images/Real_SettingPage.png" width="250" >
-
-</div>
-
-## Environnement de Travail
-
-Notre environnement de travail se base sur plusieurs outils et langages :👇
-
-<div align = center>
-
----
-
-&nbsp; ![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
-&nbsp; ![Docker](https://img.shields.io/badge/Docker-2496ED.svg?style=for-the-badge&logo=Docker&logoColor=white)
-&nbsp; ![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-&nbsp; ![Spotify Api](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)
-&nbsp; ![TypeScript](https://img.shields.io/badge/TypeScript-000?style=for-the-badge&logo=typescript&logoColor=white&color=blue)
-&nbsp; ![JavaScript](https://img.shields.io/badge/JavaScript-000?style=for-the-badge&logo=javascript&logoColor=white&color=yellow)
-
----
 
 </div>
 
