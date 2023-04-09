@@ -28,7 +28,6 @@ class SpotifyController implements Controller {
      private readonly CLIENT_SECRET = "779371c6d4994a68b8dd6e84b0873c82";
      private readonly CALLBACK_2 = 'https://flad-api-production.up.railway.app/api/spotify/callback';
      private readonly SCOPES ='user-read-private user-read-email user-read-playback-state user-read-currently-playing user-read-recently-played playlist-modify-public ugc-image-upload user-modify-playback-state';
-     private readonly ENCRYPTION_SECRET = new CryptString(16);
      private readonly clientRedirect= 'spotify_final_redirect-uri-key';
 
     private login = async (
