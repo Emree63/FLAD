@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "dave": "nodemon ./src/index.ts",
     "dev": "tsc -w & nodemon .",
     "start": "tsc & node .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -44,6 +45,7 @@
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.0",
     "morgan": "^1.10.0",
+    "mqtt": "^4.3.7",
     "request": "^2.88.2",
     "rimraf": "^4.1.2",
     "swagger-ui-express": "^4.6.0",
