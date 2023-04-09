@@ -1643,7 +1643,7 @@ function onMessageArrived(message) {
 					if ( this._traceBuffer.length == this._MAX_TRACE_ENTRIES ) {
 						this._traceBuffer.shift();
 					}
-					if (i === 0) this._traceBuffer.push(arguments[i]);
+					if (i == 0) this._traceBuffer.push(arguments[i]);
 					else if (typeof arguments[i] === "undefined" ) this._traceBuffer.push(arguments[i]);
 					else this._traceBuffer.push("  "+JSON.stringify(arguments[i]));
 				}
