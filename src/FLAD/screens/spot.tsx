@@ -24,14 +24,11 @@ export default function SpotPage() {
   
   const [currentCard, setcurrentCard] = useState(cards[cards.length - 1]);
   useEffect(() => {
-    console.log(cards.length + "================================== cards");
-    console.log(spotReducer.length + "================================== spotReducer")
     setCards(spotReducer);
-        // update the state of the cards state variable
     setcurrentCard(spotReducer[spotReducer.length - 1]);
   }, [spotReducer]);
 
-  const onSwipe = (index: number, direction: 'left' | 'right' | 'down') => {
+  const onSwipe = (direction: 'left' | 'right' | 'down') => {
 
     if (direction === 'right') {
       // Swiped right
@@ -124,13 +121,13 @@ export default function SpotPage() {
 
             <View style={{ flex: 1.83, justifyContent: 'center', alignItems: 'center' }}>
 
-              {cards.map((card, index) => (
+              {cards.map((card) => (
                 <View key={card.userSpotifyId} style={{ position: 'absolute' }} >
                   <Pressable onLongPress={() => { hapti(card) }} >
                     <Card
                       title={card.music.title}
                       image={card.music.image}
-                      onSwipe={(direction) => { onSwipe(index, direction) }}
+                      onSwipe={(direction) => { onSwipe(direction) }}
                     />
                   </Pressable>
                 </View>
@@ -140,13 +137,13 @@ export default function SpotPage() {
 
             <View style={{ flex: 1, flexDirection: 'row', alignItems: "flex-start", justifyContent: 'center' }}>
               <Animated.View style={{ flexDirection: 'row', width: '92%', alignItems: "center", justifyContent: 'space-evenly' }}>
-                <TouchableOpacity style={styles.button} onPress={onLike}>
+                <TouchableOpacity style={styles.button} onPress={() => onSwipe('left')}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={addMockSpots}>
+                <TouchableOpacity style={styles.button} onPress={() => onSwipe('down')}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={onLike}>
+                <TouchableOpacity style={styles.button} onPress={() => onSwipe('right')}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} speed={2} source={Lotties.likeAnimation} style={styles.lottie} />
                 </TouchableOpacity>
 

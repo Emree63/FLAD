@@ -59,7 +59,6 @@ export default function AuthNavigation() {
       console.log('Permission to access location was granted');
     }
   }
-  console.log(currentMusic + 'luuuuuuuiii')
   useEffect(() => {
     ChangeDarkMode();
     prepare();
@@ -82,10 +81,6 @@ export default function AuthNavigation() {
                 latitude: locationresp.coords.latitude,
                 currentMusic: currentMusic.id
               }
-              console.log('===========================================================================================================')
-              console.log(body)
-              console.log('===========================================================================================================')
-
               const resp = await axios({
                 url: 'https://flad-api-production.up.railway.app/api/users/nextTo?' + qs.stringify(body),
                 method: 'GET',

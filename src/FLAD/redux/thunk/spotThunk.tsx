@@ -13,9 +13,6 @@ export type CreateSpotReqBody = {
   user: string;
 }
 export const getSpotList = (spotsData : Record<string, string> , resuestHandler: SpotifyService) => {
-
-  console.log('oooooooooooooooooooooooooooostrat2oooooooooooooooooooooooooooooooooooo')
-
   //@ts-ignore
   return async dispatch => {
     try {
