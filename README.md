@@ -118,7 +118,16 @@ Vous serez normalement redirigé sur la page Spotify où vous devrez vous connec
 :information_source: Lorsque vous entrez dans notre application, la page d'accueil (**home**) vous permet de découvrir les musiques :notes: des utilisateurs autour de vous. Vous pouvez valider une musique soit en cliquant sur le bouton, soit en la glissant vers la droite :point_up_2:. Cette musique sera alors ajoutée à la page **favoris** :heart: et vous pourrez entamer une discussion avec l'utilisateur dans la page **chat** :speech_balloon:. 
 <br/>
 Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ```Spotify```, que vous pouvez modifier à votre guise. Toutefois, ces modifications ne seront prises en compte que dans notre application. Vous pouvez également choisir le mode sombre (dark mode) dans les paramètres pour une expérience de navigation plus confortable.
-
+<br/>
+### Voici un petit récapitulatif 
+<div align="center">
+  <img src="doc/Images/DisLike_Img.png" alt="Button 1" width="100" height="100">
+  <p>Suprimer de la pile un spot</p>
+  <img src="doc/Images/Discovery_Img.png" alt="Button 2" width="100" height="100">
+  <p>Ajout Discover (pour l'instant il permet d'ajouter des spot suplémentaires dans la pile pour que vous puissiez vous amusez si il n'y aucun utilisateur à coté de vous) </p>
+  <img src="doc/Images/Like_Img.png" alt="Button 3" width="100" height="100">
+  <p>Like pour ajouter au favorie</p>
+</div>
 ## Deploiement
 - [x] &nbsp; ![IOS](https://img.shields.io/badge/IOS-000?style=for-the-badge&logo=apple&logoColor=black&color=white)
 - [x] &nbsp; ![Android](https://img.shields.io/badge/Android-000?style=for-the-badge&logo=android&logoColor=white&color=green)
