@@ -6,8 +6,6 @@ import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Buffer } from 'buffer';
 import * as SecureStore from 'expo-secure-store';
 
-export const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKey'
-
 WebBrowser.maybeCompleteAuthSession()
 
 const discovery = {

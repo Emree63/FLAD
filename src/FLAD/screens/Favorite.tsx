@@ -104,12 +104,6 @@ export default function FavoritePage() {
                                 <FladyComponent image={item.source} />
                             )}
                         />
-                        <TouchableOpacity
-                            style={[styles.button, styles.shadow]}
-                            // @ts-ignore
-                            onPress={() => navigation.navigate('Genre')}>
-                            <Image source={require("../assets/icons/icons/next.png")} style={styles.buttonImage} />
-                        </TouchableOpacity>
                     </>
                 }
                 nestedScrollEnabled={true}

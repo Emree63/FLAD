@@ -36,7 +36,6 @@ steps:
         OVERWRITE: true
         ADMINS: emrekartal,davidd_almeida,
     depends_on: [ docker-build-and-push ]
-    
 
   - name: code-analysis
     image: node:latest

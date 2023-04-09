@@ -12,26 +12,13 @@ export type CreateSpotReqBody = {
   linkCover: string;
   user: string;
 }
-export const getSpotList = (resuestHandler: SpotifyService) => {
-
+export const getSpotList = (spotsData : Record<string, string> , resuestHandler: SpotifyService) => {
   //@ts-ignore
   return async dispatch => {
     try {
       //@ts-ignore
-      const userToken: string = await SecureStore.getItemAsync(key);
-      const headers = {
-        'Authorization': 'Bearer ' + userToken
-      };
-      const data = await axios.get(
-        "https://flad-api-production.up.railway.app/api/users/nextTo",
-        { headers }
-      )
-      if (data.data.token) {
-        const spotsData: { [userId: string]: string } = {};
-
-        for (const item of data.data) {
-          spotsData[item.user] = item.music;
-        }
+      if (spotsData) {
+        
         const spots = await Promise.all(
           Object.entries(spotsData).map(async ([userId, value]) => {
             const completeMusic = await resuestHandler.getMusicById(value);
@@ -64,6 +51,9 @@ export const getCurrentUserMusic = (resuestHandler: SpotifyService) => {
         }
       }
       const completeMusic = await resuestHandler.getMusicById(currentTrackResponse);
+      if(!completeMusic){
+        return;
+      }
       dispatch(setUserCurrentMusic(completeMusic));
     }
     catch (error) {

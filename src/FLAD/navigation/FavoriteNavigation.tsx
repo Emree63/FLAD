@@ -18,10 +18,6 @@ export default function MusicNavigation() {
         component={MusicDetail}
         sharedElements={(route) => { return [route.params.music.id] }}
       />
-      <Stack.Screen
-        name="Genre"
-        component={CurrentMusic}
-      />
     </Stack.Navigator>
   )
 }

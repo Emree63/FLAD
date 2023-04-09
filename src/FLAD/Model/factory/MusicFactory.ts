@@ -5,7 +5,7 @@ export default class MusicFactory {
     const music = new Music(
       jsonMusic.id,
       jsonMusic.name,
-      "",
+      jsonMusic.artists[0].name,
       jsonMusic.album.images[0].url,
       jsonMusic.preview_url
     );

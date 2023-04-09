@@ -12,6 +12,7 @@ import mongoose from 'mongoose';
 // import helmet from 'helmet';
 
 import http from 'http';
+import cookieParser from 'cookie-parser';
 
 class App {
     public express: Application;
@@ -35,6 +36,9 @@ class App {
     private initialiseMiddleware(): void {
         // this.express.use(helmet());
         this.express.use(cors());
+        this.express.use(cookieParser());
+
+        
         // this.express.use(morgan('dev'));
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: false }));

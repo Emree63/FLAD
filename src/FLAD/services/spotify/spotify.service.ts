@@ -29,6 +29,8 @@ export default class SpotifyService implements IspotifyService {
 		if (respMusic.status != 200) {
 			return null;
 		}
+		console.log(respMusic.data.artists[0].id);
+
 		return MusicFactory.mapFromSpotifyTrack(respMusic.data);
 	}
 

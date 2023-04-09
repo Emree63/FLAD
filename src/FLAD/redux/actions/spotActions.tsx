@@ -9,6 +9,19 @@ export const setSpotList = (spotList: Spot[]) => {
     payload: spotList,
   };
 }
+export const removeFromSpotList = (spot: Spot) => {
+  return {
+      type: spotTypes.REMOVE_SPOT,
+      payload: spot
+  }
+}
+
+export const addSpotListMock = (spotList: Spot[]) => {
+  return {
+    type: spotTypes.ADD_SPOT_MOCK,
+    payload: spotList,
+  };
+}
 
 export const setUserCurrentMusic = (currentMusic: Music) => {
   return {

@@ -13,6 +13,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { HorizontalFlatList } from "../components/HorizontalFlatList";
 import { LittleCard } from "../components/littleCard";
 import * as SecureStore from 'expo-secure-store';
+import { MY_SECURE_AUTH_STATE_KEY } from "./Register";
 
 const halfPi = Math.PI / 2;
 
@@ -27,22 +28,15 @@ const MusicDetail = ({ route }) => {
 
     const navigator = useNavigation();
 
-    const [testtoken, setTesttoken] = useState('')
-
-    const sheet = async () => {
-        SecureStore.getItemAsync('MySecureAuthStateKey').then(result => { setTesttoken(result) });
-    }
-
+   
     useEffect(() => {
-        sheet();
         getSimilarTrack();
-    }, [testtoken]);
-
+    }, []);
     const getSimilarTrack = async () => {
         try {
-            const service = new SpotifyService(testtoken);
+            let token = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY);
+            const service = new SpotifyService(token);
             const simularMusic = await service.getSimilarTrack(currentspot.id, 5, 'FR');
-            console.log("suggesstd", simularMusic);
             setSimularMusic(simularMusic);
         } catch (error) {
             console.error('Error ================ in getSimilarTrack', error);
@@ -140,7 +134,8 @@ const MusicDetail = ({ route }) => {
                                 <View>
 
                                 </View>
-                                <TouchableOpacity activeOpacity={0.5} style={{
+                                <TouchableOpacity activeOpacity={0.5}onPressIn={handlePlaySound}
+            onPressOut={handleStopSound} style={{
                                     backgroundColor: '#F80404',
                                     borderRadius: 100,
                                     padding: normalize(23)
@@ -170,20 +165,18 @@ const MusicDetail = ({ route }) => {
                         }}>
                             <Icon name="share" size={24} color="#FFFF"></Icon>
                             {/* <FontAwesome name="bookmark" size={24} color="#FF0000"  ></FontAwesome> */}
-                            <Text style={{ fontSize: normalize(16), fontWeight: "700", color: '#FFFFFF' }}>Partagedr cette music</Text>
+                            <Text style={{ fontSize: normalize(16), fontWeight: "700", color: '#FFFFFF' }}>Partager cette music</Text>
                         </TouchableOpacity>
-                        {/* <Pressable style={{flexDirection : 'row', justifyContent : 'space-between', alignItems: 'center', height: "10%" , borderRadius: 8, opacity: 84 ,backgroundColor: 'rgba(29, 16, 16, 0.84)' }}>
-            <FontAwesome name="bookmark" size={16} color="#FF0000"  ></FontAwesome>
-            <Text style={{ fontSize: 16, fontWeight:"700",lineHeight:12, color : '#FFFFFF' }}>Dans ma collection 2</Text>
-        </Pressable> */}
+                        
                     </View>
                     {simularMusic.length !== 0 && (
                         <HorizontalFlatList title={'Similar'} data={simularMusic}>
                             {(props) => (
                                 <Pressable
+                                onPress={() => {
                                     // @ts-ignore
-                                    onLongPress={() => { navigator.navigate("MusicDetail", { "music": props }) }} >
-                                    <LittleCard image={props.image} title={props.title} />
+                                        navigator.replace("DetailsSpot", { "music": props }) }} >
+                                    <LittleCard  data={props} />
                                 </Pressable>
                             )}
                         </HorizontalFlatList>
