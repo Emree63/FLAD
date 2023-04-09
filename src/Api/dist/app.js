@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 // import ErrorMiddleware from './middleware/error.middleware';
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 class App {
     constructor(controllers, port) {
         this.express = (0, express_1.default)();
@@ -22,6 +23,7 @@ class App {
     initialiseMiddleware() {
         // this.express.use(helmet());
         this.express.use((0, cors_1.default)());
+        this.express.use((0, cookie_parser_1.default)());
         // this.express.use(morgan('dev'));
         this.express.use(express_1.default.json());
         this.express.use(express_1.default.urlencoded({ extended: false }));

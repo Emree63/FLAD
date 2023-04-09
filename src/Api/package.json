@@ -10,11 +10,6 @@
     "start": "tsc & node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -32,11 +27,13 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.3",
     "@types/crypto-js": "^4.1.1",
     "@types/mongoose": "^5.11.97",
     "@types/request": "^2.48.8",
     "axios": "^1.2.6",
     "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express-winston": "^4.2.0",
@@ -45,7 +42,6 @@
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.0",
     "morgan": "^1.10.0",
-    "mqtt": "^4.3.7",
     "request": "^2.88.2",
     "rimraf": "^4.1.2",
     "swagger-ui-express": "^4.6.0",

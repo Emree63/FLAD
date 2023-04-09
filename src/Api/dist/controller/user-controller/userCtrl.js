@@ -147,16 +147,21 @@ class UserController {
         };
         this.getUserNext = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const longitude = Number(req.params.longitude);
-                const latitude = Number(req.params.latitude);
+                const longitude = Number(req.query.longitude);
+                const latitude = Number(req.query.latitude);
                 //verify::val_int(){
                 console.log('woooooooooooooo' + req);
                 if (isNaN(longitude) || isNaN(latitude)) {
+                    console.log('============' + longitude);
+                    console.log('============' + latitude);
                     console.log('Impossible de convertir la chaîne en nombre');
                 }
                 //}
                 const userId = req.user.idFlad;
-                const musicId = req.params.currentMusic;
+                const musicId = String(req.query.currentMusic);
+                console.log('============' + longitude);
+                console.log('============' + latitude);
+                console.log('daaaaaaaaaaaaaaaaaaaaaa' + musicId);
                 const data = yield this.locationService.getNearUser(userId, musicId, latitude, longitude);
                 console.log(data);
                 res.status(201).send(data);
