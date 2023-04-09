@@ -74,7 +74,7 @@ class SpotifyController implements Controller {
                 "error": "Parameter refresh_token missing"
               });
             }          
-            var authOptions = {
+            let authOptions = {
               method: 'POST',
               url: 'https://accounts.spotify.com/api/token',
               data: qs.stringify({
@@ -149,9 +149,9 @@ class SpotifyController implements Controller {
   ): Promise<Response | void> => {
     console.log("useeeee== accesToken");
 
-    var code  = req.query.code;
-    var state = req.query.state || null;
-    var storedredirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
+    let code  = req.query.code;
+    let state = req.query.state || null;
+    let storedredirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
  
     var authOptions = {
       method: 'POST',
@@ -171,9 +171,9 @@ class SpotifyController implements Controller {
     var resp = await axios(authOptions);
     if (resp.status === 200) {
       console.log('oon esttt laaa');
-      var access_token = resp.data.access_token;
-      var expiration =resp.data.expires_in;
-      var refresh = resp.data.refresh_token
+      let access_token = resp.data.access_token;
+      let expiration =resp.data.expires_in;
+      let refresh = resp.data.refresh_token
       console.log(access_token);
    
       res.clearCookie(this.clientRedirect);
