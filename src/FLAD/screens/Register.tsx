@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
 import { CredentialsRegister } from '../redux/actions/userActions';
 import * as WebBrowser from 'expo-web-browser';
+import { spotArray2 } from '../data/data';
+import { setSpotList } from '../redux/actions/spotActions';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -48,18 +50,37 @@ export default function InscriptionPage() {
 
   const dispatch = useDispatch();
 
+  function addMockSpots() {
+    dispatch(setSpotList(spotArray2))
+  }
+
   const submitForm = () => {
     const credentials: CredentialsRegister = {
       email: email,
       password: password,
       idSpotify: spotifyToken,
       name: username,
-      idFlad: "9835698"
+      idFlad: generateRandomString()
     };
     //@ts-ignore
     dispatch(registerUser(credentials))
+    addMockSpots()
     playSound()
   }
+
+  function generateRandomString(): string {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    let randomString = '';
+  
+    for (let i = 0; i < 8; i++) {
+      const randomIndex = Math.floor(Math.random() * alphabet.length);
+      const randomChar = alphabet[randomIndex];
+      randomString += randomChar;
+    }
+  
+    return randomString;
+  }
+
   const getTokens2 = async () => {
     try {
       const redirectUri = AuthSession.makeRedirectUri();

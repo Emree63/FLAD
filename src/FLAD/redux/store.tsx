@@ -16,7 +16,7 @@ const store = configureStore({
   reducer: reducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions: [spotTypes.FETCH_SPOT, spotifyTypes.GET_USER_CURRENT_MUSIC, favoritesTypes.ADD_FAVORITE_MUSICS, favoritesTypes.REMOVE_FAVORITE_MUSICS, spotTypes.REMOVE_SPOT ],
+      ignoredActions: [spotTypes.FETCH_SPOT, spotifyTypes.GET_USER_CURRENT_MUSIC, favoritesTypes.ADD_FAVORITE_MUSICS, favoritesTypes.REMOVE_FAVORITE_MUSICS, spotTypes.REMOVE_SPOT, userTypes.LOGIN, userTypes.SIGNUP ],
       ignoredActionPaths: ['appReducer'],
       ignoredPaths: ['appReducer', 'userReducer']
     }
