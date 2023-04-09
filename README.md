@@ -121,12 +121,18 @@ Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ``
 <br/>
 ### Voici un petit récapitulatif 
 <div align="center">
-  <img src="doc/Images/DisLike_Img.png" alt="Button 1" width="100" height="100">
-  <p>Suprimer de la pile un spot</p>
-  <img src="doc/Images/Discovery_Img.png" alt="Button 2" width="100" height="100">
-  <p>Ajout Discover (pour l'instant il permet d'ajouter des spot suplémentaires dans la pile pour que vous puissiez vous amusez si il n'y aucun utilisateur à coté de vous) </p>
-  <img src="doc/Images/Like_Img.png" alt="Button 3" width="100" height="100">
-  <p>Like pour ajouter au favorie</p>
+  <table>
+    <tr>
+      <td align="center"><img src="doc/Images/DisLike_Img.png" alt="Button 1" width="100" height="100"></td>
+      <td align="center"><img src="doc/Images/Discovery_Img.png" alt="Button 2" width="100" height="100"></td>
+      <td align="center"><img src="doc/Images/Like_Img.png" alt="Button 3" width="100" height="100"></td>
+    </tr>
+    <tr>
+      <td align="center">Suprimer de la pile un spot</td>
+      <td align="center">Ajout Discover (pour l'instant il permet d'ajouter des spot suplémentaires dans la pile pour que vous puissiez vous amusez si il n'y aucun utilisateur à coté de vous)</td>
+      <td align="center">Like pour ajouter au favorie</td>
+    </tr>
+  </table>
 </div>
 ## Deploiement
 - [x] &nbsp; ![IOS](https://img.shields.io/badge/IOS-000?style=for-the-badge&logo=apple&logoColor=black&color=white)
