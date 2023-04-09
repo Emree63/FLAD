@@ -36,7 +36,7 @@ La racine de notre gitlab est composée de deux dossiers essentiels au projet:
 
 [**src**](src) : **Toute la partie codage de l'application mobile** (contient un dossier API pour l'API FLAD qui effectue les requêtes vers l'API SPOTIFY et la base de données, ainsi qu'un dossier FLAD qui contient toute la partie côté client de l'application)
 
-[**doc**](doc) : **Documentation de l'application** 
+[**doc**](doc) : **Documentation de l'application** (contient les maquettes)
 
 ## Fonctionnement
 
@@ -114,6 +114,10 @@ Vous serez normalement redirigé sur la page Spotify où vous devrez vous connec
 <img src="doc/Images/Real_SettingPage.png" width="250" >
 
 </div>
+
+:information_source: Lorsque vous entrez dans notre application, la page d'accueil (**home**) vous permet de découvrir les musiques :notes: des utilisateurs autour de vous. Vous pouvez valider une musique soit en cliquant sur le bouton, soit en la glissant vers la droite :point_up_2:. Cette musique sera alors ajoutée à la page **favoris** :heart: et vous pourrez entamer une discussion avec l'utilisateur dans la page **chat** :speech_balloon:. 
+<br/>
+Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ```Spotify```, que vous pouvez modifier à votre guise. Toutefois, ces modifications ne seront prises en compte que dans notre application. Vous pouvez également choisir le mode sombre (dark mode) dans les paramètres pour une expérience de navigation plus confortable.
 
 ## Deploiement
 - [x] &nbsp; ![IOS](https://img.shields.io/badge/IOS-000?style=for-the-badge&logo=apple&logoColor=black&color=white)
