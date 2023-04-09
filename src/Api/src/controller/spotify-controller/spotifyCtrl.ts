@@ -1,13 +1,9 @@
 import Controller from '../Icontroller';
-import { Router, Request, Response, NextFunction, RequestHandler } from 'express';
-import { AuthReqBody } from './request/authReqBody';
+import { Router, Request, Response, NextFunction } from 'express';
 import HttpException from '../../middleware/exeption/httpExeption';
 import axios from 'axios';
 import CryptString from './crypt';
-import AES from 'crypto-js'
-import querystring from 'querystring';
 import qs from 'qs';
-import cookieParser from 'cookie-parser';
 
 class SpotifyController implements Controller {
     public path = '/spotify';
