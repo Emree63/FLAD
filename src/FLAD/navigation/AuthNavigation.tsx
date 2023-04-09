@@ -8,8 +8,12 @@ import * as SplashScreen from 'expo-splash-screen';
 import { ChangeMode, getRefreshToken } from '../redux/thunk/authThunk';
 import * as Location from 'expo-location';
 import SpotifyService from '../services/spotify/spotify.service';
-import { getCurrentUserMusic } from '../redux/thunk/spotThunk';
+import { getCurrentUserMusic, getSpotList } from '../redux/thunk/spotThunk';
 import Music from '../Model/Music';
+import axios from 'axios';
+import qs from 'qs';
+import * as SecureStore from 'expo-secure-store';
+import { MY_SECURE_AUTH_STATE_KEY } from '../screens/Register';
 
 export default function AuthNavigation() {
   //@ts-ignore
@@ -18,6 +22,8 @@ export default function AuthNavigation() {
   const isLogin: boolean = useSelector(state => state.userReducer.isLogedIn);
   //@ts-ignore
   const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
+  //@ts-ignore
+  const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
 
   const [appIsReady, setAppIsReady] = useState(false);
   const dispatch = useDispatch();
@@ -45,37 +51,67 @@ export default function AuthNavigation() {
       console.log(`Une erreur s'est produite lors de la mise à jour de la valeur booléenne pour la clé 'dark': `, error);
     }
   }
-
+  const requestLocationPermission = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied');
+    } else {
+      console.log('Permission to access location was granted');
+    }
+  }
+  console.log(currentMusic + 'luuuuuuuiii')
   useEffect(() => {
     ChangeDarkMode();
     prepare();
-  }, [appIsReady, tokenProcesed]);
-  useEffect(() => {
-
+    requestLocationPermission();
     const sendLocationUpdate = async () => {
       try {
-        //@ts-ignore
-        await dispatch(getCurrentUserMusic(theService))
-        let { status } = await Location.requestForegroundPermissionsAsync();
 
+        let tmpKey: string = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY) ;
+        //@ts-ignore
+        await dispatch(getCurrentUserMusic(new SpotifyService(tmpKey)))
+        let { status } = await Location.requestForegroundPermissionsAsync();
         if (status == 'granted') {
-          console.log(appIsReady)
-          if (true) {// should app is ready 
+          // should app is ready 
             const locationresp = await Location.getCurrentPositionAsync({});
-            setLocation(locationresp);
             // send location to server
-            console.log(locationresp);
-            console.log(location);
-            const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
-              longitude: locationresp.coords.longitude,
-              latitude: locationresp.coords.latitude,
-              currentMusic: currentMusic.id
+            if(currentMusic){
+            
+              const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
+                longitude: locationresp.coords.longitude,
+                latitude: locationresp.coords.latitude,
+                currentMusic: currentMusic.id
+              }
+              console.log('===========================================================================================================')
+              console.log(body)
+              console.log('===========================================================================================================')
+
+              const resp = await axios({
+                url: 'https://flad-api-production.up.railway.app/api/users/nextTo?' + qs.stringify(body),
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${tokenSend}`,
+                },
+              });
+              const datat: Record<string, string> = resp.data.listUser2;              
+              //@ts-ignore
+              dispatch(getSpotList(datat, new SpotifyService(tmpKey)))
             }
-          }
+            else{
+              return;
+            }
+            
+          
         }
         else {
-          setErrorMsg('Permission to access location was denied');
+          //@ts-ignore
+          let {status} = Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+          }
           return;
+          
         }
       } catch (error) {
         console.log(error);
@@ -85,21 +121,21 @@ export default function AuthNavigation() {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [appIsReady, tokenProcesed, currentMusic]);
+
+  
   if (tokenProcesed == false) {
     return null;
   }
 
   return (
+    
     <SafeAreaProvider onLayout={() => setAppIsReady(true)}>
       {isLogin ? (
         <Navigation />
       ) :
-        <Navigation />
+        <StartNavigation/>
       }
     </SafeAreaProvider>
   )
 }
-
-const theService = new SpotifyService('BQC0rAGJvxTt4-24P-nda6qP9iXYCql2eApnUAoEbZZkKemJ11cU3Nx-I_tKVX0FwEgFbIbSIuaVvxOapRVJq2z1Htyy3XQ5jIYNsrhrnp3KTCfppamAjxgDTf6khBrNGTxe6CNKBsMhc5IRnphey5Td2zJPvGMwnFFfMQdCtVAVsCNK7kPKlCAaf_kRMAoPn30Qk4RD45XmwtZIwQg7X0J4beGuHSiBf0MRjhsnFEW89GxVm8YuIVwgrDbF3izfPR0AlqS4IMJT5m4pEA72lYEwp1JnSDVsafILzmksaqG-11H3WAsWIENrOIu_j7qNgbvYwmUWXOrYmeWBkQ');
-

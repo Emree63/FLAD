@@ -332,7 +332,7 @@ export default function Setting() {
                         </View>
 
                         <View style={styles.musicActually}>
-                            <CardMusic image="{currentMusic.image}" title="{currentMusic.title}" description="PNL" id='1' />
+                            <CardMusic image={currentMusic.image} title={currentMusic.title} description={currentMusic.bio} id='1' />
                             <Image source={require("../assets/images/FladyShadow.png")} style={styles.mascot} />
                         </View>
 

@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, StyleSheet, ImageBackground, Pressable, TouchableOpacity, SafeAreaView } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import Animated from 'react-native-reanimated';
@@ -13,30 +13,39 @@ import FladLoading from '../components/FladLoadingScreen';
 import { useNavigation } from '@react-navigation/native';
 import Music from '../Model/Music';
 import { addFavoritesMusic } from '../redux/actions/appActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spot } from '../Model/Spot';
+import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
 
 export default function SpotPage() {
-  const [cards, setCards] = useState(spotArray2);
+  //@ts-ignore
+  const spotReducer = useSelector(state => state.appReducer.spot)
+  const [cards, setCards] = useState<Spot[]>(spotReducer);
+  
   const [currentCard, setcurrentCard] = useState(cards[cards.length - 1]);
+  useEffect(() => {
+    console.log(cards.length + "================================== cards");
+    console.log(spotReducer.length + "================================== spotReducer")
+    setCards(spotReducer);
+        // update the state of the cards state variable
+    setcurrentCard(spotReducer[spotReducer.length - 1]);
+  }, [spotReducer]);
+
   const onSwipe = (index: number, direction: 'left' | 'right' | 'down') => {
 
     if (direction === 'right') {
       // Swiped right
-      addLike(currentCard.music);
+      addLike(currentCard);
     } else if (direction === 'left') {
       // Swiped left
       console.log('Swiped left');
+      removeSpots(currentCard);
     }
     else if (direction === 'down') {
       // Swiped down
+      addMockSpots();
       console.log('Swiped down');
     }
-    // update the state of the cards state when it remove this
-    setTimeout(() => {
-      setCards(cards.filter((_, i) => i !== index));
-      setcurrentCard(cards[index - 1]);
-    }, 3);
   };
 
   const likeButtonref = useRef<LottieView>(null);
@@ -46,11 +55,22 @@ export default function SpotPage() {
     likeButtonref.current?.play(55, 0);
   }, [])
   const dispatch = useDispatch();
-
-  function addLike(music: Music) {
+  
+  function addLike(spot: Spot) {
     onLike();
-    dispatch(addFavoritesMusic(music))
+    dispatch(addFavoritesMusic(spot.music))
+    dispatch(removeFromSpotList(spot));
   }
+  function removeSpots(spot: Spot) {
+    dispatch(removeFromSpotList(spot));
+  }
+
+  function addMockSpots() {
+    //@ts-ignore
+    dispatch(setSpotList(spotArray2))
+  }
+
+  
 
   const navigator = useNavigation();
 
@@ -106,7 +126,6 @@ export default function SpotPage() {
 
               {cards.map((card, index) => (
                 <View key={card.userSpotifyId} style={{ position: 'absolute' }} >
-
                   <Pressable onLongPress={() => { hapti(card) }} >
                     <Card
                       title={card.music.title}
@@ -124,7 +143,7 @@ export default function SpotPage() {
                 <TouchableOpacity style={styles.button} onPress={onLike}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={onLike}>
+                <TouchableOpacity style={styles.button} onPress={addMockSpots}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} source={Lotties.likeAnimation} style={styles.lottie} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={onLike}>

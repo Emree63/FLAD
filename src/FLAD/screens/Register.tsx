@@ -18,20 +18,15 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 )
 
-export const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKey';
+export const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKeySpotify';
+export const MY_SECURE_AUTH_STATE_KEY_REFRESH = 'MySecureAuthStateKeySpotifyREFRESH';
 
 WebBrowser.maybeCompleteAuthSession();
 
-// Endpoint
-const discovery = {
-  authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-  tokenEndpoint: 'https://accounts.spotify.com/api/token',
-};
 // save the spotifyToken
 async function save(key: string, value: string) {
   await SecureStore.setItemAsync(key, value);
 }
-
 export default function InscriptionPage() {
   const [sound, setSound] = useState<Audio.Sound>();
   const navigation = useNavigation();
@@ -46,34 +41,10 @@ export default function InscriptionPage() {
     setSound(sound);
     await sound.playAsync();
   }
-
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //spotify auth
-  const [response] = useAuthRequest(
-    {
-      responseType: AuthSession.ResponseType.Token,
-      clientId: '1f1e34e4b6ba48b388469dba80202b10',
-      scopes: ['user-read-private', 'user-read-email', 'user-read-playback-state', 'user-read-currently-playing', 'user-read-recently-played', 'playlist-modify-public', 'ugc-image-upload', 'user-modify-playback-state'],
-      redirectUri: makeRedirectUri({
-        scheme: 'flad'
-      }),
-    },
-    discovery
-  );
-  useEffect(() => {
-    if (response && response.type === 'success') {
-      const auth = response.params.access_token;
-      const storageValue = JSON.stringify(auth);
-
-      if (Platform.OS !== 'web') {
-        // Securely store the auth on your device
-        save(MY_SECURE_AUTH_STATE_KEY, storageValue);
-      }
-    }
-  }, [response]);
 
   const dispatch = useDispatch();
 
@@ -83,7 +54,7 @@ export default function InscriptionPage() {
       password: password,
       idSpotify: spotifyToken,
       name: username,
-      idFlad: "3030"
+      idFlad: "9835698"
     };
     //@ts-ignore
     dispatch(registerUser(credentials))
@@ -91,19 +62,24 @@ export default function InscriptionPage() {
   }
   const getTokens2 = async () => {
     try {
-      const response = await fetch('https://flad-api-production.up.railway.app/api/spotify/callback');
-      const responseJson = await response.json();
+      const redirectUri = AuthSession.makeRedirectUri();
+      const result = await AuthSession.startAsync({
+        authUrl: 'https://flad-api-production.up.railway.app/api/spotify/exchange?' + '&redirectUrl=' +
+        encodeURIComponent(redirectUri)
+      })
       const {
-        access_token: accessToken,
-      } = responseJson;
-
-      await setSpotifyToken(accessToken);
-
-      console.log(spotifyToken);
+        access_token: access_token,
+        refresh_token: refresh_token,
+      } = result.params
+      save(MY_SECURE_AUTH_STATE_KEY, access_token);
+      setSpotifyToken(access_token)
+      save(MY_SECURE_AUTH_STATE_KEY_REFRESH, refresh_token);
     } catch (err) {
       console.error(err);
     }
   }
+
+  
   return (
     <DismissKeyboard>
       <View style={styles.container}>

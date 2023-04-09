@@ -10,13 +10,17 @@ export const registerUser = (resgisterCredential: CredentialsRegister) => {
   //@ts-ignore
   return async dispatch => {
     try {
+      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+
+      console.log(resgisterCredential);
+      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       }
       const resp = await axios.post(
-        `${API_URL}/api/users/register`,
+        'https://flad-api-production.up.railway.app/api/users/register',
         resgisterCredential,
         config
       )
@@ -37,6 +41,7 @@ export const registerUser = (resgisterCredential: CredentialsRegister) => {
       }
 
     } catch (error) {
+      console.log('Login Failed'+ error.message + "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"); 
       dispatch(ChangeErrorSignup())
     }
   }

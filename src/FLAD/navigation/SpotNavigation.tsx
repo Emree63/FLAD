@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SpotPage from '../screens/Spot'
+import SpotPage from '../screens/spot'
 import MusicDetail from '../screens/MusicDetail';
 
 
