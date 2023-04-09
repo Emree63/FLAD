@@ -135,6 +135,8 @@ Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ``
   </table>
 </div>
 <br/>
+
+
 ## Deploiement
 - [x] &nbsp; ![IOS](https://img.shields.io/badge/IOS-000?style=for-the-badge&logo=apple&logoColor=black&color=white)
 - [x] &nbsp; ![Android](https://img.shields.io/badge/Android-000?style=for-the-badge&logo=android&logoColor=white&color=green)
