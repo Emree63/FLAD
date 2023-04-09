@@ -109,7 +109,8 @@ class LocationService {
 
     // give a array of position sorted by distance and return the first
     private findNearest(main : Position, list : Position[]){
-        this.orderByDistance(main, list)[0]
+        const nearest = this.orderByDistance(main, list)[0]
+        return nearest;
     }
     
     //distanceFn: DistanceFn = getDistance est param sa serrait cool de lui passer un fonction
