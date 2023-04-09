@@ -19,7 +19,6 @@ class SpotifyController implements Controller {
         this.initialiseRoutes();
     }
     initialiseRoutes() {
-        // this.router.post(`${this.path}`,this.createTask);
         this.router.get(`${this.path}/exchange`,this.login);
         this.router.get(`${this.path}/callback`,this.getAccessToken);
         this.router.get(`${this.path}/refresh`,this.getRefreshToken);
@@ -27,12 +26,10 @@ class SpotifyController implements Controller {
         
     }
 
-      // need to put in ENvironement file
-    // private readonly CLIENT_CALLBACK_URL = "http://localhost:8080/callback";
+     
      private readonly API_URL = "https://accounts.spotify.com/api/token";
      private readonly CLIENT_ID = "1f1e34e4b6ba48b388469dba80202b10";
      private readonly CLIENT_SECRET = "779371c6d4994a68b8dd6e84b0873c82";
-    //  private readonly CLIENT_CALLBACK_URL = "https://auth.expo.io/@thed47/FLAD//callback";
      private readonly CALLBACK_2 = 'https://flad-api-production.up.railway.app/api/spotify/callback';
      private readonly SCOPES ='user-read-private user-read-email user-read-playback-state user-read-currently-playing user-read-recently-played playlist-modify-public ugc-image-upload user-modify-playback-state';
      private readonly ENCRYPTION_SECRET = new CryptString(16);
@@ -46,18 +43,7 @@ class SpotifyController implements Controller {
 
       console.log("useeeee== login");
         try {
-            // const params = req.body;
-            // if (!params.refresh_token) {
-            //   return res.json({
-            //     "error": "Parameter missing"
-            //   });
-            // }
-          
-            // this.spotifyRequest({
-            //   grant_type: "authorization_code",
-            //   redirect_uri: this.CLIENT_CALLBACK_2,
-            //   // code: params.code
-            // })
+            
             const redirectResponse =  req.query.redirectUrl ? req.query.redirectUrl : req.headers.referer;
             res.cookie(this.clientRedirect, redirectResponse);
             console.log("aloorrr si c'est niquuuuuuuuuuuueeee" +this.CALLBACK_2+ "gennnnnnnnnrree vraiiiiiiiment ");
@@ -67,27 +53,9 @@ class SpotifyController implements Controller {
               client_id: this.CLIENT_ID,
               scope: this.SCOPES,
               redirect_uri: this.CALLBACK_2,
-              // state: this.ENCRYPTION_SECRET.stringCrypt
             }));
             
-            // '?response_type=code' +
-            // '&client_id=' +
-            // "1f1e34e4b6ba48b388469dba80202b10" +
-            // (this.SCOPES ? '&scope=' + encodeURIComponent(this.SCOPES) : '') +
-            // '&redirect_uri=' +
-            // encodeURIComponent(this.CALLBACK_2)
-            // );
-            // .then(session => {
-            //   let result = {
-            //     "access_token": session.access_token,
-            //     "expires_in": session.expires_in,
-            //     "refresh_token": this.encrypt(session.refresh_token)
-            //   };
-            //   return res.send(result);
-            // })
-            // .catch(response => {
-            //   return res.json(response);
-            // });
+           
         } catch (error) {
             next(new HttpException(400, 'Cannot create spot'));
         }  
@@ -125,14 +93,6 @@ class SpotifyController implements Controller {
               json: true
             };
           
-            // request.post(authOptions, function(error, response, body) {
-            //   if (!error && response.statusCode === 200) {
-            //     var access_token = body.access_token;
-            //     res.send({
-            //       'access_token': access_token
-            //     });
-            //   }
-            // });
             axios(authOptions)
             .then(session => {
               if(session.status === 200){
@@ -198,7 +158,6 @@ class SpotifyController implements Controller {
     var state = req.query.state || null;
     var storedredirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
  
-    // var storedState = req.cookies ? req.cookies[stateKey] : null;
     var authOptions = {
       method: 'POST',
       url: 'https://accounts.spotify.com/api/token',
@@ -221,12 +180,7 @@ class SpotifyController implements Controller {
       var expiration =resp.data.expires_in;
       var refresh = resp.data.refresh_token
       console.log(access_token);
-    //   res.send({
-    //     "access_token": access_token,
-    //     "expires_in": expiration,
-    //     "refresh" : refresh
-    // });
-
+   
       res.clearCookie(this.clientRedirect);
     res.redirect(`${storedredirectUri}?` +
     qs.stringify({
