@@ -57,7 +57,6 @@ class App {
     }
     
     private initialiseDatabase(): void {
-        const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const uri = "mongodb+srv://fladDevDb:ZslYlNRWIOUU7i6o@fladcluster.b29tytu.mongodb.net/?retryWrites=true&w=majority"
         mongoose.connect(uri)
         .then(() => console.log("Connect to MongoDB database successfully"))
