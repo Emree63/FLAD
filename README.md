@@ -30,7 +30,7 @@
 
 :information_source: Ce projet est un travail universitaire pour la deuxième année du B.U.T Informatique de Clermont-Ferrand. 
 
-## Répartition du Gitlab
+## Répartition du Git
 
 La racine de notre gitlab est composée de deux dossiers essentiels au projet:
 

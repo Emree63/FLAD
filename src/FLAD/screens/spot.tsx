@@ -159,7 +159,7 @@ export default function SpotPage() {
             <FladLoading />
           </View>
           <Text style={{ color: "grey", fontWeight: "400", textAlign: "center", top: 100 }}>Vous avez explorer toutes les spot autour de vous.
-            {"\n"}Continuer dans discoverie pour découvrir de nouvelles music basées dur vos gouts musicaux.</Text>
+            {"\n"}Continuer dans discoverie pour découvrir de nouvelles music basées sur vos gouts musicaux.</Text>
         </View>)
       }
     </View>
