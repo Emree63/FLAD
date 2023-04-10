@@ -56,10 +56,13 @@ export default function InscriptionPage() {
       name: username,
       idFlad: "9835698"
     };
+
     //@ts-ignore
     dispatch(registerUser(credentials))
+
     playSound()
   }
+  
   const getTokens2 = async () => {
     try {
       const redirectUri = AuthSession.makeRedirectUri();

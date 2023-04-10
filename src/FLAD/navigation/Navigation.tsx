@@ -54,7 +54,6 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
             const locationresp = await Location.getCurrentPositionAsync({});
             // send location to server
             if(currentMusic){
-            
               const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
                 longitude: locationresp.coords.longitude,
                 latitude: locationresp.coords.latitude,
@@ -91,7 +90,7 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
         console.log(error);
       }
     };
-    const interval = setInterval(sendLocationUpdate, 5000);
+    const interval = setInterval(sendLocationUpdate, 30000);
     return () => {
       clearInterval(interval);
     };
