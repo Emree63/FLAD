@@ -2,7 +2,6 @@ import Controller from '../Icontroller';
 import { Router, Request, Response, NextFunction } from 'express';
 import HttpException from '../../middleware/exeption/httpExeption';
 import axios from 'axios';
-import CryptString from './crypt';
 import qs from 'qs';
 
 class SpotifyController implements Controller {
