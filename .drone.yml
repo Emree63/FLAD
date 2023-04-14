@@ -32,7 +32,7 @@ steps:
       dockerfile: src/Mqtt/Dockerfile
       context: src/Mqtt
       registry: hub.codefirst.iut.uca.fr
-      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad:2
+      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
       username:
         from_secret: SECRET_REGISTRY_USERNAME
       password:
