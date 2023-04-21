@@ -73,8 +73,6 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
             else{
               return;
             }
-            
-          
         }
         else {
           //@ts-ignore

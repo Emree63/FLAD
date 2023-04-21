@@ -17,7 +17,7 @@ export interface FetchOptions {
 
 export class RequestHandler {
     private _version: `v${number}` = 'v1';
-    
+
     get version(): string {
         return this._version;
     }
@@ -34,21 +34,20 @@ export class RequestHandler {
                 },
                 data: options.body
             });
-            
-        return resp;
-        }
-        catch(error : any){
-            const errorMessage = error.response.data?.error?.message;
-            if (errorMessage === "Invalid access token" || errorMessage === "The access token expired" ) {
-                console.log('### Warning ! ### try refresh token Request Handler ' +error);
 
+            return resp;
+        }
+        catch (error: any) {
+            const errorMessage = error.response.data?.error?.message;
+            if (errorMessage === "Invalid access token" || errorMessage === "The access token expired") {
+                console.log('### Warning ! ### try refresh token Request Handler ' + error);
                 const newToken = await this.refreshToken();
-                console.log('### GOOD Warning ! ### new token Request Handler ' +newToken);
+                console.log('### GOOD Warning ! ### new token Request Handler ' + newToken);
                 // Mettez à jour le token dans le store ou le reducer ici
                 return this.spotifyFetch(url, options, newToken);
             }
             else {
-                console.log('### Error ! ### while fetching Data in the SPotify Request Handler ' +error);
+                console.log('### Error ! ### while fetching Data in the SPotify Request Handler ' + error);
                 throw error;
             }
         }
@@ -61,9 +60,9 @@ export class RequestHandler {
         const response = await axios.get(`https://flad-api-production.up.railway.app/api/spotify/refresh?refresh_token=${refreshToken}`);
         // Renvoie le nouveau token
         const {
-            access_token :  access_token,
+            access_token: access_token,
             refresh_token: refresh_token,
-          } = response.data as SpotifyAuthResponse
+        } = response.data as SpotifyAuthResponse
         console.log('new access token : ' + access_token);
         console.log('new refresh token : ' + refresh_token);
         await SecureStore.setItemAsync(MY_SECURE_AUTH_STATE_KEY, access_token);
@@ -75,4 +74,4 @@ export class RequestHandler {
 interface SpotifyAuthResponse {
     access_token: string;
     refresh_token: string;
-  }
+}

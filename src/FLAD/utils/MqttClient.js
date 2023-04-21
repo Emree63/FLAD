@@ -1,11 +1,14 @@
 import initialize from '../lib';
+import { Alert } from 'react-native';
+require('../lib/paho-mqtt');
 
 initialize();
+
 class MqttClient {
     
   constructor() {
     const clientId = 'ReactNativeMqtt';
-    this.client = new Paho.MQTT.Client('127.0.0.1', 9001, clientId);
+    this.client = new Paho.MQTT.Client("172.20.10.3", 9001 , clientId);
     this.client.onMessageArrived = this.onMessageArrived;
     this.callbacks = {};
     this.onSuccessHandler = undefined;
