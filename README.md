@@ -151,7 +151,7 @@ La composition pour le projet se voit réaliser par deux élèves de l'IUT d'Aub
 
 <div align="center">
 <a href = "https://codefirst.iut.uca.fr/git/emre.kartal">
-<img src="https://codefirst.iut.uca.fr/git/avatars/402cf312e853192f42c0135a888725c2?size=870" width="50" >
+<img src="https://codefirst.iut.uca.fr/git/avatars/1ff65c9c5ab0e8c8883fb48adbcf972f?size=72" width="50" >
 </a>
 <a href = "https://codefirst.iut.uca.fr/git/david.d_almeida">
 <img src="https://codefirst.iut.uca.fr/git/avatars/0f8eaaad1e26d3de644ca522eccaea7c?size=870" width="50" >
@@ -159,9 +159,11 @@ La composition pour le projet se voit réaliser par deux élèves de l'IUT d'Aub
 </div>
 
 <div align = center>
-© PM2 (Projet inspiré par nos très chers développeurs de la Dafl Team (S.O les Dafl dev))
+© FladDev
 </div>
 
-<hr>
+<div align = right>
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Licence Creative Commons Attribution - Pas d&#39;Utilisation Commerciale - Pas de Modification 4.0 International</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+
+</div>
