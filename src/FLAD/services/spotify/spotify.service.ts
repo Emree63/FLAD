@@ -1,6 +1,6 @@
 import axios from "axios";
-import MusicFactory from "../../Model/factory/MusicFactory";
-import Music from "../../Model/Music";
+import MusicMapper from "../../model/mapper/MusicMapper";
+import Music from "../../model/Music";
 import { FetchOptions, RequestHandler } from "./spotifyRequestHandler/utils";
 export class MusicMinimal {
 	public id: string;

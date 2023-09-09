@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import normalize from '../components/Normalize';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -19,13 +19,12 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback>
 )
 
-
-export default function SettingProfil() {
+export default function ProfilScreen() {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
     // @ts-ignore
     const UserCurrent = useSelector(state => state.userReducer.user);
-    const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+    const style = isDark ? colorsDark : colorsLight;
     const navigation = useNavigation();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
 
@@ -108,14 +107,6 @@ export default function SettingProfil() {
         imageProfil: {
             width: 120,
             height: 120,
-        },
-        editButton: {
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            backgroundColor: '#7C7C7C',
-            alignItems: 'center',
-            justifyContent: 'center'
         },
         body: {
             paddingVertical: 9,
@@ -266,22 +257,17 @@ export default function SettingProfil() {
                             // @ts-ignore
                             onPress={() => navigation.navigate('Setting')}>
                             <View style={styles.exit}>
-                                <Image style={styles.buttonSetting} source={require('../assets/icons/icons/buttonProfil_Inverse.png')} />
+                                <Image style={styles.buttonSetting} source={require('../assets/images/chevron_right_icon.png')} />
                                 <Text style={styles.textExit}>Exit</Text>
                             </View>
                         </TouchableOpacity>
                         <View style={styles.profilHead}>
                             <Text style={styles.title}>Profil</Text>
-                            <View style={styles.imageWrapper}>
-                                <Image source={{ uri: UserCurrent.image }} style={styles.imageProfil} />
-                            </View>
-                            <View style={styles.editButton}>
-                                <TouchableOpacity onPress={pickImage} >
-                                    <Image
-                                        source={require('../assets/icons/icons/edit.png')} style={{ resizeMode: "stretch", height: '85%', aspectRatio: 1 }}
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity onPress={pickImage} >
+                                <View style={styles.imageWrapper}>
+                                    <Image source={{ uri: UserCurrent.image }} style={styles.imageProfil} />
+                                </View>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.body}>
                             <View style={styles.optionId}>

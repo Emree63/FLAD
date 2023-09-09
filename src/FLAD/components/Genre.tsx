@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import Music from "../Model/Music";
+import Music from "../model/Music";
 import { Artist } from "./Artist";
 
 export const ArtistLayout = () => {

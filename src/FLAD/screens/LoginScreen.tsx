@@ -14,7 +14,7 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback>
 )
 
-export default function LoginPage() {
+export default function LoginScreen() {
     const [sound, setSound] = useState<Audio.Sound>();
     const [rememberMe, setRememberMe] = useState(false);
     const navigation = useNavigation();
@@ -50,11 +50,11 @@ export default function LoginPage() {
     return (
         <DismissKeyboard>
             <View style={styles.container}>
-                <ImageBackground source={require("../assets/images/Background.png")} resizeMode="cover" style={styles.image}>
+                <ImageBackground source={require("../assets/images/background.png")} resizeMode="cover" style={styles.image}>
                     <Text style={styles.versionText}>
                         v2.0
                     </Text>
-                    <Image source={require("../assets/icons/Logo_White_Flad.png")} style={styles.imageLogo} />
+                    <Image source={require("../assets/images/flad_logo.png")} style={styles.imageLogo} />
                     <Text style={styles.text}>SE CONNECTER</Text>
                     {failedLogin && (
                         <Text style={styles.textError}>Email ou mot de passe incorrect!</Text>
@@ -64,7 +64,7 @@ export default function LoginPage() {
                             placeholderTextColor="#B8B4B8"
                             value={username}
                             onChangeText={setUsername} style={[styles.input, styles.shadow]} />
-                        <Image source={require('../assets/icons/icons/User.png')} style={styles.iconUser} />
+                        <Image source={require('../assets/images/user_icon.png')} style={styles.iconUser} />
                     </View>
                     <View>
                         <TextInput placeholder="Password"
@@ -79,7 +79,7 @@ export default function LoginPage() {
                         <Text style={styles.rememberMeText}>SE SOUVENIR DE MOI</Text>
                     </View>
                     <TouchableOpacity style={[styles.button, styles.shadow]} onPress={submitForm}>
-                        <Image source={require("../assets/icons/Check.png")} style={styles.buttonImage} />
+                        <Image source={require("../assets/images/check_icon.png")} style={styles.buttonImage} />
                     </TouchableOpacity>
                     <View style={styles.inscriptionText}>
                         <Text style={{ fontSize: normalize(18), color: 'white' }}>Tu n'as pas de compte? </Text>

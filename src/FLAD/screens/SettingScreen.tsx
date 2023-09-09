@@ -8,8 +8,8 @@ import normalize from '../components/Normalize';
 import { ScrollView, Switch, TextInput } from 'react-native-gesture-handler';
 import CardMusic from '../components/CardMusic';
 import { ChangeMode, DeleteToken } from '../redux/thunk/authThunk';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -18,7 +18,7 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback>
 )
 
-export default function Setting() {
+export default function SettingScreen() {
     const textInputRef = useRef(null);
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -33,7 +33,7 @@ export default function Setting() {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
-    const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+    const style = isDark ? colorsDark : colorsLight;
 
     async function ChangeDarkMode() {
         try {
@@ -268,15 +268,15 @@ export default function Setting() {
 
                         <TouchableOpacity
                             // @ts-ignore
-                            onPress={() => navigation.navigate('SettingProfil')}
+                            onPress={() => navigation.navigate('Profil')}
                         >
                             <View style={styles.profil}>
-                                <Image source={require('../assets/icons/icons/IconProfil.png')} style={styles.imageProfil} />
+                                <Image source={require('../assets/images/profil_icon_asupp.png')} style={styles.imageProfil} />
                                 <View style={styles.profilContainer}>
                                     <Text style={styles.NameProfil}>Emre KARTAL</Text>
                                     <Text style={styles.description}>id. Spotify, mail et mot de passe</Text>
                                 </View>
-                                <Image style={styles.buttonSetting} source={require('../assets/icons/icons/buttonProfil.png')} />
+                                <Image style={styles.buttonSetting} source={require('../assets/images/chevron_right_icon.png')} />
                             </View>
                         </TouchableOpacity>
 
@@ -335,7 +335,7 @@ export default function Setting() {
 
                                 <View style={styles.musicActually}>
                                     <CardMusic image={currentMusic.image} title={currentMusic.title} description={currentMusic.bio} id='1' />
-                                    <Image source={require("../assets/images/FladyShadow.png")} style={styles.mascot} />
+                                    <Image source={require("../assets/images/flady_shadow.png")} style={styles.mascot} />
                                 </View>
                             </>
                         ) : <></>}

@@ -5,7 +5,7 @@ import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle,
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";
 import normalize from '../components/Normalize';
-import Music from "../Model/Music";
+import Music from "../model/Music";
 import SpotifyService from "../services/spotify/spotify.service";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -13,13 +13,13 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { HorizontalFlatList } from "../components/HorizontalFlatList";
 import { LittleCard } from "../components/littleCard";
 import * as SecureStore from 'expo-secure-store';
-import { MY_SECURE_AUTH_STATE_KEY } from "./Register";
+import { MY_SECURE_AUTH_STATE_KEY } from "./RegisterScreen";
 
 const halfPi = Math.PI / 2;
 
 
 //@ts-ignore
-const MusicDetail = ({ route }) => {
+const DetailScreen = ({ route }) => {
     const music: Music = route.params.music;
     const [currentspot] = useState(music);
     const [simularMusic, setSimularMusic] = useState<Music[]>([]);
@@ -188,7 +188,7 @@ const MusicDetail = ({ route }) => {
     );
 };
 
-export default MusicDetail;
+export default DetailScreen;
 
 const styles = StyleSheet.create({
     mainSafeArea: {

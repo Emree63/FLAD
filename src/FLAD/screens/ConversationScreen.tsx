@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 import Friend from "../components/Friend";
 import normalize from '../components/Normalize';
 
-export default function ConversationList() {
+export default function ConversationScreen() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
@@ -14,13 +14,13 @@ export default function ConversationList() {
     const navigation = useNavigation();
 
     const friends = [
-        { id: 1, name: "Lucas", lastMessage: "J'en ai marre de provot", source: require('../assets/images/jul.png') },
-        { id: 2, name: "Louison", lastMessage: "Tu vien piscine ?", source: require('../assets/images/jul.png') },
-        { id: 3, name: "Dave", lastMessage: "Ok c noté !", source: require('../assets/images/pnl.png') },
-        { id: 4, name: "Valentin", lastMessage: "Haha react native c incroyable !!!", source: require('../assets/images/jul.png') },
+        { id: 1, name: "Lucas", lastMessage: "J'en ai marre de provot", source: "https://yt3.googleusercontent.com/CgPFZUSWbFj9txLG_8l48YRCwnrlfQya8sw_UCB-s3NGkQEnLj--KZI0CqSCyP2XqPfOB-j9yQ=s900-c-k-c0x00ffffff-no-rj" },
+        { id: 2, name: "Louison", lastMessage: "Tu vien piscine ?", source: "https://yt3.googleusercontent.com/CgPFZUSWbFj9txLG_8l48YRCwnrlfQya8sw_UCB-s3NGkQEnLj--KZI0CqSCyP2XqPfOB-j9yQ=s900-c-k-c0x00ffffff-no-rj" },
+        { id: 3, name: "Dave", lastMessage: "Ok c noté !", source: "https://img.lemde.fr/2019/04/05/0/0/960/960/664/0/75/0/18299d3_tUvp2AZPH_jnsIL2ypVFGUro.jpg" },
+        { id: 4, name: "Valentin", lastMessage: "Haha react native c incroyable !!!", source: "https://yt3.googleusercontent.com/CgPFZUSWbFj9txLG_8l48YRCwnrlfQya8sw_UCB-s3NGkQEnLj--KZI0CqSCyP2XqPfOB-j9yQ=s900-c-k-c0x00ffffff-no-rj" },
     ];
 
-    const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+    const style = isDark ? colorsDark : colorsLight;
 
     const styles = StyleSheet.create({
         mainSafeArea: {

@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { color } from 'react-native-reanimated';
 import { useSelector } from 'react-redux';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 import normalize from './Normalize';
 
 type FriendProps = {
@@ -16,7 +16,7 @@ export default function Friend(friend: FriendProps) {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
-    const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+    const style = isDark ? colorsDark : colorsLight;
 
     const source = typeof friend.image === 'string' ? { uri: friend.image } : friend.image;
 
@@ -78,7 +78,7 @@ export default function Friend(friend: FriendProps) {
                     <Text style={styles.time}> · 1sem</Text>
                 </View>
             </View>
-            <Image style={styles.button} source={require('../assets/icons/icons/buttonProfil.png')} />
+            <Image style={styles.button} source={require('../assets/images/chevron_right_icon.png')} />
         </View>
     )
 }

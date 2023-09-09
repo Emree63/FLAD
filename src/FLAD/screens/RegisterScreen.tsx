@@ -29,7 +29,7 @@ WebBrowser.maybeCompleteAuthSession();
 async function save(key: string, value: string) {
   await SecureStore.setItemAsync(key, value);
 }
-export default function InscriptionPage() {
+export default function RegisterScreen() {
   const [sound, setSound] = useState<Audio.Sound>();
   const navigation = useNavigation();
   const [spotifyToken, setSpotifyToken] = useState('');
@@ -38,7 +38,7 @@ export default function InscriptionPage() {
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/Click.mp3')
+      require('../assets/sounds/click.mp3')
     );
     setSound(sound);
     await sound.playAsync();
@@ -105,11 +105,11 @@ export default function InscriptionPage() {
   return (
     <DismissKeyboard>
       <View style={styles.container}>
-        <ImageBackground source={require("../assets/images/Background.png")} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={require("../assets/images/background.png")} resizeMode="cover" style={styles.image}>
           <Text style={styles.versionText}>
             v2.0
           </Text>
-          <Image source={require("../assets/icons/Logo_White_Flad.png")} style={styles.imageLogo} />
+          <Image source={require("../assets/images/flad_logo.png")} style={styles.imageLogo} />
           <Text style={styles.text}>S'INSCRIRE</Text>
           {failedSignup && (
             <Text style={styles.textError}>Email ou mot de passe incorrect!</Text>
@@ -119,31 +119,31 @@ export default function InscriptionPage() {
               placeholderTextColor="#B8B4B8"
               value={username}
               onChangeText={setUsername} />
-            <Image source={require('../assets/icons/icons/User.png')} style={styles.iconUser} />
+            <Image source={require('../assets/images/user_icon.png')} style={styles.iconUser} />
           </View>
           <View>
             <TextInput style={[styles.input, styles.shadow]} placeholder="Email"
               placeholderTextColor="#B8B4B8"
               value={email}
               onChangeText={setEmail} />
-            <Image source={require('../assets/icons/icons/lock.png')} style={styles.iconLock} />
+            <Image source={require('../assets/images/lock_icon.png')} style={styles.iconLock} />
           </View>
           <View>
             <TextInput style={[styles.input, styles.shadow]} placeholder="Password"
               placeholderTextColor="#B8B4B8"
               value={password} secureTextEntry={true}
               onChangeText={setPassword} />
-            <Image source={require('../assets/icons/icons/lock.png')} style={styles.iconLock} />
+            <Image source={require('../assets/images/lock_icon.png')} style={styles.iconLock} />
           </View>
           <TouchableOpacity onPress={async () => {
             await getTokens2();
           }} style={[styles.buttonSpotify, styles.shadow]}>
             <Text style={styles.textIntoButton}>Lier compte</Text>
-            <Image source={require("../assets/icons/icons/Spotify.png")} style={{ width: normalize(35), height: normalize(35) }} />
+            <Image source={require("../assets/images/spotify_icon.png")} style={{ width: normalize(35), height: normalize(35) }} />
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, styles.shadow]} onPress={() => submitForm()}>
-            <Image source={require("../assets/icons/icons/next.png")} style={styles.buttonImage} />
+            <Image source={require("../assets/images/arrow_forward.png")} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.connectionText}>
             <Text style={{ fontSize: normalize(18), color: 'white' }}>Tu as déjà un compte? </Text>

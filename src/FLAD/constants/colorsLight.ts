@@ -1,4 +1,4 @@
-export const GraphicalCharterLight = {
+export const colorsLight = {
     "body": "#f2f2f6",
     "Text": "black",
     "Card": "#fff",

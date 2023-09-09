@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, useWindowDimensions, useColorScheme } from 'react-native';
-import normalize from '../components/Normalize';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import normalize from './Normalize';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
 // @ts-ignore
-export default function Onboarding({ item }) {
-    const style = useColorScheme() == 'light' ? GraphicalCharterLight : GraphicalCharterDark;
+export default function OnboardingComponent({ item }) {
+    const style = useColorScheme() == 'light' ? colorsLight : colorsDark;
     const { width, height } = useWindowDimensions();
     const styles = StyleSheet.create({
         container: {

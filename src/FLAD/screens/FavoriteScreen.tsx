@@ -2,28 +2,28 @@ import React from 'react';
 import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity, TouchableHighlight, SafeAreaView } from 'react-native';
 import CardMusic from '../components/CardMusic';
 import normalize from '../components/Normalize';
-import Music from '../Model/Music'
+import Music from '../model/Music'
 import FladyComponent from '../components/FladyComponent';
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
 import { SharedElement } from 'react-navigation-shared-element';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
-export default function FavoritePage() {
+export default function FavoriteScreen() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
-    const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+    const style = isDark ? colorsDark : colorsLight;
 
     const navigation = useNavigation();
     //@ts-ignore
     const favoritesMusic = useSelector(state => state.appReducer.favoriteMusic);
     const images = [
-        { id: 1, source: require('../assets/images/FLADYLove.png') },
-        { id: 2, source: require('../assets/images/FLADYStar.png') },
-        { id: 3, source: require('../assets/images/FLADYHate.png') },
-        { id: 4, source: require('../assets/images/FLADYCry.png') },
+        { id: 1, source: require('../assets/images/flady_love.png') },
+        { id: 2, source: require('../assets/images/flady_star.png') },
+        { id: 3, source: require('../assets/images/flady_angry.png') },
+        { id: 4, source: require('../assets/images/flady_cry.png') },
     ];
     const navigueToDetail = (music: any) => {
         // @ts-ignore

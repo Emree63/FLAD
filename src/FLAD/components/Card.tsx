@@ -157,7 +157,7 @@ const Card = ({ image, onSwipe }: CardProps) => {
               }, opacRStyle]}
             >
               <Image style={[{ alignSelf: "center" }]}
-                source={require('../assets/icons/icons/icon_dislike.png')}
+                source={require('../assets/images/dislike_icon.png')}
               />
             </Animated.View>
             <Animated.View
@@ -172,7 +172,7 @@ const Card = ({ image, onSwipe }: CardProps) => {
               }, opacLStyle]}
             >
               <Image style={[{ alignSelf: "center" }]}
-                source={require('../assets/icons/icons/icon_like.png')}
+                source={require('../assets/images/like_icon.png')}
 
               />
             </Animated.View>
@@ -191,7 +191,7 @@ const Card = ({ image, onSwipe }: CardProps) => {
                 alignSelf: "center", width: 126.27,
                 height: 118.64,
               }]}
-                source={require('../assets/icons/icons/icon_discovery.png')}
+                source={require('../assets/images/discovery_icon.png')}
 
               />
             </Animated.View>

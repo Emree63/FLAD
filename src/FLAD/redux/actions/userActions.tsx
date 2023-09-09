@@ -1,4 +1,4 @@
-import { User } from "../../Model/User";
+import { User } from "../../model/User";
 import { userTypes } from "../types/userTypes";
 
 
@@ -14,7 +14,7 @@ export interface CredentialsRegister {
   idSpotify: string
 }
 export const setLoginState = (userJson: any) => {
-  const user = new User(userJson.data.idFlad, userJson.data.idSpotify, userJson.data.email, new Date(), userJson.data.name, require('../../assets/images/jul.png'));
+  const user = new User(userJson.data.idFlad, userJson.data.idSpotify, userJson.data.email, new Date(), userJson.data.name, userJson.data.image);
   return {
     type: userTypes.LOGIN,
     payload: user

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 
-export default function Chat() {
+export default function ChatScreen() {
 
     const navigation = useNavigation();
 

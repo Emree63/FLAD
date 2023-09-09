@@ -1,8 +1,7 @@
 import React from 'react';
-import Favorite from '../screens/Favorite';
-import MusicDetail from '../screens/MusicDetail';
+import Favorite from '../screens/FavoriteScreen';
+import DetailScreen from '../screens/DetailScreen';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
-import CurrentMusic from '../components/CurrentMusic';
 
 const Stack = createSharedElementStackNavigator();
 export default function MusicNavigation() {
@@ -14,8 +13,8 @@ export default function MusicNavigation() {
 
       />
       <Stack.Screen
-        name="MusicDetail"
-        component={MusicDetail}
+        name="Detail"
+        component={DetailScreen}
         sharedElements={(route) => { return [route.params.music.id] }}
       />
     </Stack.Navigator>

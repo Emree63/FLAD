@@ -1,7 +1,7 @@
 export default class Artist {
     private id: string;
     private name: string;
-    private _url: string; // Image.source
+    private _url: string;
 
     constructor(id: string, name: string, url: string) {
         this.id = id;

@@ -1,6 +1,6 @@
 import React from 'react';
-import Setting from '../screens/Setting';
-import SettingProfil from '../screens/SettingProfil';
+import SettingScreen from '../screens/SettingScreen';
+import ProfilScreen from '../screens/ProfilScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 export default function SettingNavigation() {
@@ -9,12 +9,12 @@ export default function SettingNavigation() {
     <Stack.Navigator initialRouteName="Setting">
       <Stack.Screen
         name="Setting"
-        component={Setting}
+        component={SettingScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="SettingProfil"
-        component={SettingProfil}
+        name="Profil"
+        component={ProfilScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

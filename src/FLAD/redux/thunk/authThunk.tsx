@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_URL } from "../../fladConfig";
+import { API_URL } from "../../assets/constants/config";
 import { Credentials, CredentialsRegister, restoreToken, setLoginState, UserLogout, userChangeMode, userSignUp, ChangeErrorLogin, ChangeErrorSignup } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
-import { UserFactory } from "../../Model/factory/UserFactory";
+import { UserMapper } from "../../model/mapper/UserMapper";
 
 const key = 'userToken';
 
@@ -35,7 +35,7 @@ export const registerUser = (resgisterCredential: CredentialsRegister) => {
           "https://flad-api-production.up.railway.app/api/users",
           { headers }
         )
-        dispatch(userSignUp(UserFactory.JsonToModel(user.data)));
+        dispatch(userSignUp(UserMapper.JsonToModel(user.data)));
       } else {
         console.log('Login Failed', 'Username or Password is incorrect');
       }

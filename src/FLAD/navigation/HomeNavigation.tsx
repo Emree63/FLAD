@@ -11,17 +11,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SpotNavigation from './SpotNavigation';
 import MessagingNavigation from './MessagingNavigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 import { getCurrentUserMusic, getSpotList } from '../redux/thunk/spotThunk';
 import SpotifyService from '../services/spotify/spotify.service';
 import * as SecureStore from 'expo-secure-store';
-import { MY_SECURE_AUTH_STATE_KEY } from '../screens/Register';
+import { MY_SECURE_AUTH_STATE_KEY } from '../screens/RegisterScreen';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import qs from 'qs';
 
-export default function Navigation() {
+export default function HomeNavigation() {
   const [setErrorMsg] = useState('');
   const [location, setLocation] = useState<Location.LocationObject>();
 //@ts-ignore
@@ -98,7 +98,7 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
 
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
-  const style = isDark ? GraphicalCharterDark : GraphicalCharterLight;
+  const style = isDark ? colorsDark : colorsLight;
   const BottomTabNavigator = createBottomTabNavigator();
   const MyTheme = {
     dark: false,

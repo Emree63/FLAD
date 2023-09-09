@@ -38,7 +38,7 @@ const FladLoading = () => {
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
       <Animated.View style={[{ backgroundColor: '#B40404', justifyContent: 'center', alignItems: 'center' }, breatheStyleSquare]}>
-        <Animated.Image source={require('../assets/icons/icon.png')} style={[{ height: size, width: size, borderColor: '#fff', borderRadius: size / 2 }]} />
+        <Animated.Image source={require('../assets/images/icon.png')} style={[{ height: size, width: size, borderColor: '#fff', borderRadius: size / 2 }]} />
       </Animated.View>
 
     </View>

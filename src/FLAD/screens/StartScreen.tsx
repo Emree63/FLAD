@@ -2,15 +2,15 @@ import React, { useState, useRef } from 'react';
 import { Modal, View, StyleSheet, useColorScheme, Text, FlatList, Animated, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
-import OnboardingItem from './OnboardingItem';
-import Paginator from './Paginator';
-import NextButton from './NextButton';
+import OnboardingItem from '../components/OnboardingComponent';
+import Paginator from '../components/Paginator';
+import NextButton from '../components/NextButton';
 import slides from '../data/slides';
-import { GraphicalCharterDark } from '../assets/GraphicalCharterDark';
-import { GraphicalCharterLight } from '../assets/GraphicalCharterLight';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
-export default function Onboarding() {
-    const style = useColorScheme() == 'light' ? GraphicalCharterLight : GraphicalCharterDark;
+export default function StartScreen() {
+    const style = useColorScheme() == 'light' ? colorsLight : colorsDark;
     const [currentIndex, setCurrentIndex] = useState(0);
     const scrollX = useRef(new Animated.Value(0)).current;
     const slidesRef = useRef(null);
@@ -164,7 +164,7 @@ export default function Onboarding() {
             </View>
             <Modal animationType="slide" visible={isModalVisible} presentationStyle={'pageSheet'}>
                 <View style={styles.modalContent}>
-                    <ImageBackground source={require("../assets/images/Background_Start_Page.png")} style={styles.backgroundImage}>
+                    <ImageBackground source={require("../assets/images/background_start.png")} style={styles.backgroundImage}>
                         <View style={styles.modalView}>
                             <Text style={styles.versionText}>
                                 v2.0
@@ -174,7 +174,7 @@ export default function Onboarding() {
                                     <Image source={require("../assets/icons/icons/croix.png")} style={styles.imageButton} />
                                 </View>
                             </TouchableOpacity>
-                            <Image source={require("../assets/icons/Logo_White_Flad.png")} style={styles.imageLogo} />
+                            <Image source={require("../assets/images/flad_logo.png")} style={styles.imageLogo} />
                             <TouchableOpacity
                                 style={styles.buttonConnection}
                                 onPress={() => {
@@ -191,7 +191,7 @@ export default function Onboarding() {
                             >
                                 <Text style={styles.text}>S’INSCRIRE MAINTENANT</Text>
                             </TouchableOpacity>
-                            <Image source={require("../assets/images/Flady.gif")} style={styles.mascot} />
+                            <Image source={require("../assets/images/flady.gif")} style={styles.mascot} />
                             <TouchableOpacity
                                 style={styles.button2Connection}
                                 // @ts-ignore

@@ -1,11 +1,10 @@
 export class User {
-  //attributes from DAFL
   private _idFlad: string;
   private _idSpotify: string;
   private _email: string;
   private _createdAt: Date;
   private _name: string;
-  public image: string = require('../assets/images/jul.png');
+  public image: string;
   
   //constructors
   constructor(idFlad: string, idSpotify: string, email: string, createdAt: Date, name: string, image: string) {
@@ -31,10 +30,6 @@ export class User {
   }
   get name(): string {
     return this._name;
-  }
-
-  static empty() {
-    return new User('', '', '', new Date(), '', require('../assets/images/jul.png'));
   }
 
   toString() {

@@ -8,7 +8,7 @@ import Animated, {
 const { width } = Dimensions.get("window");
 const SIZE = width / 3;
 import { Feather as Icon } from "@expo/vector-icons";
-import Music from "../Model/Music";
+import Music from "../model/Music";
 import { useState } from "react";
 
 

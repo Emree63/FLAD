@@ -1,4 +1,4 @@
-import Navigation from './Navigation';
+import HomeNavigation from './HomeNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StartNavigation from './StartNavigation';
@@ -11,7 +11,7 @@ export default function AuthNavigation() {
   //@ts-ignore
   const tokenProcesed: boolean = useSelector(state => state.userReducer.loading);
   //@ts-ignore
-  const isLogin: boolean = useSelector(state => state.userReducer.isLogedIn);  
+  const isLogin: boolean = useSelector(state => state.userReducer.isLogedIn);
   const [appIsReady, setAppIsReady] = useState(false);
   const dispatch = useDispatch();
   async function prepare() {
@@ -29,9 +29,9 @@ export default function AuthNavigation() {
         const newValue = JSON.stringify(JSON.parse(currentValue));
         //@ts-ignore
         dispatch(ChangeMode(JSON.parse(newValue)))
-      } 
+      }
     } catch (error) {
-      console.log(`Une erreur s'est produite lors de la mise à jour de la valeur booléenne pour la clé 'dark': `, error);
+      console.log("An error occurred while updating the boolean value for the 'dark' key: ", error);
     }
   }
   useEffect(() => {
@@ -40,18 +40,18 @@ export default function AuthNavigation() {
 
   }, [appIsReady, tokenProcesed]);
 
-  
+
   if (tokenProcesed == false) {
     return null;
   }
 
   return (
-    
+
     <SafeAreaProvider onLayout={() => setAppIsReady(true)}>
       {isLogin ? (
-        <Navigation />
+        <HomeNavigation />
       ) :
-        <StartNavigation/>
+        <HomeNavigation />
       }
     </SafeAreaProvider>
   )

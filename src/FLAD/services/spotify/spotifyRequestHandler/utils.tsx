@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { MY_SECURE_AUTH_STATE_KEY, MY_SECURE_AUTH_STATE_KEY_REFRESH } from "../../../screens/Register";
+import { MY_SECURE_AUTH_STATE_KEY, MY_SECURE_AUTH_STATE_KEY_REFRESH } from "../../../screens/RegisterScreen";
 import * as SecureStore from 'expo-secure-store';
 
 export type Methods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';

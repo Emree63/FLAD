@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Spot } from "../../Model/Spot";
+import { Spot } from "../../model/Spot";
 
 export const likeSpot = async (spot: Spot) => {
     return async (dispatch) => {

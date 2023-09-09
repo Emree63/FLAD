@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SpotPage from '../screens/spot'
-import MusicDetail from '../screens/MusicDetail';
+import SpotScreen from '../screens/SpotScreen'
+import DetailScreen from '../screens/DetailScreen';
 
 
 export default function SpotNavigation() {
@@ -16,12 +16,12 @@ export default function SpotNavigation() {
     }}
     >
       <Stack.Screen
-        name="SpotsPage"
-        component={SpotPage}
+        name="Spot"
+        component={SpotScreen}
       />
       <Stack.Screen
-        name="DetailsSpot"
-        component={MusicDetail}
+        name="Detail"
+        component={DetailScreen}
       />
     </Stack.Navigator>
   )

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Conversation from '../screens/Conversation'
-import Chat from '../screens/Chat';
+import ConversationScreen from '../screens/ConversationScreen'
+import ChatScreen from '../screens/ChatScreen';
 
 export default function MessagingNavigation() {
   const Stack = createStackNavigator();
@@ -10,12 +10,12 @@ export default function MessagingNavigation() {
     <Stack.Navigator initialRouteName="Conversation" screenOptions={{ gestureEnabled: true, headerShown: false, cardOverlayEnabled: true, cardStyle: { backgroundColor: "transparent" } }}>
       <Stack.Screen
         name="Conversation"
-        component={Conversation}
+        component={ConversationScreen}
       />
       <Stack.Screen
         name="Chat"
-        component={Chat}
-        options = {{
+        component={ChatScreen}
+        options={{
           headerShown: true
         }}
       />

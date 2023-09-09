@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
-import { Spot } from "../../Model/Spot";
+import { Spot } from "../../model/Spot";
 import SpotifyService from "../../services/spotify/spotify.service";
 import { setSpotList, setUserCurrentMusic } from "../actions/spotActions";
 const key = 'userToken';

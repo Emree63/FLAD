@@ -1,6 +1,6 @@
 import Music from "../Music";
 
-export default class MusicFactory {
+export default class MusicMapper {
   static mapFromSpotifyTrack(jsonMusic: any): Music {
     const music = new Music(
       jsonMusic.id,
