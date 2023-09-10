@@ -27,7 +27,7 @@ export default function FavoriteScreen() {
     ];
     const navigueToDetail = (music: any) => {
         // @ts-ignore
-        navigation.navigate("MusicDetail", { "music": music })
+        navigation.navigate("Detail", { "music": music })
     };
     const styles = StyleSheet.create({
         mainSafeArea: {
@@ -35,7 +35,7 @@ export default function FavoriteScreen() {
             backgroundColor: style.body,
         },
         titleContainer: {
-            marginTop: 30,
+            marginTop: 10,
             marginLeft: 20,
         },
         title: {
@@ -47,7 +47,7 @@ export default function FavoriteScreen() {
             marginTop: 10,
             fontSize: normalize(20),
             color: '#787878',
-            marginBottom: 20
+            marginBottom: 5
         },
         button: {
             marginTop: '10%',

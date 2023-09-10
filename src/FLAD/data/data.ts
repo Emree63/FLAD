@@ -1,8 +1,7 @@
 import Music from "../model/Music";
 import { Spot } from "../model/Spot";
 
-
-export const spotArray2: Spot[] = [
+export const spotsData: Spot[] = [
   new Spot("1", new Music("6KNw3UKRp3QRsO7Cf4ASVE",
     "MOLLY - A COLORS SHOW",
     "Tame Impala",

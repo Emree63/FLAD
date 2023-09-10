@@ -38,7 +38,7 @@ export default function RegisterScreen() {
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/click.mp3')
+      require('../assets/sounds/click_sound.mp3')
     );
     setSound(sound);
     await sound.playAsync();
@@ -105,7 +105,7 @@ export default function RegisterScreen() {
   return (
     <DismissKeyboard>
       <View style={styles.container}>
-        <ImageBackground source={require("../assets/images/background.png")} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={require("../assets/images/background_home.png")} resizeMode="cover" style={styles.image}>
           <Text style={styles.versionText}>
             v2.0
           </Text>

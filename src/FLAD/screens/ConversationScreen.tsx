@@ -28,7 +28,7 @@ export default function ConversationScreen() {
             backgroundColor: style.body,
         },
         titleContainer: {
-            marginTop: 30,
+            marginTop: 10,
             marginLeft: 20,
         },
         title: {
@@ -40,7 +40,7 @@ export default function ConversationScreen() {
             marginTop: 10,
             fontSize: normalize(20),
             color: '#787878',
-            marginBottom: 20
+            marginBottom: 5
         }
     })
 

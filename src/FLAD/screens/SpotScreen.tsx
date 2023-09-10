@@ -1,10 +1,9 @@
 import { View, Text, Dimensions, StyleSheet, ImageBackground, Image, Pressable, TouchableOpacity, SafeAreaView } from 'react-native'
-import React, { useCallback,useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import Animated from 'react-native-reanimated';
 import Card from '../components/Card';
-import { cards as cardArray, spotArray2 } from '../data/data'
 import AdjustSize from '../components/AdjustSize';
 import normalize from '../components/Normalize';
 import LottieView from 'lottie-react-native'
@@ -16,12 +15,13 @@ import { addFavoritesMusic } from '../redux/actions/appActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spot } from '../model/Spot';
 import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
+import { spotsData } from '../data/data';
 
 export default function SpotScreen() {
   //@ts-ignore
   const spotReducer = useSelector(state => state.appReducer.spot)
+
   const [cards, setCards] = useState<Spot[]>(spotReducer);
-  
   const [currentCard, setcurrentCard] = useState(cards[cards.length - 1]);
   useEffect(() => {
     setCards(spotReducer);
@@ -31,15 +31,12 @@ export default function SpotScreen() {
   const onSwipe = (direction: 'left' | 'right' | 'down') => {
 
     if (direction === 'right') {
-      // Swiped right
       addLike(currentCard);
     } else if (direction === 'left') {
-      // Swiped left
       console.log('Swiped left');
       removeSpots(currentCard);
     }
     else if (direction === 'down') {
-      // Swiped down
       addMockSpots();
       console.log('Swiped down');
     }
@@ -51,9 +48,9 @@ export default function SpotScreen() {
     likeButtonref.current?.play(0, 55);
     likeButtonref.current?.play(55, 0);
   }, [])
-  
+
   const dispatch = useDispatch();
-  
+
   function addLike(spot: Spot) {
     onLike();
     dispatch(addFavoritesMusic(spot.music))
@@ -65,10 +62,8 @@ export default function SpotScreen() {
 
   function addMockSpots() {
     //@ts-ignore
-    dispatch(setSpotList(spotArray2))
+    dispatch(setSpotList(spotsData))
   }
-
-  
 
   const navigator = useNavigation();
 
@@ -76,7 +71,7 @@ export default function SpotScreen() {
   const hapti = (card: Spot) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     // @ts-ignore
-    navigator.navigate("DetailsSpot", { "music": card.music })
+    navigator.navigate("Detail", { "music": card.music })
   };
   return (
 
@@ -139,10 +134,10 @@ export default function SpotScreen() {
             <View style={{ flex: 1, flexDirection: 'row', alignItems: "flex-start", justifyContent: 'center' }}>
               <Animated.View style={{ flexDirection: 'row', width: '92%', alignItems: "center", justifyContent: 'space-evenly' }}>
                 <TouchableOpacity style={styles.button} onPress={() => onSwipe('left')}>
-                  <Image source={require("../assets/images/dislike_icon_no_text.png")} style={{width: '45%', height: '40%'}}/>
+                  <Image source={require("../assets/images/dislike_icon_no_text.png")} style={{ width: '45%', height: '40%' }} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => onSwipe('down')}>
-                  <Image source={require("../assets/images/discovery_icon_no_text.png")} style={{width: '58%', height: '50%', marginLeft: '7%'}}/>
+                  <Image source={require("../assets/images/discovery_icon_no_text.png")} style={{ width: '58%', height: '50%', marginLeft: '7%' }} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => onSwipe('right')}>
                   <LottieView autoPlay={false} loop={false} ref={likeButtonref} speed={2} source={Lotties.likeAnimation} style={styles.lottie} />
@@ -166,6 +161,7 @@ export default function SpotScreen() {
 
   );
 };
+
 const styles = StyleSheet.create({
   mainSafeArea: {
     flex: 1,
