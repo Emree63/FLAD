@@ -171,7 +171,7 @@ export default function StartScreen() {
                             </Text>
                             <TouchableOpacity onPress={handleModal} style={styles.closeButtonCircle}>
                                 <View>
-                                    <Image source={require("../assets/icons/icons/croix.png")} style={styles.imageButton} />
+                                    <Image source={require("../assets/images/cross_icon.png")} style={styles.imageButton} />
                                 </View>
                             </TouchableOpacity>
                             <Image source={require("../assets/images/flad_logo.png")} style={styles.imageLogo} />

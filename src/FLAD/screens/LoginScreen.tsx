@@ -26,7 +26,7 @@ export default function LoginScreen() {
     async function playSound() {
         console.log('Loading Sound');
         const { sound } = await Audio.Sound.createAsync(
-            require('../assets/sounds/Click.mp3')
+            require('../assets/sounds/click.mp3')
         );
         setSound(sound);
         await sound.playAsync();
@@ -72,7 +72,7 @@ export default function LoginScreen() {
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry style={[styles.input, styles.shadow]} />
-                        <Image source={require('../assets/icons/icons/lock.png')} style={styles.iconLock} />
+                        <Image source={require('../assets/images/lock_icon.png')} style={styles.iconLock} />
                     </View>
                     <View style={styles.rememberMeContainer}>
                         <TouchableOpacity style={[styles.checkbox, rememberMe ? styles.checkboxChecked : null]} onPress={toggleRememberMe}></TouchableOpacity>
