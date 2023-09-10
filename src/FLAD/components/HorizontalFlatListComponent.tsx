@@ -7,8 +7,8 @@ interface HorizontalFlatListProps {
   title: string;
   data: any[];
 }
-export const HorizontalFlatList = ({ title, data, children: RenderCell }: HorizontalFlatListProps) => {
 
+export default function HorizontalFlatList({ title, data, children: RenderCell }: HorizontalFlatListProps) {
   return (
     <View style={styles.similarSection}>
       <Text style={styles.similarTitle} >{title}</Text>

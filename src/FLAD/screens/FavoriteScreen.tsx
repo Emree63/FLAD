@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity, TouchableHighlight, SafeAreaView } from 'react-native';
-import CardMusic from '../components/CardMusic';
+import CardMusic from '../components/CardMusicComponent';
 import normalize from '../components/Normalize';
 import Music from '../model/Music'
 import FladyComponent from '../components/FladyComponent';

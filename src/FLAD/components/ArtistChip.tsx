@@ -7,7 +7,7 @@ interface ArtistChipProps {
   artist: Artist;
 }
 
-const ArtistChip = ({ artist }: ArtistChipProps) => {
+export default function ArtistChip({ artist }: ArtistChipProps) {
   const handlePress = useCallback(async () => {
     const supported = await Linking.canOpenURL(artist.url);
 
@@ -36,6 +36,3 @@ const ArtistChip = ({ artist }: ArtistChipProps) => {
     </View>
   );
 };
-
-
-export default ArtistChip;

@@ -10,8 +10,7 @@ import SpotifyService from "../services/spotify/spotify.service";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather as Icon } from "@expo/vector-icons";
-import { HorizontalFlatList } from "../components/HorizontalFlatList";
-import { LittleCard } from "../components/littleCard";
+import HorizontalFlatList from "../components/HorizontalFlatListComponent";
 import * as SecureStore from 'expo-secure-store';
 import { MY_SECURE_AUTH_STATE_KEY } from "./RegisterScreen";
 

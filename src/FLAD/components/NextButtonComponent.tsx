@@ -4,7 +4,7 @@ import Svg, { G, Circle } from 'react-native-svg';
 import { AntDesign } from '@expo/vector-icons';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import normalize from '../components/Normalize';
+import normalize from './Normalize';
 
 // @ts-ignore
 export default function NextButton({ percentage, scrollTo }) {

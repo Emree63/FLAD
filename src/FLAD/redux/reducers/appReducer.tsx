@@ -1,3 +1,4 @@
+import { spotsData } from "../../data/data";
 import Music from "../../model/Music";
 import { Spot } from "../../model/Spot";
 import { discoveriesTypes } from "../types/discoverieTypes";
@@ -6,7 +7,7 @@ import { spotifyTypes } from "../types/spotifyTypes";
 import { spotTypes } from "../types/spotTypes";
 
 const initialState = {
-  spot: [] as Spot[],
+  spot: spotsData,
   favoriteMusic: [] as Music[],
   userCurrentMusic: null
 }

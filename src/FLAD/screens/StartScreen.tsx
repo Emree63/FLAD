@@ -3,8 +3,8 @@ import { Modal, View, StyleSheet, useColorScheme, Text, FlatList, Animated, Touc
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
 import OnboardingItem from '../components/OnboardingComponent';
-import Paginator from '../components/Paginator';
-import NextButton from '../components/NextButton';
+import Paginator from '../components/PaginatorComponent';
+import NextButton from '../components/NextButtonComponent';
 import slides from '../data/slides';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';

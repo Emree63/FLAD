@@ -51,7 +51,7 @@ export default function AuthNavigation() {
       {isLogin ? (
         <HomeNavigation />
       ) :
-        <StartNavigation />
+        <HomeNavigation />
       }
     </SafeAreaProvider>
   )

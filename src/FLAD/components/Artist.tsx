@@ -4,19 +4,19 @@ import Animated, {
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
-
-const { width } = Dimensions.get("window");
-const SIZE = width / 3;
 import { Feather as Icon } from "@expo/vector-icons";
 import Music from "../model/Music";
 import { useState } from "react";
 
+const { width } = Dimensions.get("window");
+const SIZE = width / 3;
 
 interface ArtistProps {
   artist: Music;
   onPress: () => void;
 }
-export const Artist = ({ artist, onPress }: ArtistProps) => {
+
+export default function Artist({ artist, onPress }: ArtistProps) {
   const source = typeof artist.image === 'string' ? { uri: artist.image } : artist.image;
   const [selected, setSeleted] = useState(false);
   const onS = () => {
@@ -67,7 +67,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 100,
     alignItems: "center",
-
-
   }
 });

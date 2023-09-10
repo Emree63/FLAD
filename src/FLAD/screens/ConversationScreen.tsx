@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, FlatList, TouchableOpacity } from
 import { useSelector } from "react-redux";
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import Friend from "../components/Friend";
+import Friend from "../components/FriendComponent";
 import normalize from '../components/Normalize';
 
 export default function ConversationScreen() {

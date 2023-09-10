@@ -12,13 +12,13 @@ type FriendProps = {
     lastMessage: string;
 }
 
-export default function Friend(friend: FriendProps) {
+export default function Friend(props: FriendProps) {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
     const style = isDark ? colorsDark : colorsLight;
 
-    const source = typeof friend.image === 'string' ? { uri: friend.image } : friend.image;
+    const source = typeof props.image === 'string' ? { uri: props.image } : props.image;
 
     const styles = StyleSheet.create({
         container: {
@@ -72,9 +72,9 @@ export default function Friend(friend: FriendProps) {
         <View style={styles.container}>
             <Image style={styles.image} source={source} />
             <View style={styles.profilContainer}>
-                <Text style={styles.name} numberOfLines={1}>{friend.name}</Text>
+                <Text style={styles.name} numberOfLines={1}>{props.name}</Text>
                 <View style={styles.lastMessageContainer}>
-                    <Text style={styles.lastMessage} numberOfLines={1}>{friend.lastMessage}</Text>
+                    <Text style={styles.lastMessage} numberOfLines={1}>{props.lastMessage}</Text>
                     <Text style={styles.time}> · 1sem</Text>
                 </View>
             </View>

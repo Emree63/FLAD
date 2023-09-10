@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
 import normalize from '../components/Normalize';
 import { ScrollView, Switch, TextInput } from 'react-native-gesture-handler';
-import CardMusic from '../components/CardMusic';
+import CardMusic from '../components/CardMusicComponent';
 import { ChangeMode, DeleteToken } from '../redux/thunk/authThunk';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';

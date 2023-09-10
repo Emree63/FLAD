@@ -8,7 +8,7 @@ import AdjustSize from '../components/AdjustSize';
 import normalize from '../components/Normalize';
 import LottieView from 'lottie-react-native'
 import Lotties from '../assets/lottie/Lottie';
-import FladLoading from '../components/FladLoadingScreen';
+import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
 import Music from '../model/Music';
 import { addFavoritesMusic } from '../redux/actions/appActions';
@@ -151,7 +151,7 @@ export default function SpotScreen() {
       )
         : (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: "#141414" }}>
           <View style={{ position: "absolute" }}>
-            <FladLoading />
+            <Loading />
           </View>
           <Text style={{ color: "grey", fontWeight: "400", textAlign: "center", top: 100 }}>Vous avez explorer toutes les spot autour de vous.
             {"\n"}Continuer dans discoverie pour découvrir de nouvelles music basées sur vos gouts musicaux.</Text>

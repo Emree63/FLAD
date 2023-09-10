@@ -3,23 +3,21 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
+import normalize from './Normalize';
 
-import normalize from '../components/Normalize';
-
-type CustomCardMusic = { //Props
+type CardMusicProps = {
   image: string;
   title: string;
   description: string;
   id: string;
 }
 
-
-export default function CardMusic(CBP: CustomCardMusic) {
+export default function CardMusic(props: CardMusicProps) {
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
   const style = isDark ? colorsDark : colorsLight;
 
-  const source = typeof CBP.image === 'string' ? { uri: CBP.image } : CBP.image;
+  const source = typeof props.image === 'string' ? { uri: props.image } : props.image;
   const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -67,9 +65,8 @@ export default function CardMusic(CBP: CustomCardMusic) {
         <Image source={source} style={styles.image} />
       </View>
       <View style={styles.textContainer}>
-        {/*  currentMusic.id === CBP.id && styles.currentMusic */}
-        <Text style={[styles.title]}>{CBP.title}</Text>
-        <Text style={[styles.description]}>{CBP.description}</Text>
+        <Text style={[styles.title]}>{props.title}</Text>
+        <Text style={[styles.description]}>{props.description}</Text>
       </View>
     </View>
   );

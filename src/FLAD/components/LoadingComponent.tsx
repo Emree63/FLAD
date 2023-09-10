@@ -2,14 +2,12 @@ import { View } from 'react-native'
 import React, { useEffect } from 'react'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 
-const size = 100
-const FladLoading = () => {
+export default function Loading() {
 
+  const size = 100
   const progresse = useSharedValue(1);
 
-
   useEffect(() => {
-    // withTiming, withSpring
     progresse.value = withRepeat(withTiming(0.01, { duration: 750 }), -1, true);
   }, [progresse]);
 
@@ -36,14 +34,9 @@ const FladLoading = () => {
 
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-
       <Animated.View style={[{ backgroundColor: '#B40404', justifyContent: 'center', alignItems: 'center' }, breatheStyleSquare]}>
         <Animated.Image source={require('../assets/images/icon.png')} style={[{ height: size, width: size, borderColor: '#fff', borderRadius: size / 2 }]} />
       </Animated.View>
-
     </View>
   );
 };
-
-export default FladLoading;
-
