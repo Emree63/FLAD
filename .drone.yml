@@ -14,28 +14,28 @@ steps:
       - npm install
       - npm run
       
-  - name: docker-build-and-push
-    image: plugins/docker
-    settings:
-      dockerfile: src/Api/Dockerfile
-      context: src/Api
-      registry: hub.codefirst.iut.uca.fr
-      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
-      username:
-        from_secret: SECRET_REGISTRY_USERNAME
-      password:
-        from_secret: SECRET_REGISTRY_PASSWORD
+#  - name: docker-build-and-push
+#    image: plugins/docker
+#    settings:
+#      dockerfile: src/Api/Dockerfile
+#      context: src/Api
+#      registry: hub.codefirst.iut.uca.fr
+#      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
+#      username:
+#        from_secret: SECRET_REGISTRY_USERNAME
+#      password:
+#        from_secret: SECRET_REGISTRY_PASSWORD
 
   #container deployment
-  - name: deploy-container
-    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
-    environment:
-        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
-        CONTAINERNAME: flady-container
-        COMMAND: create
-        OVERWRITE: true
-        ADMINS: emrekartal,davidd_almeida,
-    depends_on: [ docker-build-and-push ]
+#  - name: deploy-container
+#    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+#    environment:
+#        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
+#        CONTAINERNAME: flady-container
+#        COMMAND: create
+#        OVERWRITE: true
+#        ADMINS: emrekartal,davidd_almeida,
+#    depends_on: [ docker-build-and-push ]
 
   - name: code-analysis
     image: node:latest
