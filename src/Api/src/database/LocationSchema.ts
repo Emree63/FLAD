@@ -1,0 +1,35 @@
+import { Schema, model, Document } from 'mongoose';
+
+const locationSchema = new Schema({
+
+    idFlad: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    musicId: {
+        type: String,
+        required: true,
+    },
+    latitude: {
+        type: Number,
+        required: true,
+    },
+    longitude: {
+        type: Number,
+        required: true,
+    },
+
+
+},
+    { timestamps: true }
+);
+
+export default model<ILocation>('Location', locationSchema);
+
+export interface ILocation extends Document {
+    idFlad: string;
+    musicId: string;
+    latitude: number;
+    longitude: number;
+}
