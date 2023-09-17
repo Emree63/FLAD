@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import IToken from '../database/IToken';
+import Token from '../models/Token';
 import UserSchema from '../database/UserSchema';
-import token from '../models/Token';
+import token from '../services/TokenService';
 import HttpException from '../exception/HttpException';
 
-async function authenticatedMiddleware(
+async function authMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
@@ -13,17 +13,17 @@ async function authenticatedMiddleware(
     const bearer = req.headers.authorization;
 
     if (!bearer || !bearer.startsWith('Bearer ')) {
-        return next(new HttpException(401, 'Unauthorised'));
+        return next(new HttpException(401, 'Unauthorized'));
     }
 
     const accessToken = bearer.split('Bearer')[1].trim();
     try {
-        const payload: IToken | jwt.JsonWebTokenError = await token.verifyToken(
+        const payload: Token | jwt.JsonWebTokenError = await token.verifyToken(
             accessToken
         );
 
         if (payload instanceof jwt.JsonWebTokenError) {
-            return next(new HttpException(401, 'Unauthorised'));
+            return next(new HttpException(401, 'Unauthorized'));
         }
 
         const user = await UserSchema.findById(payload.id)
@@ -31,15 +31,15 @@ async function authenticatedMiddleware(
             .exec();
 
         if (!user) {
-            return next(new HttpException(401, 'Unauthorised'));
+            return next(new HttpException(401, 'Unauthorized'));
         }
 
         req.user = user;
 
         return next();
     } catch (error) {
-        return next(new HttpException(401, 'Unauthorised'));
+        return next(new HttpException(401, 'Unauthorized'));
     }
 }
 
-export default authenticatedMiddleware;
+export default authMiddleware;

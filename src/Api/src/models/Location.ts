@@ -1,59 +1,21 @@
-export interface Position {
-    /**
-     * Creation timestamp for coords
-     */
-    timestamp: number;
-    /**
-     * The GPS coordinates along with the accuracy of the data
-     */
-    coords: {
-        /**
-         * Latitude in decimal degrees
-         */
-        latitude: number;
-        /**
-         * longitude in decimal degrees
-         */
-        longitude: number;
-    };
-}
-export class PlacePosition implements Position {
-    timestamp: number;
-    coords: {
-        latitude: number;
-        longitude: number;
-    };
-    constructor(timestamp: number,latitude : number ,longitude: number){
-        this.timestamp = timestamp;
-        this.coords = {latitude, longitude};
-    }
-}
+import { Document } from 'mongoose';
+
 export class UserLocation {
-    uuid: string;
+    userId: string;
+    musicId : string;
     latitude : number;
     longitude: number;
-    musicId : string;
-    constructor(uuid: string, musicId : string,latitude: number, longitude: number){
-        this.uuid = uuid;
+    constructor(userId: string, musicId : string,latitude: number, longitude: number){
+        this.userId = userId;
         this.musicId = musicId;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 }
 
-export class Place{
-position: Position;
-address: Address;
-constructor(address: Address,position: Position){
-    this.position = position;
-    this.address = address;
-}
-}
-
-
-export type Address = {
-street : string;
-city : string;
-state : string;
-zip : string;
+export class Location extends Document {
+    userId: string;
+    musicId: string;
+    latitude: number;
+    longitude: number;
 }

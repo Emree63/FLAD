@@ -1,13 +1,8 @@
-import IUser from "../models/User";
+import User from "../models/User";
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const userSchema = new Schema({
-    idFlad: {
-        type: String,
-        required: true,
-        unique: true
-    },
     idSpotify: {
         type: String,
         required: true,
@@ -32,11 +27,10 @@ const userSchema = new Schema({
     { timestamps: true }
 );
 
-userSchema.pre<IUser>('save', async function (next) {
+userSchema.pre<User>('save', async function (next) {
     if (!this.isModified('password')) {
         return next();
     }
-
     const hash = await bcrypt.hash(this.password, 8);
     this.password = hash;
     next();
@@ -48,4 +42,4 @@ userSchema.methods.isValidPassword = async function (
     return await bcrypt.compare(password, this.password);
 };
 
-export default model<IUser>('User', userSchema);
+export default model<User>('User', userSchema);

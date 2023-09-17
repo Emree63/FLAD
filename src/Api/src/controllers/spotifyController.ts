@@ -1,24 +1,22 @@
-import Controller from './interfaces/IController';
+import IController from './interfaces/IController';
 import { Router, Request, Response, NextFunction } from 'express';
 import HttpException from '../exception/HttpException';
 import axios from 'axios';
 import qs from 'qs';
 
-class SpotifyController implements Controller {
+class SpotifyController implements IController {
     public path = '/spotify';
     public router = Router();
     
     constructor() {
-      console.log("useeeee");
-
         this.initialiseRoutes();
     }
+    
     initialiseRoutes() {
         this.router.get(`${this.path}/exchange`,this.login);
         this.router.get(`${this.path}/callback`,this.getAccessToken);
         this.router.get(`${this.path}/refresh`,this.getRefreshToken);
         this.router.get(`${this.path}/spot`, this.getSpot);
-        
     }
 
      

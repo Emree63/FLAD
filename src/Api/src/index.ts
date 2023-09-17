@@ -1,6 +1,6 @@
 import App from "./app";
-import SpotifyController from "./controller/spotify.controller";
-import UserController from "./controller/user.controller";
+import SpotifyController from "./controllers/spotifyController";
+import UserController from "./controllers/userController";
 import dotenv from 'dotenv'
 
 dotenv.config();

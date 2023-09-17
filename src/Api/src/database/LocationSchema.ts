@@ -1,8 +1,8 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { Location } from '../models/Location';
 
 const locationSchema = new Schema({
-
-    idFlad: {
+    userId: {
         type: String,
         required: true,
         unique: true,
@@ -18,18 +18,9 @@ const locationSchema = new Schema({
     longitude: {
         type: Number,
         required: true,
-    },
-
-
+    }
 },
     { timestamps: true }
 );
 
-export default model<ILocation>('Location', locationSchema);
-
-export interface ILocation extends Document {
-    idFlad: string;
-    musicId: string;
-    latitude: number;
-    longitude: number;
-}
+export default model<Location>('Location', locationSchema);

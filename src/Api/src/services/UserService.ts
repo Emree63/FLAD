@@ -1,5 +1,5 @@
 import UserSchema from "../database/UserSchema";
-import token from "../models/Token";
+import token from "./TokenService";
 
 class UserService {
     private user = UserSchema;
@@ -8,7 +8,6 @@ class UserService {
         name: string,
         email: string,
         password: string,
-        idFlad: string,
         idSpotify: string
     ): Promise<string | Error> {
         try {
@@ -16,42 +15,26 @@ class UserService {
                 name,
                 email,
                 password,
-                idFlad,
                 idSpotify
             });
-
-            const accessToken = token.createToken(user);
-
-            return accessToken;
+            return token.createToken(user);
         } catch (error: any) {
             throw new Error(error.message);
         }
     }
 
-    /**
-     * Attempt to login a user
-     */
     public async login(
         email: string,
         password: string
     ): Promise<string | Error> {
-        try {
-            // should maybe creat a method base on id and other information for better security
-            // need to view with Emre
-            const user = await this.user.findOne({ email });
-            // const user = await this.user.findById(idFlad);
-
-            if (!user) {
-                throw new Error('Unable to find user with that email address');
-            }
-
-            if (await user.isValidPassword(password)) {
-                return token.createToken(user);
-            } else {
-                throw new Error('Wrong credentials given');
-            }
-        } catch (error) {
-            throw new Error('Unable to create user');
+        const user = await this.user.findOne({ email });
+        if (!user) {
+            throw new Error('Wrong credentials given');
+        }
+        if (await user.isValidPassword(password)) {
+            return token.createToken(user);
+        } else {
+            throw new Error('Wrong credentials given');
         }
     }
 }
