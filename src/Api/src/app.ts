@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import { MONGO_PASSWORD } from './config';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import Controller from './controllers/interfaces/IController';
@@ -45,7 +44,7 @@ class App {
     }
 
     private initDatabase(): void {
-        const MONGO_URL = `mongodb+srv://FladDev:${MONGO_PASSWORD}@flad.mliekr2.mongodb.net/?retryWrites=true&w=majority`;
+        const MONGO_URL = `mongodb+srv://FladDev:${process.env.MONGO_PASSWORD}@flad.mliekr2.mongodb.net/?retryWrites=true&w=majority`;
         mongoose.connect(MONGO_URL)
             .then(() => console.log("Connect to MongoDB database successfully"))
             .catch(error => console.log("Error connecting : " + error));

@@ -120,7 +120,7 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
           tabBarStyle: styles.tabBar,
           ...(Platform.OS === 'android'
             ? { tabBarLabelStyle: { bottom: normalize(10) } }
-            : { tabBarLabelStyle: { bottom: normalize(-22) } }
+            : { tabBarLabelStyle: { bottom: normalize(-25) } }
           ),
 
         }}>
@@ -168,6 +168,6 @@ const styles = StyleSheet.create({
   },
   IconContainer: {
     position: 'absolute',
-    top: 5,
+    top: 6,
   }
 })

@@ -1,6 +1,5 @@
 import IController from './interfaces/IController';
 import { Router, Request, Response, NextFunction } from 'express';
-import { CLIENT_ID_SPOTIFY, CLIENT_SECRET_SPOTIFY } from '../config';
 import HttpException from '../exception/HttpException';
 import axios from 'axios';
 import qs from 'qs';
@@ -8,6 +7,8 @@ import qs from 'qs';
 class SpotifyController implements IController {
   public path = '/spotify';
   public router = Router();
+  public readonly CLIENT_ID_SPOTIFY = process.env.CLIENT_ID_SPOTIFY;
+  public readonly CLIENT_SECRET_SPOTIFY = process.env.CLIENT_SECRET_SPOTIFY;
   private readonly API_URL = "https://accounts.spotify.com/api/token";
   private readonly CALLBACK = 'http://localhost:8080/api/spotify/callback';
   private readonly SCOPES = 'user-read-private user-read-email user-read-playback-state user-read-currently-playing user-read-recently-played playlist-modify-public ugc-image-upload user-modify-playback-state';
@@ -35,7 +36,7 @@ class SpotifyController implements IController {
       res.redirect('https://accounts.spotify.com/authorize?' +
         qs.stringify({
           response_type: 'code',
-          client_id: CLIENT_ID_SPOTIFY,
+          client_id: this.CLIENT_ID_SPOTIFY,
           scope: this.SCOPES,
           redirect_uri: this.CALLBACK,
         }));
@@ -64,7 +65,7 @@ class SpotifyController implements IController {
           refresh_token: params
         }),
         headers: {
-          'Authorization': 'Basic ' + (Buffer.from(CLIENT_ID_SPOTIFY + ':' + CLIENT_SECRET_SPOTIFY).toString('base64')),
+          'Authorization': 'Basic ' + (Buffer.from(this.CLIENT_ID_SPOTIFY + ':' + this.CLIENT_SECRET_SPOTIFY).toString('base64')),
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         json: true
@@ -108,7 +109,7 @@ class SpotifyController implements IController {
         grant_type: 'authorization_code'
       }),
       headers: {
-        'Authorization': 'Basic ' + (Buffer.from(CLIENT_ID_SPOTIFY + ':' + CLIENT_SECRET_SPOTIFY).toString('base64')),
+        'Authorization': 'Basic ' + (Buffer.from(this.CLIENT_ID_SPOTIFY + ':' + this.CLIENT_SECRET_SPOTIFY).toString('base64')),
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       json: true
