@@ -51,5 +51,5 @@ steps:
       - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
       - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
       - export SONAR_SCANNER_OPTS="-server"
-      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=. -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
+      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=./src/FLAD -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
     depends_on: [ app-build ]
