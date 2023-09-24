@@ -85,4 +85,4 @@ steps:
       - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
       - export SONAR_SCANNER_OPTS="-server"
       - sonar-scanner -D sonar.projectKey=FLAD-API -D sonar.sources=./src/Api -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
-    depends_on: [ app-build ]
+    depends_on: [ hadolint ]
