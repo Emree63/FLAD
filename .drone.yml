@@ -31,7 +31,7 @@ steps:
       - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=./src/FLAD -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
     depends_on: [ app-build ]
 
----
+--- 
 
 kind: pipeline
 type: docker
@@ -41,6 +41,7 @@ trigger:
   event:
     - push
 
+steps:
   - name: hadolint
     image: hadolint/hadolint:latest-alpine
     commands:
