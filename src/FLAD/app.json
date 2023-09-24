@@ -49,11 +49,6 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Flad to use your location."
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "c4f08377-0f4c-4b9e-8ff6-476a8627064e"
-      }
-    }
+    ]
   }
 }
