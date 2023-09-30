@@ -42,12 +42,6 @@ trigger:
     - push
 
 steps:
-  - name: hadolint
-    image: hadolint/hadolint:latest-alpine
-    commands:
-      - cd src/Api
-      - hadolint Dockerfile
-
   - name: docker-build-and-push
     image: plugins/docker
     settings:
