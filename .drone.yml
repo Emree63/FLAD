@@ -60,6 +60,13 @@ steps:
     environment:
         IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
         CONTAINERNAME: flad
+        CODEFIRST_CLIENTDRONE_ENV_PORT: 8080
+        CODEFIRST_CLIENTDRONE_ENV_MONGO_PASSWORD:
+           from_secret: MONGO_PASSWORD
+        CODEFIRST_CLIENTDRONE_ENV_CLIENT_ID_SPOTIFY:
+           from_secret: CLIENT_ID_SPOTIFY
+        CODEFIRST_CLIENTDRONE_ENV_CLIENT_SECRET_SPOTIFY:
+           from_secret: CLIENT_SECRET_SPOTIFY
         COMMAND: create
         OVERWRITE: true
         ADMINS: emrekartal,davidd_almeida,
