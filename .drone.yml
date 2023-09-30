@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: FLAD
+name: FLAD-CLI
 
 trigger:
   event:
@@ -13,29 +13,6 @@ steps:
       - cd ./src/FLAD/
       - npm install
       - npm run
-      
-#  - name: docker-build-and-push
-#    image: plugins/docker
-#    settings:
-#      dockerfile: src/Api/Dockerfile
-#      context: src/Api
-#      registry: hub.codefirst.iut.uca.fr
-#      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
-#      username:
-#        from_secret: SECRET_REGISTRY_USERNAME
-#      password:
-#        from_secret: SECRET_REGISTRY_PASSWORD
-
-  #container deployment
-#  - name: deploy-container
-#    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
-#    environment:
-#        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
-#        CONTAINERNAME: flady-container
-#        COMMAND: create
-#        OVERWRITE: true
-#        ADMINS: emrekartal,davidd_almeida,
-#    depends_on: [ docker-build-and-push ]
 
   - name: code-analysis
     image: node:latest
@@ -51,5 +28,61 @@ steps:
       - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
       - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
       - export SONAR_SCANNER_OPTS="-server"
-      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=. -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
+      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=./src/FLAD -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
     depends_on: [ app-build ]
+
+--- 
+
+kind: pipeline
+type: docker
+name: FLAD-API
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: hadolint
+    image: hadolint/hadolint:latest-alpine
+    commands:
+      - cd src/Api
+#      - hadolint Dockerfile
+
+#  - name: docker-build-and-push
+#    image: plugins/docker
+#    settings:
+#      dockerfile: src/Api/Dockerfile
+#      context: src/Api
+#      registry: hub.codefirst.iut.uca.fr
+#      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
+#      username:
+#        from_secret: SECRET_REGISTRY_USERNAME
+#      password:
+#        from_secret: SECRET_REGISTRY_PASSWORD
+
+#  - name: deploy-container
+#    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+#    environment:
+#        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
+#        CONTAINERNAME: flady-container
+#        COMMAND: create
+#        OVERWRITE: true
+#        ADMINS: emrekartal,davidd_almeida,
+#    depends_on: [ docker-build-and-push ]
+
+  - name: code-analysis
+    image: node:latest
+    environment:
+      SONAR_TOKEN:
+        from_secret: SONAR_TOKEN_API
+    settings:
+      sources: ./src/Api/ 
+    commands:
+      - export SONAR_SCANNER_VERSION=4.7.0.2747
+      - export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      - curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      - export SONAR_SCANNER_OPTS="-server"
+      - sonar-scanner -D sonar.projectKey=FLAD-API -D sonar.sources=./src/Api -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
+    depends_on: [ hadolint ]
