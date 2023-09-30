@@ -43,7 +43,7 @@ trigger:
 
 steps:
   - name: hadolint
-    image: hadolint/hadolint:latest
+    image: hadolint/hadolint:latest-alpine
     commands:
       - cd src/Api
       - hadolint Dockerfile
