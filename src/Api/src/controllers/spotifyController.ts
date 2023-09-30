@@ -74,9 +74,6 @@ class SpotifyController implements IController {
       axios(authOptions)
         .then(session => {
           if (session.status === 200) {
-            console.log('### Information : responce ###' + JSON.stringify(session.data));
-            console.log('### Information : refresh_token ###' + session.data.refresh_token);
-
             res.send({
               "access_token": session.data.access_token,
               "refresh_token": session.data.refresh_token,
@@ -84,10 +81,8 @@ class SpotifyController implements IController {
             });
           }
         });
-      console.log("goood");
     } catch (error) {
-      console.log("errur");
-      next(new HttpException(400, 'Cannot create post'));
+      next(new HttpException(400, 'Cannot get a new refresh token'));
     }
 
   }
@@ -98,8 +93,7 @@ class SpotifyController implements IController {
     next: NextFunction
   ): Promise<Response | void> => {
     let code = req.query.code;
-    let storedredirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
-
+    let storedRedirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;    
     var authOptions = {
       method: 'POST',
       url: this.API_URL,
@@ -120,10 +114,8 @@ class SpotifyController implements IController {
         let access_token = resp.data.access_token;
         let expiration = resp.data.expires_in;
         let refresh = resp.data.refresh_token
-        console.log(access_token);
-
         res.clearCookie(this.clientRedirect);
-        res.redirect(`${storedredirectUri}?` +
+        res.redirect(`${storedRedirectUri}?` +
           qs.stringify({
             "access_token": access_token,
             "expires_in": expiration,
