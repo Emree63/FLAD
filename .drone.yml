@@ -69,7 +69,7 @@ steps:
            from_secret: CLIENT_SECRET_SPOTIFY
         COMMAND: create
         OVERWRITE: true
-        PRIVATE: false
+        PRIVATE: true
         ADMINS: emrekartal,davidd_almeida,
     depends_on: [ docker-build-and-push ]
 
