@@ -40,6 +40,7 @@ class App {
     public listen(): void {
         this.express.listen(this.port, () => {
             console.log(`[server] : App listening on the port ${this.port}`);
+            console.log(`${process.env.MONGO_PASSWORD}`)
         });
     }
 
