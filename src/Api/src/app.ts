@@ -40,12 +40,12 @@ class App {
     public listen(): void {
         this.express.listen(this.port, () => {
             console.log(`[server] : App listening on the port ${this.port}`);
-            console.log(`${process.env.MONGO_PASSWORD}`)
         });
     }
 
     private initDatabase(): void {
         const MONGO_URL = `mongodb+srv://FladDev:${process.env.MONGO_PASSWORD}@flad.mliekr2.mongodb.net/?retryWrites=true&w=majority`;
+        console.log(MONGO_URL)
         mongoose.connect(MONGO_URL)
             .then(() => console.log("Connect to MongoDB database successfully"))
             .catch(error => console.log("Error connecting : " + error));
