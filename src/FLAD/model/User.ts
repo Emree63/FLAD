@@ -5,8 +5,7 @@ export class User {
   private _createdAt: Date;
   private _name: string;
   public image: string;
-  
-  //constructors
+
   constructor(idFlad: string, idSpotify: string, email: string, createdAt: Date, name: string, image: string) {
     this._name = name;
     this._idFlad = idFlad;
@@ -30,9 +29,5 @@ export class User {
   }
   get name(): string {
     return this._name;
-  }
-
-  toString() {
-    return 'User : ' + this.idFlad + ', ' + this.name + ', ' + this.idSpotify;
   }
 }

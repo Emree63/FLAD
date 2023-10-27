@@ -1,69 +1,69 @@
 import axios from "axios";
-import { API_URL } from "../../assets/constants/config";
-import { Credentials, CredentialsRegister, restoreToken, setLoginState, UserLogout, userChangeMode, userSignUp, ChangeErrorLogin, ChangeErrorSignup } from "../actions/userActions";
+import configs from "../../constants/config";
+import { LoginCredentials, RegisterCredentials, restoreToken, setLoginState, userLogout, setDarkMode, userSignUp, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
 import { UserMapper } from "../../model/mapper/UserMapper";
 
 const key = 'userToken';
 
-export const registerUser = (resgisterCredential: CredentialsRegister) => {
+export const register = (resgisterCredential: RegisterCredentials) => {
   //@ts-ignore
   return async dispatch => {
     try {
-      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 
-      console.log(resgisterCredential);
-      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       }
       const resp = await axios.post(
-        'https://flad-api-production.up.railway.app/api/users/register',
+        configs.API_URL + '/users/register',
         resgisterCredential,
         config
       )
 
       if (resp.data.token) {
-        console.log(resp.data.token);
         const token = resp.data.token;
         const headers = {
           'Authorization': 'Bearer ' + token
         };
         const user = await axios.get(
-          "https://flad-api-production.up.railway.app/api/users",
+          configs.API_URL + 'api/users',
           { headers }
         )
-        dispatch(userSignUp(UserMapper.JsonToModel(user.data)));
+        dispatch(userSignUp(UserMapper.toModel(user.data)));
       } else {
-        console.log('Login Failed', 'Username or Password is incorrect');
+        dispatch(setErrorSignup(true))
       }
 
     } catch (error) {
-      console.log('Login Failed'+ error.message + "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"); 
-      dispatch(ChangeErrorSignup())
+      if (axios.isAxiosError(error)) {
+        dispatch(setErrorNetwork(true));
+      } else {
+        dispatch(setErrorLogin(true));
+      }
     }
   }
 }
 
-export const userLogin = (loginCredential: Credentials) => {
+export const login = (loginCredential: LoginCredentials) => {
   //@ts-ignore
   return async dispatch => {
     try {
-      console.log(loginCredential);
-
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       }
-
+      console.log(configs.API_URL + '/users/login')
+      console.log(loginCredential)
+      console.log(config)
       const resp = await axios.post(
-        "https://flad-api-production.up.railway.app/api/users/login",
+        configs.API_URL + '/users/login',
         loginCredential,
         config
       )
+
       if (resp.data.token) {
         const token = resp.data.token;
         await SecureStore.setItemAsync(key, token);
@@ -72,18 +72,21 @@ export const userLogin = (loginCredential: Credentials) => {
         };
 
         const user = await axios.get(
-          "https://flad-api-production.up.railway.app/api/users",
+          configs.API_URL + '/users',
           { headers }
         )
-        console.log(user.data);
-
         dispatch(setLoginState(user.data));
       } else {
         console.log('Login Failed', 'Username or Password is incorrect');
+        dispatch(setErrorLogin(true));
       }
-
     } catch (error) {
-      dispatch(ChangeErrorLogin())
+      if (axios.isAxiosError(error)) {
+        console.log("axios : " + error.message);
+        dispatch(setErrorNetwork(true));
+      } else {
+        dispatch(setErrorLogin(true));
+      }
     }
   }
 }
@@ -107,29 +110,29 @@ export const getRefreshToken = () => {
 }
 
 
-export const DeleteToken = () => {
+export const deleteToken = () => {
   //@ts-ignore
   return async dispatch => {
     try {
       await SecureStore.deleteItemAsync(key);
-      dispatch(UserLogout());
+      dispatch(userLogout());
     } catch (e) {
       console.log('Error deleting token', e);
     }
   }
 }
 
-export const ChangeMode = (value: boolean) => {
+export const darkMode = (value: boolean) => {
   //@ts-ignore
   return async dispatch => {
-    dispatch(userChangeMode(value));
+    dispatch(setDarkMode(value));
   }
 }
 
-export const ChangeImageUserCurrent = (value: ImagePicker) => {
+export const imageUserCurrent = (value: any) => {
   //@ts-ignore
   return async dispatch => {
     //@ts-ignore
-    dispatch(userChangeImage(value));
+    dispatch(setImageUserCurrent(value));
   }
 }

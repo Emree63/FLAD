@@ -2,6 +2,7 @@ import axios from "axios";
 import MusicMapper from "../../model/mapper/MusicMapper";
 import Music from "../../model/Music";
 import { FetchOptions, RequestHandler } from "./spotifyRequestHandler/utils";
+
 export class MusicMinimal {
 	public id: string;
 	public title: string;
@@ -15,7 +16,7 @@ export class MusicMinimal {
 }
 
 export default class SpotifyService implements IspotifyService {
-	private readonly API_URL = "https://flad-api-production.up.railway.app/api/";
+	private readonly API_URL = API_URL;
 	private spotifyRequestHandler = new RequestHandler();
 	public token: string;
 

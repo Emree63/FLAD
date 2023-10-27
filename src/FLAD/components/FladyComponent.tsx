@@ -17,15 +17,16 @@ export default function FladyComponent(monFlady: Flady) {
 
 const styles = StyleSheet.create({
     container: {
-        width: normalize(152),
-        height: normalize(152),
-        borderRadius: 90,
-        marginHorizontal: normalize(15),
+        width: normalize(132),
+        height: normalize(132),
+        borderRadius: 30,
+        backgroundColor: 'white',
+        marginHorizontal: normalize(12),
         overflow: 'hidden',
     },
     image: {
-        width: normalize(220),
-        height: normalize(220),
+        width: normalize(180),
+        height: normalize(180),
         marginLeft: -1
     }
 })

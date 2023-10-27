@@ -4,14 +4,13 @@ import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
 import * as SecureStore from 'expo-secure-store';
 import * as AuthSession from 'expo-auth-session';
-import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
-import { registerUser } from '../redux/thunk/authThunk';
+import { register } from '../redux/thunk/authThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
-import { CredentialsRegister } from '../redux/actions/userActions';
+import { RegisterCredentials } from '../redux/actions/userActions';
 import * as WebBrowser from 'expo-web-browser';
-import { spotArray2 } from '../data/data';
 import { setSpotList } from '../redux/actions/spotActions';
+import { spotsData } from '../data/data';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -51,11 +50,11 @@ export default function RegisterScreen() {
   const dispatch = useDispatch();
 
   function addMockSpots() {
-    dispatch(setSpotList(spotArray2))
+    dispatch(setSpotList(spotsData))
   }
 
   const submitForm = () => {
-    const credentials: CredentialsRegister = {
+    const credentials: RegisterCredentials = {
       email: email,
       password: password,
       idSpotify: spotifyToken,
@@ -64,7 +63,7 @@ export default function RegisterScreen() {
     };
 
     //@ts-ignore
-    dispatch(registerUser(credentials))
+    dispatch(register(credentials))
     addMockSpots()
     playSound()
   }

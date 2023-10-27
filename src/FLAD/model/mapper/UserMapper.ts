@@ -2,11 +2,7 @@ import { User } from "../User";
 
 export class UserMapper {
 
-    public static JsonToModel( jsonUser :any ) : User{
-        return new User(jsonUser.idFlad, jsonUser.idSpotify, jsonUser.email, jsonUser.createdAt, jsonUser.name, jsonUser.imageUrl);
+    public static toModel(user: any): User {
+        return new User(user.idFlad, user.idSpotify, user.email, user.createdAt, user.name, user.imageUrl);
     }
-    public static uptade( jsonUser :any ) : User{
-        return new User(jsonUser.idFlad, jsonUser.idSpotify, jsonUser.email, jsonUser.createdAt, jsonUser.name, jsonUser.imageUrl);
-    }
-
 }

@@ -12,6 +12,4 @@ export default class Artist {
     get url(): string {
         return this.url;
     }
-    
-
 }

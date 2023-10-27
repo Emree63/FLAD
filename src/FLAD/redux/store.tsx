@@ -13,6 +13,7 @@ const reducer = {
 }
 
 const store = configureStore({
+  // @ts-ignore
   reducer: reducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: {

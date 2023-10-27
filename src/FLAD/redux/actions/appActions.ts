@@ -7,6 +7,7 @@ export const getFavoritesMusic = (music: Music[]) => {
     payload: music,
   };
 }
+
 export const addFavoritesMusic = (music: Music) => {
   return {
     type: favoritesTypes.ADD_FAVORITE_MUSICS,

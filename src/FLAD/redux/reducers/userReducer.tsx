@@ -3,14 +3,13 @@ import { User } from "../../model/User";
 import { userTypes } from "../types/userTypes";
 
 const initialState = {
-  loading: false,
   user: User,
   userFladToken: "",
   userSpotifyToken: null,
-  error: null,
   isLogedIn: false,
   failedLogin: false,
   failedSignup: false,
+  errorNetwork: false,
   dark: null
 }
 
@@ -25,41 +24,39 @@ const userReducer = (state = initialState, action: any) => {
         isLogedIn: resp,
       };
     case userTypes.LOGIN:
-      AsyncStorage.setItem('dark', JSON.stringify(false)).then(() => { });
       return {
         ...state,
         user: action.payload,
-        failedLogin: false,
-        isLogedIn: true,
-        dark: false
+        isLogedIn: true
       };
     case userTypes.SIGNUP:
-      AsyncStorage.setItem('dark', JSON.stringify(false)).then(() => { });
       return {
         ...state,
         user: action.payload,
-        failedSignup: false,
         isLogedIn: true,
         dark: false
       };
     case userTypes.USER_LOGOUT:
-      AsyncStorage.removeItem('dark').then(() => { });
+      AsyncStorage.removeItem('dark');
       return {
         ...state,
         user: null,
-        isLogedIn: false
+        isLogedIn: false,
+        dark: null
       }
     case userTypes.SAVE_SPOTIFY:
       return {
         ...state,
-        userSpotifyToken: action.payload,
+        userSpotifyToken: action.payload
       };
-    case userTypes.CHANGE_ERROR_LOGIN:
-      return { ...state, failedLogin: true }
-    case userTypes.CHANGE_ERROR_SIGNUP:
-      return { ...state, failedSignup: true }
-    case userTypes.CHANGE_MODE:
+    case userTypes.ERROR_LOGIN:
+      return { ...state, failedLogin: action.payload }
+    case userTypes.ERROR_SIGNUP:
+      return { ...state, failedSignup: action.payload }
+    case userTypes.DARK_MODE:
       return { ...state, dark: action.payload }
+    case userTypes.ERROR_NETWORK:
+      return { ...state, errorNetwork: action.payload }
     default:
       return state;
   }

@@ -8,7 +8,7 @@ import { spotTypes } from "../types/spotTypes";
 
 const initialState = {
   spot: spotsData,
-  favoriteMusic: [] as Music[],
+  favoriteMusic: [],
   userCurrentMusic: null
 }
 

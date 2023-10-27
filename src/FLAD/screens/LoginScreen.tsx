@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
+import { setErrorNetwork } from "../redux/actions/userActions";
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
-import { userLogin } from '../redux/thunk/authThunk';
+import { login } from '../redux/thunk/authThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
-import { Credentials } from '../redux/actions/userActions';
+import { LoginCredentials } from '../redux/actions/userActions';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -20,11 +21,13 @@ export default function LoginScreen() {
     const navigation = useNavigation();
     // @ts-ignore
     const failedLogin = useSelector(state => state.userReducer.failedLogin);
+    // @ts-ignore
+    const networkError = useSelector(state => state.userReducer.errorNetwork);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     async function playSound() {
-        console.log('Loading Sound');
         const { sound } = await Audio.Sound.createAsync(
             require('../assets/sounds/click.mp3')
         );
@@ -34,14 +37,32 @@ export default function LoginScreen() {
     const dispatch = useDispatch();
 
     const submitForm = () => {
-        const credentials: Credentials = {
-            email: username,
-            password: password
+        const credentials: LoginCredentials = {
+            email: username.toLowerCase(),
+            password: password.toLowerCase()
         };
         //@ts-ignore
-        dispatch(userLogin(credentials))
+        dispatch(login(credentials))
         playSound()
     }
+
+    useEffect(() => {
+        if (networkError) {
+          Alert.alert(
+            'Erreur réseau',
+            'Une erreur réseau s\'est produite. Veuillez vérifier votre connexion internet et réessayer.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  dispatch(setErrorNetwork(false));
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+      }, [networkError, dispatch]);
 
     const toggleRememberMe = () => {
         setRememberMe(!rememberMe);
@@ -124,9 +145,9 @@ const styles = StyleSheet.create({
         borderRadius: 21
     },
     textError: {
-        fontSize: 15, 
-        alignSelf: "center", 
-        color: "red", 
+        fontSize: 15,
+        alignSelf: "center",
+        color: "red",
         fontWeight: 'bold'
     },
     buttonImage: {

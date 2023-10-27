@@ -41,8 +41,8 @@ class UserController implements IController {
         try {
             const { name, email, password, idSpotify } = req.body;
             const token = await this.userService.register(
-                name,
-                email,
+                name.toLowerCase(),
+                email.toLowerCase(),
                 password,
                 idSpotify
             );

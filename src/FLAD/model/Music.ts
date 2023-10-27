@@ -1,4 +1,4 @@
-export default class Music{ 
+export default class Music {
   private _id: string;
   private _title: string;
   private _bio: string;
@@ -11,6 +11,14 @@ export default class Music{
     this._image = image;
     this._id = id;
     this._trackPreviewUrl = trackPreviewUrl;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
   }
 
   get title(): string {
@@ -35,14 +43,6 @@ export default class Music{
 
   set image(value: string) {
     this._image = value;
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  set id(value: string) {
-    this._id = value;
   }
 
   get trackPreviewUrl(): string {
