@@ -10,7 +10,7 @@ interface CircularProps {
 }
 
 const PI = Math.PI;
-const FladInput = ({ background, foreground, progress }: CircularProps) => {
+export default function FladInput({ background, foreground, progress }: CircularProps) {
   const theta = multiply(progress, 2 * PI);
   const opacity = lessThan(theta, PI);
 
@@ -26,10 +26,9 @@ const FladInput = ({ background, foreground, progress }: CircularProps) => {
         <HalfCirlce backgroundColor={background} />
         <Animated.View>
           <HalfCirlce backgroundColor={background} />
-        </Animated.View>        
+        </Animated.View>
       </View>
+
     </>
   );
 };
-
-export default FladInput;

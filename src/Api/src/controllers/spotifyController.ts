@@ -1,3 +1,4 @@
+
 import IController from './interfaces/IController';
 import { Router, Request, Response, NextFunction } from 'express';
 import HttpException from '../exception/HttpException';
@@ -50,41 +51,39 @@ class SpotifyController implements IController {
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
-    try {
-      const params = req.query.refresh_token;
-      if (!req.query.refresh_token) {
-        return res.json({
-          "error": "Parameter refresh_token missing"
-        });
-      }
-      let authOptions = {
-        method: 'POST',
-        url: 'https://accounts.spotify.com/api/token',
-        data: qs.stringify({
-          grant_type: 'refresh_token',
-          refresh_token: params
-        }),
-        headers: {
-          'Authorization': 'Basic ' + (Buffer.from(this.CLIENT_ID_SPOTIFY + ':' + this.CLIENT_SECRET_SPOTIFY).toString('base64')),
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        json: true
-      };
-
-      axios(authOptions)
-        .then(session => {
-          if (session.status === 200) {
-            res.send({
-              "access_token": session.data.access_token,
-              "refresh_token": session.data.refresh_token,
-              "expires_in": session.data.expires_in
-            });
-          }
-        });
-    } catch (error) {
-      next(new HttpException(400, 'Cannot get a new refresh token'));
+    const params = req.query.refresh_token;
+    if (!req.query.refresh_token) {
+      return res.json({
+        "error": "Parameter refresh_token missing"
+      });
     }
+    let authOptions = {
+      method: 'POST',
+      url: 'https://accounts.spotify.com/api/token',
+      data: qs.stringify({
+        grant_type: 'refresh_token',
+        refresh_token: params
+      }),
+      headers: {
+        'Authorization': 'Basic ' + (Buffer.from(this.CLIENT_ID_SPOTIFY + ':' + this.CLIENT_SECRET_SPOTIFY).toString('base64')),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      json: true
+    };
 
+    axios(authOptions)
+      .then(session => {
+        if (session.status === 200) {
+          res.send({
+            "access_token": session.data.access_token,
+            "refresh_token": session.data.refresh_token,
+            "expires_in": session.data.expires_in
+          });
+        } 
+      })
+      .catch(error => {
+        res.status(400).send("Cannot get a new refresh token");
+      });
   }
 
   private getAccessToken = async (
@@ -93,7 +92,7 @@ class SpotifyController implements IController {
     next: NextFunction
   ): Promise<Response | void> => {
     let code = req.query.code;
-    let storedRedirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;    
+    let storedRedirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
     var authOptions = {
       method: 'POST',
       url: this.API_URL,
@@ -123,7 +122,6 @@ class SpotifyController implements IController {
           }));
       }
     } catch (error) {
-      console.log(error);
       next(new HttpException(400, 'Error connection: ' + error.message));
     }
   };

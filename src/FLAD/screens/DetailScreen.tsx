@@ -5,7 +5,7 @@ import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle,
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";
 import normalize from '../components/Normalize';
-import Music from "../model/Music";
+import Music from "../models/Music";
 import SpotifyService from "../services/spotify/spotify.service";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

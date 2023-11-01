@@ -5,7 +5,7 @@ import Animated, {
   ZoomOut,
 } from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
-import Music from "../model/Music";
+import Music from "../models/Music";
 import { useState } from "react";
 
 const { width } = Dimensions.get("window");

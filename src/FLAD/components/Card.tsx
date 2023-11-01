@@ -133,7 +133,6 @@ const Card = ({ image, onSwipe }: CardProps) => {
   return (
     <View>
       <PanGestureHandler onGestureEvent={onGestureEvent}>
-
         <Animated.View style={[styleCardsNew, styles.container]}>
           <Animated.View style={[styles.image, {
             backgroundColor: 'black', elevation: 100,

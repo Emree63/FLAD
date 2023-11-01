@@ -8,7 +8,7 @@ export default [
     {
         id: '2',
         title: 'Tous les jours de nouvelles musiques qui peuvent vous plaire',
-        description: 'L\'application apprends de vous et de vos amis pour vous suggérer des albums et des musics',
+        description: 'L\'application apprend de vous et de vos amis pour vous suggérer des albums et des musiques',
         image: require('../assets/images/board_2.png')
     },
     {

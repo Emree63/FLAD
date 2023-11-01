@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
-import * as SecureStore from 'expo-secure-store';
 import * as AuthSession from 'expo-auth-session';
 import { register } from '../redux/thunk/authThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
 import { RegisterCredentials } from '../redux/actions/userActions';
-import * as WebBrowser from 'expo-web-browser';
 import { setSpotList } from '../redux/actions/spotActions';
 import { spotsData } from '../data/data';
+import configs from '../constants/config';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -19,21 +18,18 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 )
 
-export const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKeySpotify';
-export const MY_SECURE_AUTH_STATE_KEY_REFRESH = 'MySecureAuthStateKeySpotifyREFRESH';
-
-WebBrowser.maybeCompleteAuthSession();
-
-// save the spotifyToken
-async function save(key: string, value: string) {
-  await SecureStore.setItemAsync(key, value);
-}
 export default function RegisterScreen() {
   const [sound, setSound] = useState<Audio.Sound>();
   const navigation = useNavigation();
-  const [spotifyToken, setSpotifyToken] = useState('');
+  const [spotifyToken, setSpotifyToken] = useState();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
   // @ts-ignore
   const failedSignup = useSelector(state => state.userReducer.failedSignup);
+  // @ts-ignore
+  const errorMessage = useSelector(state => state.userReducer.errorMessage);
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
@@ -42,24 +38,42 @@ export default function RegisterScreen() {
     setSound(sound);
     await sound.playAsync();
   }
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-
-  const dispatch = useDispatch();
 
   function addMockSpots() {
     dispatch(setSpotList(spotsData))
   }
 
   const submitForm = () => {
+    const isUsernameValid = /^[a-zA-Z0-9_]+$/.test(username);
+    const isEmailValid = /^[a-zA-Z0-9_]+@[a-zA-Z0-9_]+\.[^\s@]+$/.test(email);
+
+    if (username == "" || username == null) {
+      Alert.alert("Erreur inscription", "Le nom d'utilisateur ne peut pas être vide.");
+      return;
+    }
+    if (!isUsernameValid) {
+      Alert.alert("Erreur inscription", "Le nom d'utilisateur ne peut pas posséder de caractères spéciaux.");
+      return;
+    }
+    if (!isEmailValid) {
+      Alert.alert("Erreur inscription", "L'adresse e-mail n\'est pas valide.");
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert("Erreur inscription", "Le mot de passe doit avoir au moins 6 caractères");
+      return;
+    }
+
+    if (spotifyToken == null || spotifyToken == "") {
+      Alert.alert("Erreur inscription", "Pour vous inscrire, veuillez vous connecter à Spotify.");
+      return;
+    }
+
     const credentials: RegisterCredentials = {
       email: email,
       password: password,
-      idSpotify: spotifyToken,
-      name: username,
-      idFlad: generateRandomString()
+      tokenSpotify: spotifyToken,
+      name: username
     };
 
     //@ts-ignore
@@ -68,39 +82,25 @@ export default function RegisterScreen() {
     playSound()
   }
 
-  function generateRandomString(): string {
-    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-    let randomString = '';
-  
-    for (let i = 0; i < 8; i++) {
-      const randomIndex = Math.floor(Math.random() * alphabet.length);
-      const randomChar = alphabet[randomIndex];
-      randomString += randomChar;
-    }
-  
-    return randomString;
-  }
-
-  const getTokens2 = async () => {
+  const getSpotifyToken = async () => {
     try {
       const redirectUri = AuthSession.makeRedirectUri();
-      const result = await AuthSession.startAsync({
-        authUrl: 'https://flad-api-production.up.railway.app/api/spotify/exchange?' + '&redirectUrl=' +
-        encodeURIComponent(redirectUri)
+      const result: any = await AuthSession.startAsync({
+        authUrl: configs.API_URL + '/spotify/exchange?' + 'redirectUrl=' +
+          encodeURIComponent(redirectUri)
       })
       const {
         access_token: access_token,
         refresh_token: refresh_token,
       } = result.params
-      save(MY_SECURE_AUTH_STATE_KEY, access_token);
-      setSpotifyToken(access_token)
-      save(MY_SECURE_AUTH_STATE_KEY_REFRESH, refresh_token);
-    } catch (err) {
-      console.error(err);
+      setSpotifyToken(refresh_token)
+    } catch (error) {
+      Alert.alert("Erreur inscription", "La connexion à Spotify à échouer.");
+      return;
     }
   }
 
-  
+
   return (
     <DismissKeyboard>
       <View style={styles.container}>
@@ -111,7 +111,7 @@ export default function RegisterScreen() {
           <Image source={require("../assets/images/flad_logo.png")} style={styles.imageLogo} />
           <Text style={styles.text}>S'INSCRIRE</Text>
           {failedSignup && (
-            <Text style={styles.textError}>Email ou mot de passe incorrect!</Text>
+            <Text style={styles.textError}>{errorMessage}</Text>
           )}
           <View style={{ marginTop: 7 }}>
             <TextInput style={[styles.input, styles.shadow]} placeholder="Username"
@@ -135,12 +135,15 @@ export default function RegisterScreen() {
             <Image source={require('../assets/images/lock_icon.png')} style={styles.iconLock} />
           </View>
           <TouchableOpacity onPress={async () => {
-            await getTokens2();
+            await getSpotifyToken();
           }} style={[styles.buttonSpotify, styles.shadow]}>
             <Text style={styles.textIntoButton}>Lier compte</Text>
-            <Image source={require("../assets/images/spotify_icon.png")} style={{ width: normalize(35), height: normalize(35) }} />
+            {spotifyToken == null ? (
+              <Image source={require("../assets/images/spotify_icon.png")} style={{ width: normalize(35), height: normalize(35) }} />
+            ) :
+              <Image source={require("../assets/images/ok_icon.png")} style={{ width: normalize(17), height: normalize(14) }} />
+            }
           </TouchableOpacity>
-
           <TouchableOpacity style={[styles.button, styles.shadow]} onPress={() => submitForm()}>
             <Image source={require("../assets/images/arrow_forward.png")} style={styles.buttonImage} />
           </TouchableOpacity>

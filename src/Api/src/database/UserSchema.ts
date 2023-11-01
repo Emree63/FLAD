@@ -8,6 +8,10 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    tokenSpotify: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true,
@@ -20,6 +24,11 @@ const userSchema = new Schema({
         trim: true
     },
     password: {
+        type: String,
+        required: true
+    }
+    ,
+    image: {
         type: String,
         required: true
     }

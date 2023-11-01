@@ -1,4 +1,4 @@
-import { User } from "../../model/User";
+import { User } from "../../models/User";
 import { userTypes } from "../types/userTypes";
 
 export interface LoginCredentials {
@@ -10,22 +10,19 @@ export interface RegisterCredentials {
   email: string,
   password: string,
   name: string,
-  idFlad: string,
-  idSpotify: string
+  tokenSpotify: string
 }
 
-export const setLoginState = (userJson: any) => {
-  const user = new User(userJson.data.idFlad, userJson.data.idSpotify, userJson.data.email, new Date(), userJson.data.name, userJson.data.image);
+export const userLogin = (user: User) => {
   return {
     type: userTypes.LOGIN,
     payload: user
   };
 }
 
-export const restoreToken = (token: string) => {
+export const restoreToken = () => {
   return {
-    type: userTypes.RESTORE_TOKEN,
-    payload: token
+    type: userTypes.RESTORE_TOKEN
   };
 }
 
@@ -56,7 +53,7 @@ export const setErrorLogin = (value: boolean) => {
   };
 }
 
-export const setErrorSignup = (value: boolean) => {
+export const setErrorSignup = (value: string) => {
   return {
     type: userTypes.ERROR_SIGNUP,
     payload: value

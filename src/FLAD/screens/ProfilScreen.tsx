@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
+import React from 'react';
+import { Alert, View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Svg, Path } from 'react-native-svg';
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
 import normalize from '../components/Normalize';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
+import { deleteUser } from '../redux/thunk/authThunk';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -23,17 +23,33 @@ export default function ProfilScreen() {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
     // @ts-ignore
-    const UserCurrent = useSelector(state => state.userReducer.user);
+    const userCurrent = useSelector(state => state.userReducer.user);
     const style = isDark ? colorsDark : colorsLight;
     const navigation = useNavigation();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
-
-    useEffect(() => {
-        console.log(UserCurrent.image);
-    });
+    const dispatch = useDispatch();
 
     const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
+    const deleteAccount = () => {
+        Alert.alert(
+            'Confirmation',
+            'Êtes-vous sûr de vouloir supprimer votre compte ?',
+            [
+                {
+                    text: 'Annuler',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Oui',
+                    //@ts-ignore
+                    onPress: () => dispatch(deleteUser()),
+                    style: 'destructive'
+                },
+            ],
+            { cancelable: false }
+        );
+    };
 
     const pickImage = async () => {
         await ImagePicker.launchImageLibraryAsync({
@@ -56,8 +72,8 @@ export default function ProfilScreen() {
             backgroundColor: style.body,
         },
         buttonSetting: {
-            width: normalize(17),
-            height: normalize(17),
+            width: normalize(11),
+            height: normalize(18),
             marginRight: 5
         },
         modalContent: {
@@ -257,7 +273,7 @@ export default function ProfilScreen() {
                             // @ts-ignore
                             onPress={() => navigation.navigate('Setting')}>
                             <View style={styles.exit}>
-                                <Image style={styles.buttonSetting} source={require('../assets/images/chevron_right_icon.png')} />
+                                <Image style={styles.buttonSetting} source={require('../assets/images/chevron_left_icon.png')} />
                                 <Text style={styles.textExit}>Exit</Text>
                             </View>
                         </TouchableOpacity>
@@ -265,18 +281,18 @@ export default function ProfilScreen() {
                             <Text style={styles.title}>Profil</Text>
                             <TouchableOpacity onPress={pickImage} >
                                 <View style={styles.imageWrapper}>
-                                    <Image source={{ uri: UserCurrent.image }} style={styles.imageProfil} />
+                                    <Image source={{ uri: userCurrent.image }} style={styles.imageProfil} />
                                 </View>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.body}>
                             <View style={styles.optionId}>
                                 <Text style={styles.textOption}>Identifiant</Text>
-                                <TextInput placeholderTextColor='#828288' placeholder={UserCurrent.name} style={styles.textInputId} />
+                                <TextInput placeholderTextColor='#828288' placeholder={userCurrent.name} style={styles.textInputId} />
                             </View>
                             <View style={styles.optionMail}>
                                 <Text style={styles.textOption}>Mail</Text>
-                                <TextInput placeholderTextColor='#828288' placeholder={UserCurrent.email} style={styles.textInputMail} />
+                                <TextInput placeholderTextColor='#828288' placeholder={userCurrent.email} style={styles.textInputMail} />
                             </View>
                         </View>
 
@@ -295,16 +311,11 @@ export default function ProfilScreen() {
 
                         <View style={styles.deleteOption}>
                             <View style={styles.buttonDeleteOption}>
-                                <Svg width="20" height="22" viewBox="0 0 25 31">
-                                    <Path d="M21.4265 16.0194V21.7371V28.4078L19.8044 29.8373H10.6125L21.4265 16.0194Z" fill="#686868" />
-                                    <Path d="M9.41089 3.4031V1H15.4186V3.4031" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                    <Path d="M21.4264 8.81006V27.4341C21.4264 28.7613 20.3504 29.8372 19.0233 29.8372H5.80618C4.47901 29.8372 3.40308 28.7613 3.40308 27.4341V8.81006" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                    <Path d="M1 3.40308H23.8295V5.80618H1V3.40308Z" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                    <Path d="M15.4185 10.7626V26.8333" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                    <Path d="M9.41089 10.7626V26.8333" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <Svg width="20" height="20" viewBox="0 0 29 29">
+                                    <Path d="M10.8157 22.6797C10.3586 22.6797 10.0657 22.4101 10.0422 21.9648L9.69067 9.0625C9.67895 8.62891 9.97192 8.34765 10.4407 8.34765C10.8743 8.34765 11.179 8.61719 11.1907 9.05078L11.5657 21.9648C11.5774 22.3984 11.2727 22.6797 10.8157 22.6797ZM14.3899 22.6797C13.9328 22.6797 13.6164 22.3984 13.6164 21.9648V9.0625C13.6164 8.62891 13.9328 8.34765 14.3899 8.34765C14.8469 8.34765 15.175 8.62891 15.175 9.0625V21.9648C15.175 22.3984 14.8469 22.6797 14.3899 22.6797ZM17.9758 22.6797C17.5188 22.6797 17.2141 22.3984 17.2258 21.9648L17.5891 9.0625C17.6008 8.61719 17.9055 8.34765 18.3391 8.34765C18.8078 8.34765 19.1008 8.62891 19.0891 9.0625L18.7375 21.9648C18.7141 22.4101 18.4211 22.6797 17.9758 22.6797ZM9.24536 5.5H11.1086V2.99219C11.1086 2.32422 11.5774 1.89062 12.2805 1.89062H16.4758C17.1789 1.89062 17.6477 2.32422 17.6477 2.99219V5.5H19.5109V2.875C19.5109 1.17578 18.4094 0.144531 16.6047 0.144531H12.1516C10.3469 0.144531 9.24536 1.17578 9.24536 2.875V5.5ZM3.92505 6.4375H24.8664C25.3469 6.4375 25.7336 6.02734 25.7336 5.54687C25.7336 5.06641 25.3469 4.66797 24.8664 4.66797H3.92505C3.4563 4.66797 3.04614 5.06641 3.04614 5.54687C3.04614 6.03906 3.4563 6.4375 3.92505 6.4375ZM9.0227 26.2422H19.7688C21.4445 26.2422 22.5695 25.1523 22.6516 23.4765L23.4719 6.19141H5.30786L6.13989 23.4883C6.22192 25.164 7.32348 26.2422 9.0227 26.2422Z" fill="white" fill-opacity="0.85" />
                                 </Svg>
                             </View>
-                            <TouchableOpacity onPress={() => console.log("Tkt t deconnecter")}>
+                            <TouchableOpacity onPress={() => deleteAccount()}>
                                 <Text style={styles.textDeleteOption}>Supprimer le compte</Text>
                             </TouchableOpacity>
                         </View>

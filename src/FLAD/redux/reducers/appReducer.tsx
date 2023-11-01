@@ -1,6 +1,4 @@
 import { spotsData } from "../../data/data";
-import Music from "../../model/Music";
-import { Spot } from "../../model/Spot";
 import { discoveriesTypes } from "../types/discoverieTypes";
 import { favoritesTypes } from "../types/favoritesTypes";
 import { spotifyTypes } from "../types/spotifyTypes";

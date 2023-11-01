@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { View, Text, Image, Pressable, Linking, Alert } from 'react-native'
-import Artist from '../model/Artist';
+import Artist from '../models/Artist';
 
 interface ArtistChipProps {
   backgroundColor: string;

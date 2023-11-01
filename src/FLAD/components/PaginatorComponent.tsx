@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet, Animated, useWindowDimensions } from 'react-native';
-
 import normalize from './Normalize';
 
 // @ts-ignore

@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from "../../model/User";
+import { User } from "../../models/User";
 import { userTypes } from "../types/userTypes";
 
 const initialState = {
   user: User,
-  userFladToken: "",
-  userSpotifyToken: null,
   isLogedIn: false,
+  loading: false,
   failedLogin: false,
   failedSignup: false,
+  errorMessage: null,
   errorNetwork: false,
   dark: null
 }
@@ -16,25 +16,27 @@ const initialState = {
 const userReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case userTypes.RESTORE_TOKEN:
-      const resp = (action.payload == "" ? false : true)
       return {
         ...state,
-        userFladToken: action.payload,
         loading: true,
-        isLogedIn: resp,
       };
     case userTypes.LOGIN:
       return {
         ...state,
         user: action.payload,
-        isLogedIn: true
+        isLogedIn: true,
+        failedLogin: false,
+        failedSignup: false,
+        errorNetwork: false
       };
     case userTypes.SIGNUP:
       return {
         ...state,
         user: action.payload,
         isLogedIn: true,
-        dark: false
+        failedLogin: false,
+        failedSignup: false,
+        errorNetwork: false
       };
     case userTypes.USER_LOGOUT:
       AsyncStorage.removeItem('dark');
@@ -52,7 +54,7 @@ const userReducer = (state = initialState, action: any) => {
     case userTypes.ERROR_LOGIN:
       return { ...state, failedLogin: action.payload }
     case userTypes.ERROR_SIGNUP:
-      return { ...state, failedSignup: action.payload }
+      return { ...state, failedSignup: true, errorMessage: action.payload }
     case userTypes.DARK_MODE:
       return { ...state, dark: action.payload }
     case userTypes.ERROR_NETWORK:
@@ -61,5 +63,6 @@ const userReducer = (state = initialState, action: any) => {
       return state;
   }
 }
-export default userReducer
 
+
+export default userReducer;

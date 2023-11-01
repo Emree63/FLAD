@@ -16,20 +16,20 @@ import { colorsLight } from '../constants/colorsLight';
 import { getCurrentUserMusic, getSpotList } from '../redux/thunk/spotThunk';
 import SpotifyService from '../services/spotify/spotify.service';
 import * as SecureStore from 'expo-secure-store';
-import { MY_SECURE_AUTH_STATE_KEY } from '../screens/RegisterScreen';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import qs from 'qs';
 
+const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKeySpotify';
+
 export default function HomeNavigation() {
   const [setErrorMsg] = useState('');
-  const [location, setLocation] = useState<Location.LocationObject>();
-//@ts-ignore
-const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
- //@ts-ignore
- const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
+  //@ts-ignore
+  const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
+  //@ts-ignore
+  const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
 
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -45,46 +45,46 @@ const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
     const sendLocationUpdate = async () => {
       try {
 
-        let tmpKey: string = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY) ;
+        let tmpKey: string = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY);
         //@ts-ignore
         dispatch(getCurrentUserMusic(new SpotifyService(tmpKey)))
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status == 'granted') {
           // should app is ready 
-            const locationresp = await Location.getCurrentPositionAsync({});
-            // send location to server
-            if(currentMusic){
-              const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
-                longitude: locationresp.coords.longitude,
-                latitude: locationresp.coords.latitude,
-                currentMusic: currentMusic.id
-              }
-              const resp = await axios({
-                url: 'https://flad-api-production.up.railway.app/api/users/nextTo?' + qs.stringify(body),
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${tokenSend}`,
-                },
-              });
-              const datat: Record<string, string> = resp.data.listUser2;   
-              //@ts-ignore           
-              dispatch(getSpotList(datat, new SpotifyService(tmpKey)))
+          const locationresp = await Location.getCurrentPositionAsync({});
+          // send location to server
+          if (currentMusic) {
+            const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
+              longitude: locationresp.coords.longitude,
+              latitude: locationresp.coords.latitude,
+              currentMusic: currentMusic.id
             }
-            else{
-              return;
-            }
-            
-          
+            const resp = await axios({
+              url: 'https://flad-api-production.up.railway.app/api/users/nextTo?' + qs.stringify(body),
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${tokenSend}`,
+              },
+            });
+            const datat: Record<string, string> = resp.data.listUser2;
+            //@ts-ignore           
+            dispatch(getSpotList(datat, new SpotifyService(tmpKey)))
+          }
+          else {
+            return;
+          }
+
+
         }
         else {
           //@ts-ignore
-          let {status} = Location.requestForegroundPermissionsAsync();
+          let { status } = Location.requestForegroundPermissionsAsync();
           if (status !== 'granted') {
             setErrorMsg('Permission to access location was denied');
             return;
           }
           return;
-          
+
         }
       } catch (error) {
         console.log(error);

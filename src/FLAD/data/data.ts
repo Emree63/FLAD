@@ -1,5 +1,5 @@
-import Music from "../model/Music";
-import { Spot } from "../model/Spot";
+import Music from "../models/Music";
+import { Spot } from "../models/Spot";
 
 export const spotsData: Spot[] = [
   new Spot("1", new Music("6KNw3UKRp3QRsO7Cf4ASVE",

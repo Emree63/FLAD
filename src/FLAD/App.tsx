@@ -7,8 +7,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   return (
     <Provider store={store}>
-      <AuthNavigation/>
+      <AuthNavigation />
     </Provider>
   );
 }
-

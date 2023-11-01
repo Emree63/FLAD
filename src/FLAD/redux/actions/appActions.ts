@@ -1,4 +1,4 @@
-import Music from "../../model/Music";
+import Music from "../../models/Music";
 import { favoritesTypes } from "../types/favoritesTypes";
 
 export const getFavoritesMusic = (music: Music[]) => {

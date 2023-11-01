@@ -23,9 +23,9 @@ export default function LoginScreen() {
     const failedLogin = useSelector(state => state.userReducer.failedLogin);
     // @ts-ignore
     const networkError = useSelector(state => state.userReducer.errorNetwork);
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     async function playSound() {
         const { sound } = await Audio.Sound.createAsync(
@@ -34,35 +34,34 @@ export default function LoginScreen() {
         setSound(sound);
         await sound.playAsync();
     }
-    const dispatch = useDispatch();
 
     const submitForm = () => {
         const credentials: LoginCredentials = {
             email: username.toLowerCase(),
-            password: password.toLowerCase()
+            password: password
         };
         //@ts-ignore
-        dispatch(login(credentials))
+        dispatch(login(credentials, rememberMe))
         playSound()
     }
 
     useEffect(() => {
         if (networkError) {
-          Alert.alert(
-            'Erreur réseau',
-            'Une erreur réseau s\'est produite. Veuillez vérifier votre connexion internet et réessayer.',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  dispatch(setErrorNetwork(false));
-                },
-              },
-            ],
-            { cancelable: false }
-          );
+            Alert.alert(
+                'Erreur réseau',
+                'Une erreur réseau s\'est produite. Veuillez vérifier votre connexion internet et réessayer.',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            dispatch(setErrorNetwork(false));
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         }
-      }, [networkError, dispatch]);
+    }, [networkError]);
 
     const toggleRememberMe = () => {
         setRememberMe(!rememberMe);
@@ -96,7 +95,11 @@ export default function LoginScreen() {
                         <Image source={require('../assets/images/lock_icon.png')} style={styles.iconLock} />
                     </View>
                     <View style={styles.rememberMeContainer}>
-                        <TouchableOpacity style={[styles.checkbox, rememberMe ? styles.checkboxChecked : null]} onPress={toggleRememberMe}></TouchableOpacity>
+                        <TouchableOpacity style={[styles.checkbox, rememberMe ? styles.checkboxChecked : null]} onPress={toggleRememberMe}>
+                            {rememberMe && (
+                                <Image source={require("../assets/images/ok_icon.png")} style={styles.checkBoxImage} />
+                            )}
+                        </TouchableOpacity>
                         <Text style={styles.rememberMeText}>SE SOUVENIR DE MOI</Text>
                     </View>
                     <TouchableOpacity style={[styles.button, styles.shadow]} onPress={submitForm}>
@@ -153,6 +156,10 @@ const styles = StyleSheet.create({
     buttonImage: {
         width: normalize(46),
         height: normalize(46),
+    },
+    checkBoxImage: {
+        width: normalize(14),
+        height: normalize(11),
     },
     iconUser: {
         position: 'absolute',
@@ -225,7 +232,12 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     checkboxChecked: {
-        backgroundColor: 'white'
+        backgroundColor: '#5C1DC3',
+        borderColor: '#5C1DC3',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     inscriptionText: {
         flexDirection: 'row',
