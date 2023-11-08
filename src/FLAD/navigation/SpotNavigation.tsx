@@ -1,27 +1,21 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import SpotScreen from '../screens/SpotScreen'
 import DetailScreen from '../screens/DetailScreen';
-
+import { createStackNavigator } from '@react-navigation/stack';
 
 export default function SpotNavigation() {
   const Stack = createStackNavigator();
-
   return (
-    <Stack.Navigator screenOptions={{
-      gestureEnabled: false,
-      headerShown: false,
-      cardOverlayEnabled: true,
-
-    }}
-    >
+    <Stack.Navigator>
       <Stack.Screen
         name="Spot"
         component={SpotScreen}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   )

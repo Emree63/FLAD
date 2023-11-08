@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Platform, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import FavoriteNavigation from './FavoriteNavigation';
 import SettingNavigation from './SettingNavigation';
-
 import normalize from '../components/Normalize';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -13,89 +12,18 @@ import MessagingNavigation from './MessagingNavigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import { getCurrentUserMusic, getSpotList } from '../redux/thunk/spotThunk';
-import SpotifyService from '../services/spotify/spotify.service';
-import * as SecureStore from 'expo-secure-store';
-import * as Location from 'expo-location';
-import axios from 'axios';
-import qs from 'qs';
+import { getUserCurrentMusic } from '../redux/thunk/appThunk';
+import { logout } from '../redux/thunk/authThunk';
+import { setAccessError, setErrorEmptyMusic } from '../redux/actions/userActions';
 
-const MY_SECURE_AUTH_STATE_KEY = 'MySecureAuthStateKeySpotify';
 
 export default function HomeNavigation() {
-  const [setErrorMsg] = useState('');
   //@ts-ignore
-  const tokenSend: string = useSelector(state => state.userReducer.userFladToken);
+  const favoritesMusicLength = useSelector(state => state.appReducer.nbAddedFavoritesMusic);
   //@ts-ignore
-  const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
-
-  const dispatch = useDispatch();
-
-  const requestLocationPermission = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Permission to access location was denied');
-    } else {
-      console.log('Permission to access location was granted');
-    }
-  }
-
-  useEffect(() => {
-    requestLocationPermission();
-    const sendLocationUpdate = async () => {
-      try {
-
-        let tmpKey: string = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY);
-        //@ts-ignore
-        dispatch(getCurrentUserMusic(new SpotifyService(tmpKey)))
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status == 'granted') {
-          // should app is ready 
-          const locationresp = await Location.getCurrentPositionAsync({});
-          // send location to server
-          if (currentMusic) {
-            const body: Record<string, string | boolean | number | (string | boolean | number)[]> = {
-              longitude: locationresp.coords.longitude,
-              latitude: locationresp.coords.latitude,
-              currentMusic: currentMusic.id
-            }
-            const resp = await axios({
-              url: 'https://flad-api-production.up.railway.app/api/users/nextTo?' + qs.stringify(body),
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${tokenSend}`,
-              },
-            });
-            const datat: Record<string, string> = resp.data.listUser2;
-            //@ts-ignore           
-            dispatch(getSpotList(datat, new SpotifyService(tmpKey)))
-          }
-          else {
-            return;
-          }
-
-
-        }
-        else {
-          //@ts-ignore
-          let { status } = Location.requestForegroundPermissionsAsync();
-          if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-          }
-          return;
-
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const interval = setInterval(sendLocationUpdate, 30000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentMusic]);
-
+  const accessError = useSelector(state => state.userReducer.accessError);
+  //@ts-ignore
+  const errorEmptyMusic = useSelector(state => state.userReducer.errorEmptyMusic);
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
   const style = isDark ? colorsDark : colorsLight;
@@ -109,8 +37,51 @@ export default function HomeNavigation() {
       text: 'rgb(138, 138, 138)',
     }
   };
-  //@ts-ignore
-  const favoritesMusicLength: number = useSelector(state => state.appReducer.favoriteMusic.length);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    //@ts-ignore
+    dispatch(getUserCurrentMusic());
+  }, []);
+
+  useEffect(() => {
+    if (accessError) {
+      Alert.alert(
+        "Problème lié à votre compte",
+        "Votre compte ne fait plus partie des utilisateurs ayant accès à l'application. Pour plus d'informations, veuillez contacter l'équipe de support à l'adresse suivante : fladdevpro@gmail.com.",
+        [
+          {
+            text: 'Réessayer plus tard',
+            onPress: () => {
+              dispatch(setAccessError(false))
+              //@ts-ignore
+              dispatch(logout());
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [accessError]);
+
+  useEffect(() => {
+    if (errorEmptyMusic) {
+      Alert.alert(
+        "Bienvenue sur FLAD 🎵",
+        "Votre compte Spotify semble tout neuf, donc pour le moment, vous ne pouvez pas encore partager de musique.\n\n" +
+        "Pas encore de playlist secrète ? Aucun morceau honteux ? Nous attendons impatiemment vos découvertes musicales !",
+        [
+          {
+            text: "D'accord",
+            onPress: () => dispatch(setErrorEmptyMusic(false)),
+          }
+        ]
+      );
+    }
+  }, [errorEmptyMusic]);
+
+
   return (
     // @ts-ignore
     <NavigationContainer theme={MyTheme}>

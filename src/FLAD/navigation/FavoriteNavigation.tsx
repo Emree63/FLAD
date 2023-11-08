@@ -6,16 +6,16 @@ import { createSharedElementStackNavigator } from 'react-navigation-shared-eleme
 const Stack = createSharedElementStackNavigator();
 export default function MusicNavigation() {
   return (
-    <Stack.Navigator initialRouteName="Favorite" screenOptions={{ gestureEnabled: true, headerShown: false, cardOverlayEnabled: true, cardStyle: { backgroundColor: "transparent" } }} >
+    <Stack.Navigator initialRouteName="Favorite">
       <Stack.Screen
         name="Favorite"
         component={Favorite}
-
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
-        sharedElements={(route) => { return [route.params.music.id] }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   )

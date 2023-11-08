@@ -26,7 +26,7 @@ export default function Loading() {
       borderWidth: size / 10,
       borderColor: "#F80404",
       shadowColor: "#F40C1C",
-      shadowOffset: { width: 0, height: 0 },
+      //shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 1,
       shadowRadius: 10,
     };

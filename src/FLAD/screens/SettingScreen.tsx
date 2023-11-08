@@ -12,6 +12,7 @@ import { darkMode } from '../redux/thunk/userThunk';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { User } from '../models/User';
+import Artist from '../models/Artist';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -54,7 +55,7 @@ export default function SettingScreen() {
 
     const Deconnection = () => {
         //@ts-ignore
-        dispatch(logout())
+        dispatch(logout());
     }
 
     const [isCheckedLocalisation, setIsCheckedLocalisation] = useState(false);
@@ -234,11 +235,18 @@ export default function SettingScreen() {
             marginBottom: 5
         },
         mascot: {
-            width: normalize(90),
-            height: normalize(90),
+            width: normalize(70),
+            height: normalize(70),
             position: 'absolute',
             right: normalize(0),
-            top: normalize(10)
+            top: normalize(20)
+        },
+        creationDateText: {
+            marginTop: 10,
+            fontSize: normalize(13),
+            fontWeight: '700',
+            color: style.Text,
+            opacity: 0.4
         }
 
     })
@@ -268,7 +276,7 @@ export default function SettingScreen() {
                             <View style={styles.profil}>
                                 <Image source={{ uri: currentUser.image }} style={styles.imageProfil} />
                                 <View style={styles.profilContainer}>
-                                    <Text style={styles.NameProfil}>{currentUser.name}</Text>
+                                    <Text style={styles.NameProfil}>{currentUser.name.charAt(0).toUpperCase() + currentUser.name.slice(1)}</Text>
                                     <Text style={styles.description}>id. Spotify, mail et mot de passe</Text>
                                 </View>
                                 <Image style={styles.buttonSetting} source={require('../assets/images/chevron_right_icon.png')} />
@@ -328,7 +336,7 @@ export default function SettingScreen() {
                                 </View>
 
                                 <View style={styles.musicActually}>
-                                    <CardMusic image={currentMusic.image} title={currentMusic.title} description={currentMusic.bio} id='1' />
+                                    <CardMusic image={currentMusic.cover} title={currentMusic.name} description={currentMusic.artists.map((artist: Artist) => artist.name).join(', ')} id='1' />
                                     <Image source={require("../assets/images/flady_icon.png")} style={styles.mascot} />
                                 </View>
                             </>
@@ -344,6 +352,15 @@ export default function SettingScreen() {
                             <TouchableOpacity onPress={() => Deconnection()}>
                                 <Text style={styles.textDeconnectionOption}>Se deconnecter</Text>
                             </TouchableOpacity>
+                        </View>
+                        <View style={{alignItems: 'center'}}>
+                        <Text style={styles.creationDateText}>Compte créer le {currentUser.creationDate.toLocaleString('fr-FR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                        })}</Text>
                         </View>
                     </View>
                 </ScrollView>

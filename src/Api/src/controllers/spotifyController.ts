@@ -57,7 +57,7 @@ class SpotifyController implements IController {
         "error": "Parameter refresh_token missing"
       });
     }
-    let authOptions = {
+    const authOptions = {
       method: 'POST',
       url: 'https://accounts.spotify.com/api/token',
       data: qs.stringify({
@@ -79,7 +79,7 @@ class SpotifyController implements IController {
             "refresh_token": session.data.refresh_token,
             "expires_in": session.data.expires_in
           });
-        } 
+        }
       })
       .catch(error => {
         res.status(400).send("Cannot get a new refresh token");
@@ -108,7 +108,7 @@ class SpotifyController implements IController {
       json: true
     };
     try {
-      var resp = await axios(authOptions);
+      const resp = await axios(authOptions);
       if (resp.status === 200) {
         let access_token = resp.data.access_token;
         let expiration = resp.data.expires_in;

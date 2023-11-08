@@ -61,8 +61,8 @@ export default function Friend(props: FriendProps) {
             justifyContent: 'center',
         },
         button: {
-            width: normalize(13),
-            height: normalize(13),
+            width: normalize(9),
+            height: normalize(15),
             marginRight: 42
         }
     })

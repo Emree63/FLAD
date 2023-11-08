@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Svg, Path } from 'react-native-svg';
@@ -11,6 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { deleteUser } from '../redux/thunk/authThunk';
+import { setMail, setName } from '../redux/thunk/userThunk';
+import { setErrorUpdate } from '../redux/actions/userActions';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -23,7 +25,13 @@ export default function ProfilScreen() {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
     // @ts-ignore
+    const errorUpdateMessage = useSelector(state => state.userReducer.errorUpdateMessage);
+    // @ts-ignore
+    const errorUpdate = useSelector(state => state.userReducer.errorUpdate);
+    // @ts-ignore
     const userCurrent = useSelector(state => state.userReducer.user);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const style = isDark ? colorsDark : colorsLight;
     const navigation = useNavigation();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -59,6 +67,90 @@ export default function ProfilScreen() {
             quality: 1,
         });
     };
+
+    const submitUsername = () => {
+        const isUsernameValid = /^\w+$/.test(username);
+
+        if (username.length > 30) {
+            Alert.alert("Erreur modification", "Le nom d'utilisateur ne peut pas être plus grand que 30 caractères.");
+            return;
+        }
+        if (!isUsernameValid) {
+            Alert.alert("Erreur modification", "Le nom d'utilisateur ne peut pas posséder de caractères spéciaux.");
+            return;
+        }
+        Alert.alert(
+            'Confirmation',
+            'Êtes-vous sûr de vouloir changer de nom d\'utilisateur ?',
+            [
+                {
+                    text: 'Annuler',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Oui',
+                    onPress: () => {
+                        //@ts-ignore
+                        dispatch(setName(username));
+                        setUsername("");
+                    },
+                    style: 'destructive'
+                },
+            ],
+            { cancelable: false }
+        );
+    }
+
+    const submitEmail = () => {
+        const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
+        if (email.length > 100) {
+            Alert.alert("Erreur modification", "L'adresse e-mail ne peut pas être plus grand que 100 caractères.");
+            return;
+        }
+        if (!isEmailValid) {
+            Alert.alert("Erreur modification", "L'adresse e-mail n\'est pas valide.");
+            return;
+        }
+        Alert.alert(
+            'Confirmation',
+            'Êtes-vous sûr de vouloir changer l\'adresse e-mail ?',
+            [
+                {
+                    text: 'Annuler',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Oui',
+                    onPress: () => {
+                        //@ts-ignore
+                        dispatch(setMail(email));
+                        setEmail("");
+                    },
+                    style: 'destructive'
+                },
+            ],
+            { cancelable: false }
+        );
+    }
+
+    useEffect(() => {
+        if (errorUpdate) {
+            Alert.alert(
+                "Erreur modification",
+                errorUpdateMessage,
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => {
+                            dispatch(setErrorUpdate(false))
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+    }, [errorUpdate]);
 
     const styles = StyleSheet.create({
         mainSafeArea: {
@@ -171,14 +263,21 @@ export default function ProfilScreen() {
         },
         textInputId: {
             marginLeft: 50,
+            width: '50%',
+            color: style.Text,
+            fontSize: normalize(18),
+        },
+        textIdSpotify: {
+            marginLeft: 50,
             width: '57%',
             color: style.Text,
+            fontWeight: 'bold',
             fontSize: normalize(18),
         },
         textInputMail: {
             marginLeft: 100,
             color: style.Text,
-            width: '57%',
+            width: '50%',
             fontSize: normalize(18)
         },
         passwordOption: {
@@ -201,18 +300,20 @@ export default function ProfilScreen() {
             marginTop: 5
         },
         cancelText: {
-            fontSize: normalize(20),
+            fontSize: normalize(18),
             color: '#1c77fb'
         },
         updateText: {
             marginLeft: 60,
-            fontSize: normalize(20),
+            fontWeight: 'bold',
+            fontSize: normalize(18),
             color: '#404040'
         },
         titlePassword: {
-            fontSize: normalize(22),
+            fontWeight: 'bold',
+            fontSize: normalize(20),
             color: style.Text,
-            marginLeft: 50
+            marginLeft: 65
         },
         warning: {
             color: '#98989f',
@@ -287,12 +388,28 @@ export default function ProfilScreen() {
                         </View>
                         <View style={styles.body}>
                             <View style={styles.optionId}>
+                                <Text style={styles.textOption}>Id. Spotify</Text>
+                                <Text style={styles.textIdSpotify} numberOfLines={1}>{userCurrent.idSpotify}</Text>
+                            </View>
+                            <View style={styles.optionId}>
                                 <Text style={styles.textOption}>Identifiant</Text>
-                                <TextInput placeholderTextColor='#828288' placeholder={userCurrent.name} style={styles.textInputId} />
+                                <TextInput placeholderTextColor='#828288' value={username}
+                                    onChangeText={setUsername} placeholder={userCurrent.name} style={styles.textInputId} />
+                                {username.length >= 5 && (
+                                    <TouchableOpacity onPress={() => submitUsername()}>
+                                        <Image source={require("../assets/images/confirm_icon.png")} style={{ width: normalize(25), height: normalize(25) }} />
+                                    </TouchableOpacity>
+                                )}
                             </View>
                             <View style={styles.optionMail}>
                                 <Text style={styles.textOption}>Mail</Text>
-                                <TextInput placeholderTextColor='#828288' placeholder={userCurrent.email} style={styles.textInputMail} />
+                                <TextInput placeholderTextColor='#828288' value={email}
+                                    onChangeText={setEmail} placeholder={userCurrent.email} style={styles.textInputMail} />
+                                {email.length >= 7 && (
+                                    <TouchableOpacity onPress={() => submitEmail()}>
+                                        <Image source={require("../assets/images/confirm_icon.png")} style={{ width: normalize(25), height: normalize(25) }} />
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         </View>
 

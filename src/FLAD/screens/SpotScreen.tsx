@@ -4,18 +4,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import Animated from 'react-native-reanimated';
 import Card from '../components/Card';
-import AdjustSize from '../components/AdjustSize';
 import normalize from '../components/Normalize';
 import LottieView from 'lottie-react-native'
 import Lotties from '../assets/lottie/Lottie';
 import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
-import Music from '../model/Music';
 import { addFavoritesMusic } from '../redux/actions/appActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spot } from '../model/Spot';
+import { Spot } from '../models/Spot';
 import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
-import { spotsData } from '../data/data';
 
 export default function SpotScreen() {
   //@ts-ignore
@@ -89,7 +86,7 @@ export default function SpotScreen() {
               alignItems: "center",
             }}
             source={{
-              uri: currentCard.music.image,
+              uri: currentCard.music.cover,
             }}
           ></ImageBackground>
           <SafeAreaView style={styles.mainSafeArea}>
@@ -100,9 +97,9 @@ export default function SpotScreen() {
                   left: wWidht / 9,
                   top: normalize(87),
                   color: "#FFFFFF",
-                  fontSize: normalize(AdjustSize(currentCard.music.title)),
+                  fontSize: normalize(currentCard.music.name),
                   fontWeight: "800",
-                }}>{currentCard.music.title}</Text>
+                }}>{currentCard.music.name}</Text>
               <Text
                 style={{
                   fontStyle: 'normal',
@@ -110,7 +107,7 @@ export default function SpotScreen() {
                   top: normalize(87),
                   color: "#FFFFFF",
                   fontSize: normalize(20),
-                }}>{currentCard.music.bio}</Text>
+                }}>{currentCard.music.artists[0].name}</Text>
             </LinearGradient>
           </SafeAreaView>
           <View style={{ flex: 8.35 }}>
@@ -118,11 +115,11 @@ export default function SpotScreen() {
             <View style={{ flex: 1.83, justifyContent: 'center', alignItems: 'center' }}>
 
               {cards.map((card) => (
-                <View key={card.userSpotifyId} style={{ position: 'absolute' }} >
+                <View style={{ position: 'absolute' }} >
                   <Pressable onLongPress={() => { hapti(card) }} >
                     <Card
-                      title={card.music.title}
-                      image={card.music.image}
+                      title={card.music.name}
+                      image={card.music.cover}
                       onSwipe={(direction) => { onSwipe(direction) }}
                     />
                   </Pressable>

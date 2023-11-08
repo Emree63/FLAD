@@ -16,15 +16,15 @@ export default function AuthNavigation() {
   const [appIsReady, setAppIsReady] = useState(false);
   const dispatch = useDispatch();
 
-  async function prepare() {
-    //@ts-ignore
-    await dispatch(getRefreshToken())
-  }
-
   async function check() {
     if (tokenProcessed && appIsReady) {
       await SplashScreen.hideAsync();
     }
+  }
+
+  async function prepare() {
+    //@ts-ignore
+    dispatch(getRefreshToken())
   }
 
   async function initDarkMode() {

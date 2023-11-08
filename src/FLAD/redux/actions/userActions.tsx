@@ -26,13 +26,6 @@ export const restoreToken = () => {
   };
 }
 
-export const userSignUp = (user: User) => {
-  return {
-    type: userTypes.SIGNUP,
-    payload: user
-  };
-}
-
 export const userLogout = () => {
   return {
     type: userTypes.USER_LOGOUT,
@@ -41,28 +34,56 @@ export const userLogout = () => {
 
 export const setDarkMode = (value: boolean) => {
   return {
-    type: userTypes.DARK_MODE,
+    type: userTypes.SET_DARK_MODE,
     payload: value
   };
 }
 
 export const setErrorLogin = (value: boolean) => {
   return {
-    type: userTypes.ERROR_LOGIN,
+    type: userTypes.SET_ERROR_LOGIN,
     payload: value
   };
 }
 
 export const setErrorSignup = (value: string) => {
   return {
-    type: userTypes.ERROR_SIGNUP,
+    type: userTypes.SET_ERROR_SIGNUP,
     payload: value
   };
 }
 
 export const setErrorNetwork = (value: boolean) => {
   return {
-    type: userTypes.ERROR_NETWORK,
+    type: userTypes.SET_ERROR_NETWORK,
+    payload: value
+  };
+}
+
+export const setErrorEmptyMusic = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_EMPTY_MUSIC,
+    payload: value
+  };
+}
+
+export const setAccessError = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_ACCESS,
+    payload: value
+  };
+}
+
+export const setErrorUpdate = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_UPDATE,
+    payload: value
+  };
+}
+
+export const setErrorUpdateMessage = (value: string) => {
+  return {
+    type: userTypes.SET_ERROR_UPDATE_MESSAGE,
     payload: value
   };
 }

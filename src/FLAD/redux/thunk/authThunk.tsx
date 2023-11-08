@@ -1,10 +1,10 @@
 import axios from "axios";
 import configs from "../../constants/config";
-import { LoginCredentials, RegisterCredentials, restoreToken, userLogin, userLogout, userSignUp, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
+import { LoginCredentials, RegisterCredentials, restoreToken, userLogin, userLogout, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
 import { UserMapper } from "../../models/mapper/UserMapper";
+import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 
-const key = 'userToken';
 const keyRemember = 'rememberUser';
 
 export const register = (resgisterCredential: RegisterCredentials) => {
@@ -22,7 +22,7 @@ export const register = (resgisterCredential: RegisterCredentials) => {
         config
       )
       const token = resp.data.token;
-      await SecureStore.setItemAsync(key, token);
+      await SecureStore.setItemAsync(configs.key, token);
       await SecureStore.setItemAsync(keyRemember, 'true');
       const headers = {
         'Authorization': 'Bearer ' + token
@@ -31,8 +31,8 @@ export const register = (resgisterCredential: RegisterCredentials) => {
         configs.API_URL + '/user',
         { headers }
       )
-      dispatch(userSignUp(UserMapper.toModel(user.data.data)));
-
+      MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
+      dispatch(userLogin(UserMapper.toModel(user.data.data)));
     } catch (error: any) {
       console.error("Error : " + error.message);
       switch (error.response.status) {
@@ -70,7 +70,7 @@ export const login = (loginCredential: LoginCredentials, remember: boolean) => {
       )
 
       const token = resp.data.token;
-      await SecureStore.setItemAsync(key, token);
+      await SecureStore.setItemAsync(configs.key, token);
       if (remember) {
         await SecureStore.setItemAsync(keyRemember, remember.toString());
       }
@@ -83,8 +83,8 @@ export const login = (loginCredential: LoginCredentials, remember: boolean) => {
         configs.API_URL + '/user',
         { headers }
       )
+      MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
       dispatch(userLogin(UserMapper.toModel(user.data.data)));
-
     } catch (error: any) {
       console.error("Error : " + error.message);
       switch (error.response.status) {
@@ -103,7 +103,7 @@ export const getRefreshToken = () => {
   //@ts-ignore
   return async dispatch => {
     let remember: string | null = await SecureStore.getItemAsync(keyRemember);
-    let token: string | null = await SecureStore.getItemAsync(key);
+    let token: string | null = await SecureStore.getItemAsync(configs.key);
     if (token) {
       if (remember) {
         const headers = {
@@ -114,14 +114,13 @@ export const getRefreshToken = () => {
             configs.API_URL + '/user',
             { headers }
           )
+          MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
           await dispatch(userLogin(UserMapper.toModel(user.data.data)));
         } catch (error: any) {
-          await SecureStore.deleteItemAsync(key);
-          dispatch(userLogout());
+          dispatch(logout());
         }
       } else {
-        await SecureStore.deleteItemAsync(key);
-        dispatch(userLogout());
+        dispatch(logout());
       }
     }
     dispatch(restoreToken());
@@ -132,7 +131,7 @@ export const getRefreshToken = () => {
 export const deleteUser = () => {
   //@ts-ignore
   return async dispatch => {
-    let token: string | null = await SecureStore.getItemAsync(key);
+    let token: string | null = await SecureStore.getItemAsync(configs.key);
     if (token) {
       const headers = {
         'Authorization': 'Bearer ' + token
@@ -142,8 +141,7 @@ export const deleteUser = () => {
           configs.API_URL + '/user',
           { headers }
         )
-        await SecureStore.deleteItemAsync(key);
-        dispatch(userLogout());
+        dispatch(logout());
       } catch (error: any) {
         console.error("Error deleting account : " + error.message);
       }
@@ -154,8 +152,9 @@ export const deleteUser = () => {
 export const logout = () => {
   //@ts-ignore
   return async dispatch => {
-    await SecureStore.deleteItemAsync(key);
+    await SecureStore.deleteItemAsync(configs.key);
     await SecureStore.deleteItemAsync(keyRemember);
+    MusicServiceProvider.resetService();
     dispatch(userLogout());
   }
 }

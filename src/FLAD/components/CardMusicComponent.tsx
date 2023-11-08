@@ -26,8 +26,8 @@ export default function CardMusic(props: CardMusicProps) {
       marginBottom: 15
     },
     imageContainer: {
-      width: normalize(92),
-      height: normalize(92),
+      width: normalize(82),
+      height: normalize(82),
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: 20,

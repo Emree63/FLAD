@@ -1,15 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, SafeAreaView } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
 import CardMusic from '../components/CardMusicComponent';
 import normalize from '../components/Normalize';
-import Music from '../models/Music';
 import { Svg, Path } from 'react-native-svg';
 import FladyComponent from '../components/FladyComponent';
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
-import { SharedElement } from 'react-navigation-shared-element';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
+import { useDispatch } from 'react-redux';
+import { getFavoriteMusic } from '../redux/thunk/appThunk';
+import { Spot } from '../models/Spot';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Artist from '../models/Artist';
 
 export default function FavoriteScreen() {
 
@@ -17,26 +20,31 @@ export default function FavoriteScreen() {
     const isDark = useSelector(state => state.userReducer.dark);
     const style = isDark ? colorsDark : colorsLight;
 
-    const navigation = useNavigation();
-    //@ts-ignore
-    const favoritesMusic = useSelector(state => state.appReducer.favoriteMusic);
     const images = [
         { id: 1, source: require('../assets/images/flady_love.png') },
         { id: 2, source: require('../assets/images/flady_star.png') },
         { id: 3, source: require('../assets/images/flady_angry.png') },
         { id: 4, source: require('../assets/images/flady_cry.png') },
     ];
-    const navigueToDetail = (music: any) => {
-        // @ts-ignore
-        navigation.navigate("Detail", { "music": music })
-    };
+    const navigation = useNavigation();
+    //@ts-ignore
+    const favoriteMusic = useSelector(state => state.appReducer.favoriteMusic);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        //@ts-ignore
+        dispatch(getFavoriteMusic())
+    }, []);
+
+
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
         },
         titleContainer: {
-            marginTop: 10,
+            marginVertical: 10,
             marginLeft: 20,
         },
         header: {
@@ -55,30 +63,6 @@ export default function FavoriteScreen() {
             fontSize: normalize(20),
             color: '#787878',
             marginBottom: 5
-        },
-        button: {
-            marginTop: '10%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            backgroundColor: 'white',
-            width: normalize(100),
-            height: normalize(100),
-            borderRadius: 21
-        },
-        buttonImage: {
-            width: normalize(46),
-            height: normalize(46),
-        },
-        shadow: {
-            shadowColor: '#000',
-            shadowOffset: {
-                width: 2,
-                height: 3,
-            },
-            shadowOpacity: 0.50,
-            shadowRadius: 3.84,
         }
     });
 
@@ -95,15 +79,14 @@ export default function FavoriteScreen() {
                 <Text style={styles.description}>Retrouvez ici vos musiques favorites</Text>
             </View>
             <FlatList
-                data={favoritesMusic}
+                data={favoriteMusic}
+                keyExtractor={(item: Spot) => item.music.id}
                 renderItem={({ item }) => (
-                    <TouchableHighlight onPress={() => { navigueToDetail(item) }}>
-                        <SharedElement id={item.id}>
-                            <CardMusic image={item.image} title={item.title} description={item.bio} id={item.id} />
-                        </SharedElement>
-                    </TouchableHighlight>
+                    //@ts-ignore
+                    <TouchableOpacity onPress={() => { navigation.navigate("Detail", { "music": item.music }) }}>
+                        <CardMusic image={item.music.cover} title={item.music.name} description={item.music.artists.map((artist: Artist) => artist.name).join(', ')} id={item.music.id} />
+                    </TouchableOpacity>
                 )}
-                keyExtractor={(item: Music) => item.title}
                 ListFooterComponent={
                     <>
                         <Text style={[styles.title, { marginLeft: 20 }]}>What's your mood?</Text>

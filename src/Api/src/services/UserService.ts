@@ -1,3 +1,4 @@
+import { IMusic } from "../models/Music";
 import LocationSchema from "../database/LocationSchema";
 import UserSchema from "../database/UserSchema";
 import token from "./TokenService";
@@ -46,12 +47,70 @@ class UserService {
 
     public async delete(
         id: string
-    ): Promise<string | Error> {
+    ): Promise<void | Error> {
         try {
             await this.user.findByIdAndRemove(id);
             await this.location.findByIdAndRemove(id);
-            return;
         } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async addMusic(userId: string, music: IMusic): Promise<string | Error> {
+        try {
+            return await this.user.findByIdAndUpdate(userId, {
+                $push: { musics_likes: music },
+            });
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async deleteMusic(userId: string, musicId: string): Promise<boolean | Error> {
+        try {
+            const userOld = await this.user.findById(userId);
+            const userNew = await this.user.findByIdAndUpdate(userId, {
+                $pull: { musics_likes: { _id: musicId } },
+            }, { new: true });
+
+            if (userOld.musics_likes.length === userNew.musics_likes.length) {
+                return false;
+            }
+            return true;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async getMusics(userId: string): Promise<IMusic[] | Error> {
+        try {
+            const user = await this.user.findById(userId);
+            return user?.musics_likes || [];
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async setName(userId: string, newName: string): Promise<void | Error> {
+        try {
+            await this.user.findByIdAndUpdate(
+                userId,
+                { name: newName },
+                { new: true }
+            );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async setEmail(userId: string, newEmail: string): Promise<void | Error> {
+        try {
+            await this.user.findByIdAndUpdate(
+                userId,
+                { email: newEmail },
+                { new: true }
+            );
+        } catch (error) {
             throw new Error(error.message);
         }
     }

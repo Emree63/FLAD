@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
-import { setErrorNetwork } from "../redux/actions/userActions";
+import { setErrorNetwork, LoginCredentials } from "../redux/actions/userActions";
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
 import { login } from '../redux/thunk/authThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
-import { LoginCredentials } from '../redux/actions/userActions';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (

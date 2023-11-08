@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native';
+import { Alert, View, Image, StyleSheet, Text, ImageBackground, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import normalize from '../components/Normalize';
 import * as AuthSession from 'expo-auth-session';
@@ -7,8 +7,6 @@ import { register } from '../redux/thunk/authThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { Audio } from 'expo-av';
 import { RegisterCredentials } from '../redux/actions/userActions';
-import { setSpotList } from '../redux/actions/spotActions';
-import { spotsData } from '../data/data';
 import configs from '../constants/config';
 
 // @ts-ignore
@@ -39,20 +37,24 @@ export default function RegisterScreen() {
     await sound.playAsync();
   }
 
-  function addMockSpots() {
-    dispatch(setSpotList(spotsData))
-  }
-
   const submitForm = () => {
-    const isUsernameValid = /^[a-zA-Z0-9_]+$/.test(username);
-    const isEmailValid = /^[a-zA-Z0-9_]+@[a-zA-Z0-9_]+\.[^\s@]+$/.test(email);
+    const isUsernameValid = /^\w+$/.test(username);
+    const isEmailValid = /^\w+@\w+\.[^\s@]+$/.test(email);
 
+    if (username.length > 30) {
+      Alert.alert("Erreur inscription", "Le nom d'utilisateur ne peut pas être plus grand que 30 caractères.");
+      return;
+    }
     if (username == "" || username == null) {
       Alert.alert("Erreur inscription", "Le nom d'utilisateur ne peut pas être vide.");
       return;
     }
     if (!isUsernameValid) {
       Alert.alert("Erreur inscription", "Le nom d'utilisateur ne peut pas posséder de caractères spéciaux.");
+      return;
+    }
+    if (email.length > 100) {
+      Alert.alert("Erreur inscription", "L'adresse e-mail ne peut pas être plus grand que 100 caractères.");
       return;
     }
     if (!isEmailValid) {
@@ -78,7 +80,6 @@ export default function RegisterScreen() {
 
     //@ts-ignore
     dispatch(register(credentials))
-    addMockSpots()
     playSound()
   }
 

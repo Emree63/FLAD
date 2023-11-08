@@ -1,24 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Pressable } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Pressable, Share, Alert } from "react-native";
 import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle, withSpring } from "react-native-reanimated";
-
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";
 import normalize from '../components/Normalize';
 import Music from "../models/Music";
-import SpotifyService from "../services/spotify/spotify.service";
 import { LinearGradient } from "expo-linear-gradient";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather as Icon } from "@expo/vector-icons";
-import HorizontalFlatList from "../components/HorizontalFlatListComponent";
-import * as SecureStore from 'expo-secure-store';
-import { MY_SECURE_AUTH_STATE_KEY } from "./RegisterScreen";
+import { MusicServiceProvider } from "../models/MusicServiceProvider";
+import { HorizontalFlatList } from "../components/HorizontalFlatList";
+import { LittleCard } from "../components/littleCard";
 
 const halfPi = Math.PI / 2;
 
-
 //@ts-ignore
-const DetailScreen = ({ route }) => {
+export default function DetailScreen({ route }) {
     const music: Music = route.params.music;
     const [currentspot] = useState(music);
     const [simularMusic, setSimularMusic] = useState<Music[]>([]);
@@ -27,19 +23,13 @@ const DetailScreen = ({ route }) => {
 
     const navigator = useNavigation();
 
-   
+
     useEffect(() => {
         getSimilarTrack();
     }, []);
     const getSimilarTrack = async () => {
-        try {
-            let token = await SecureStore.getItemAsync(MY_SECURE_AUTH_STATE_KEY);
-            const service = new SpotifyService(token);
-            const simularMusic = await service.getSimilarTrack(currentspot.id, 5, 'FR');
-            setSimularMusic(simularMusic);
-        } catch (error) {
-            console.error('Error ================ in getSimilarTrack', error);
-        }
+        const simularMusic = await MusicServiceProvider.musicService.getSimilarTracks(currentspot.id);
+        setSimularMusic(simularMusic);
     }
 
     const handlePlaySound = async () => {
@@ -48,7 +38,7 @@ const DetailScreen = ({ route }) => {
                 { uri: music.trackPreviewUrl },
                 { shouldPlay: true }
             );
-            setSound(newSound);
+            //setSound(newSound);
             setIsPlaying(true);
 
         } else {
@@ -74,6 +64,21 @@ const DetailScreen = ({ route }) => {
         }
             : undefined;
     }, [sound]);
+
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message:
+                    music.url,
+            });
+        } catch (error: any) {
+            Alert.alert(error.message);
+        }
+    };
+
+    const addToPlaylist = async () => {
+        MusicServiceProvider.musicService.addToPlaylist(music.id);
+    };
 
     const sensor = useAnimatedSensor(SensorType.ROTATION);
     const styleAniamatedImage = useAnimatedStyle(() => {
@@ -101,7 +106,7 @@ const DetailScreen = ({ route }) => {
                     blurRadius={133}
                     style={styles.back_drop}
                     source={{
-                        uri: currentspot.image,
+                        uri: currentspot.cover,
                     }}
                 ></Image>
                 <LinearGradient style={styles.gradientFade}
@@ -116,7 +121,7 @@ const DetailScreen = ({ route }) => {
 
                                 <Animated.Image
                                     source={{
-                                        uri: currentspot.image,
+                                        uri: currentspot.cover,
                                     }}
                                     style={[
                                         {
@@ -133,15 +138,14 @@ const DetailScreen = ({ route }) => {
                                 <View>
 
                                 </View>
-                                <TouchableOpacity activeOpacity={0.5}onPressIn={handlePlaySound}
-            onPressOut={handleStopSound} style={{
-                                    backgroundColor: '#F80404',
-                                    borderRadius: 100,
-                                    padding: normalize(23)
+                                <TouchableOpacity activeOpacity={0.5} onPressIn={handlePlaySound}
+                                    onPressOut={handleStopSound} style={{
+                                        backgroundColor: '#F80404',
+                                        borderRadius: 100,
+                                        padding: normalize(23)
 
-                                }}>
+                                    }}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
-                                        <FontAwesome name="play" size={32} color="#FFFF"  ></FontAwesome>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -151,14 +155,13 @@ const DetailScreen = ({ route }) => {
 
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' }}>
 
-                        <TouchableOpacity activeOpacity={0.6} style={{
+                        <TouchableOpacity onPress={addToPlaylist} activeOpacity={0.6} style={{
                             flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: 180,
                             height: 64, borderRadius: 8, opacity: 0.86, backgroundColor: '#0B0606',
                         }}>
-                            <FontAwesome name="bookmark" size={24} color="#FFFF"  ></FontAwesome>
                             <Text style={{ fontSize: normalize(16), fontWeight: "700", color: '#FFFFFF' }}>Dans ma collection</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.6} style={{
+                        <TouchableOpacity onPress={onShare} activeOpacity={0.6} style={{
                             flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: 180,
                             height: 64, borderRadius: 8, opacity: 0.86, backgroundColor: '#0B0606',
                         }}>
@@ -166,7 +169,7 @@ const DetailScreen = ({ route }) => {
                             {/* <FontAwesome name="bookmark" size={24} color="#FF0000"  ></FontAwesome> */}
                             <Text style={{ fontSize: normalize(16), fontWeight: "700", color: '#FFFFFF' }}>Partager cette music</Text>
                         </TouchableOpacity>
-                        
+
                     </View>
                     {simularMusic.length !== 0 && (
                         <HorizontalFlatList title={'Similar'} data={simularMusic}>
@@ -174,20 +177,19 @@ const DetailScreen = ({ route }) => {
                                 <Pressable
                                 onPress={() => {
                                     // @ts-ignore
-                                        navigator.replace("DetailsSpot", { "music": props }) }} >
+                                        navigator.replace("Detail", { "music": props }) }} >
                                     <LittleCard  data={props} />
                                 </Pressable>
                             )}
                         </HorizontalFlatList>
                     )}
+
                 </ScrollView>
             </View>
         </View>
 
     );
 };
-
-export default DetailScreen;
 
 const styles = StyleSheet.create({
     mainSafeArea: {

@@ -31,6 +31,14 @@ const userSchema = new Schema({
     image: {
         type: String,
         required: true
+    },
+    musics_likes: {
+        type: [{
+            idMusic: String,
+            idUser: String,
+            date: Date
+        }],
+        default: [] 
     }
 },
     { timestamps: true }
