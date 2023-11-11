@@ -1,4 +1,4 @@
-import { Spot } from "../../models/Spot";
+import { Spot } from "../../model/Spot";
 import { favoritesTypes } from "../types/favoritesTypes";
 import { spotifyTypes } from "../types/spotifyTypes";
 import { spotTypes } from "../types/spotTypes";
@@ -14,10 +14,8 @@ const appReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case favoritesTypes.GET_FAVORITE_MUSICS:
       return { ...state, favoriteMusic: action.payload };
-    case favoritesTypes.REMOVE_FAVORITE_MUSICS:
-      return { ...state, favoriteMusic: state.favoriteMusic };
     case spotTypes.FETCH_SPOT:
-      const uniqueSpots = action.payload.filter((spot) => {
+      const uniqueSpots = action.payload.filter((spot: Spot) => {
         return !state.spot.some((s) => s.userSpotifyId === spot.userSpotifyId && s.music.id === spot.music.id);
       });
       const updatedSpotList = [...uniqueSpots, ...state.spot];

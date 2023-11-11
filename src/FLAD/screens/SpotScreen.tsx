@@ -9,9 +9,8 @@ import LottieView from 'lottie-react-native'
 import Lotties from '../assets/lottie/Lottie';
 import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
-import { addFavoritesMusic } from '../redux/actions/appActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spot } from '../models/Spot';
+import { Spot } from '../model/Spot';
 import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
 
 export default function SpotScreen() {
@@ -50,7 +49,7 @@ export default function SpotScreen() {
 
   function addLike(spot: Spot) {
     onLike();
-    dispatch(addFavoritesMusic(spot.music))
+    //dispatch(addFavoritesMusic(spot.music))
     dispatch(removeFromSpotList(spot));
   }
   function removeSpots(spot: Spot) {

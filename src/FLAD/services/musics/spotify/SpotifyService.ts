@@ -1,8 +1,8 @@
 import axios from "axios";
-import Music from "../../../models/Music";
+import Music from "../../../model/Music";
 import IMusicService from "../interfaces/IMusicService";
 import TokenSpotify from "./TokenSpotify";
-import MusicMapper from "../../../models/mapper/MusicMapper";
+import MusicMapper from "../../../model/mapper/MusicMapper";
 
 export default class SpotifyService implements IMusicService {
     private readonly API_URL = "https://api.spotify.com/v1";
@@ -183,6 +183,22 @@ export default class SpotifyService implements IMusicService {
         } catch (error: any) {
             console.log(error)
             return [];
+        }
+    }
+
+    async getImageArtistWithId(idArtist: string): Promise<string | null> {
+        const access_token = await this._token.getAccessToken();
+
+        try {
+            const response = await axios.get(`${this.API_URL}/artists/${idArtist}`, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                },
+            });
+            return response.data.images[0].url;
+        } catch (error: any) {
+            console.log(error)
+            return null;
         }
     }
 

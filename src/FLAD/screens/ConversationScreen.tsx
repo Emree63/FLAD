@@ -5,6 +5,7 @@ import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import Friend from "../components/FriendComponent";
 import normalize from '../components/Normalize';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ConversationScreen() {
 
@@ -22,10 +23,13 @@ export default function ConversationScreen() {
 
     const style = isDark ? colorsDark : colorsLight;
 
+    const insets = useSafeAreaInsets();
+
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
+            paddingTop: insets.top
         },
         titleContainer: {
             marginTop: 10,

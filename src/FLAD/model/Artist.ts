@@ -1,13 +1,11 @@
 export default class Artist {
     private _id: string;
     private _name: string;
-    private _image: string;
     private _url: string;
 
-    constructor(id: string, name: string, image: string, url: string) {
+    constructor(id: string, name: string, url: string) {
         this._id = id;
         this._name = name;
-        this._image = image;
         this._url = url;
     }
 
@@ -25,14 +23,6 @@ export default class Artist {
 
     set name(value: string) {
         this._name = value;
-    }
-
-    get image(): string {
-        return this._image;
-    }
-
-    set image(value: string) {
-        this._image = value;
     }
 
     get url(): string {

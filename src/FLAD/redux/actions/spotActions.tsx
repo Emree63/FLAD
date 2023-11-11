@@ -1,5 +1,4 @@
-import Music from "../../models/Music";
-import { Spot } from "../../models/Spot";
+import { Spot } from "../../model/Spot";
 import { spotTypes } from "../types/spotTypes";
 
 export const setSpotList = (spotList: Spot[]) => {

@@ -1,4 +1,4 @@
-import Music from "../../../models/Music";
+import Music from "../../../model/Music";
 
 export default interface IMusicService {
     getMusicById(id: string): Promise<Music>;
@@ -8,4 +8,5 @@ export default interface IMusicService {
     getMusicsWithName(name: string): Promise<Music[]>;
     addToPlaylist(idTrack: string): void;
     getSimilarTracks(idTrack: string): Promise<Music[]>;
+    getImageArtistWithId(idArtist: string): Promise<string | null>;
 }

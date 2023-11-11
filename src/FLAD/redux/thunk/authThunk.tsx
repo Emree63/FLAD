@@ -2,8 +2,8 @@ import axios from "axios";
 import configs from "../../constants/config";
 import { LoginCredentials, RegisterCredentials, restoreToken, userLogin, userLogout, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
-import { UserMapper } from "../../models/mapper/UserMapper";
-import { MusicServiceProvider } from "../../models/MusicServiceProvider";
+import { UserMapper } from "../../model/mapper/UserMapper";
+import { MusicServiceProvider } from "../../model/MusicServiceProvider";
 
 const keyRemember = 'rememberUser';
 
@@ -34,7 +34,6 @@ export const register = (resgisterCredential: RegisterCredentials) => {
       MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
       dispatch(userLogin(UserMapper.toModel(user.data.data)));
     } catch (error: any) {
-      console.error("Error : " + error.message);
       switch (error.response.status) {
         case 400:
           dispatch(setErrorSignup("Email non valide !"));
@@ -46,6 +45,7 @@ export const register = (resgisterCredential: RegisterCredentials) => {
           dispatch(setErrorSignup("Compte Spotify non autorisé !"));
           break;
         default:
+          console.error("Error : " + error.message);
           dispatch(setErrorSignup("Erreur lors de l'inscription !"));
           break;
       }
@@ -86,12 +86,12 @@ export const login = (loginCredential: LoginCredentials, remember: boolean) => {
       MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
       dispatch(userLogin(UserMapper.toModel(user.data.data)));
     } catch (error: any) {
-      console.error("Error : " + error.message);
       switch (error.response.status) {
         case 400:
           dispatch(setErrorLogin(true));
           break;
         default:
+          console.error("Error : " + error.message);
           dispatch(setErrorNetwork(true));
           break;
       }

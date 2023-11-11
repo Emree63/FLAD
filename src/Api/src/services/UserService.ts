@@ -95,8 +95,7 @@ class UserService {
         try {
             await this.user.findByIdAndUpdate(
                 userId,
-                { name: newName },
-                { new: true }
+                { name: newName }
             );
         } catch (error) {
             throw new Error(error.message);
@@ -107,9 +106,35 @@ class UserService {
         try {
             await this.user.findByIdAndUpdate(
                 userId,
-                { email: newEmail },
-                { new: true }
+                { email: newEmail }
             );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async setImage(userId: string, newImage: string): Promise<void | Error> {
+        try {
+            await this.user.findByIdAndUpdate(
+                userId,
+                { image: newImage }
+            );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async setPassword(userId: string, oldPassword: string, newPassword: string): Promise<void | Error> {
+        try {
+
+            const user = await this.user.findById(userId);
+
+            if (await user.isValidPassword(oldPassword)) {
+                user.password = newPassword;
+                await user.save();
+            } else {
+                throw new Error('Old password does not match.');
+            }
         } catch (error) {
             throw new Error(error.message);
         }

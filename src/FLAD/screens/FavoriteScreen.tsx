@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, SectionList, TouchableOpacity } from 'react-native';
 import CardMusic from '../components/CardMusicComponent';
 import normalize from '../components/Normalize';
 import { Svg, Path } from 'react-native-svg';
 import FladyComponent from '../components/FladyComponent';
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import { useDispatch } from 'react-redux';
 import { getFavoriteMusic } from '../redux/thunk/appThunk';
-import { Spot } from '../models/Spot';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Artist from '../models/Artist';
+import { Spot } from '../model/Spot';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function FavoriteScreen() {
 
@@ -34,14 +32,46 @@ export default function FavoriteScreen() {
 
     useEffect(() => {
         //@ts-ignore
-        dispatch(getFavoriteMusic())
+        dispatch(getFavoriteMusic());
     }, []);
 
+    const groupByDate = (data: Spot[]) => {
+        const groupedData: { [key: string]: Spot[] } = {};
+
+        const sortedData = data.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+        sortedData.forEach((item) => {
+            const formattedDate = formatDate(item.date);
+
+            if (groupedData[formattedDate]) {
+                groupedData[formattedDate].push(item);
+            } else {
+                groupedData[formattedDate] = [item];
+            }
+        });
+
+        return Object.keys(groupedData).map((date) => ({
+            title: date,
+            data: groupedData[date],
+        }));
+    };
+
+    const formatDate = (date: Date): string => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
+    };
+
+
+    const insets = useSafeAreaInsets();
 
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
+            paddingTop: insets.top
         },
         titleContainer: {
             marginVertical: 10,
@@ -63,6 +93,13 @@ export default function FavoriteScreen() {
             fontSize: normalize(20),
             color: '#787878',
             marginBottom: 5
+        },
+        titleSection: {
+            fontSize: normalize(20),
+            color: style.Text,
+            fontWeight: 'medium',
+            marginLeft: 20,
+            marginBottom: 10
         }
     });
 
@@ -78,14 +115,21 @@ export default function FavoriteScreen() {
                 </View>
                 <Text style={styles.description}>Retrouvez ici vos musiques favorites</Text>
             </View>
-            <FlatList
-                data={favoriteMusic}
+            <SectionList
+                sections={groupByDate(favoriteMusic)}
                 keyExtractor={(item: Spot) => item.music.id}
                 renderItem={({ item }) => (
-                    //@ts-ignore
-                    <TouchableOpacity onPress={() => { navigation.navigate("Detail", { "music": item.music }) }}>
-                        <CardMusic image={item.music.cover} title={item.music.name} description={item.music.artists.map((artist: Artist) => artist.name).join(', ')} id={item.music.id} />
+                    <TouchableOpacity
+                        onPress={() => {
+                            //@ts-ignore
+                            navigation.navigate('Detail', { music: item.music });
+                        }}>
+                        <CardMusic music={item.music} />
                     </TouchableOpacity>
+                )}
+                renderSectionHeader={({ section: { title } }) => (
+                    //@ts-ignore
+                    <Text style={styles.titleSection}>{title}</Text>
                 )}
                 ListFooterComponent={
                     <>
@@ -96,13 +140,12 @@ export default function FavoriteScreen() {
                             keyExtractor={(item) => item.id.toString()}
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <FladyComponent image={item.source} />
-                            )}
+                            renderItem={({ item }) => <FladyComponent image={item.source} />}
                         />
                     </>
                 }
                 nestedScrollEnabled={true}
+
             />
         </SafeAreaView>
     );

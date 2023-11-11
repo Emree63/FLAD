@@ -4,12 +4,11 @@ import { useSelector } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import normalize from './Normalize';
+import Music from '../model/Music';
+import Artist from '../model/Artist';
 
 type CardMusicProps = {
-  image: string;
-  title: string;
-  description: string;
-  id: string;
+  music: Music
 }
 
 export default function CardMusic(props: CardMusicProps) {
@@ -17,7 +16,6 @@ export default function CardMusic(props: CardMusicProps) {
   const isDark = useSelector(state => state.userReducer.dark);
   const style = isDark ? colorsDark : colorsLight;
 
-  const source = typeof props.image === 'string' ? { uri: props.image } : props.image;
   const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -62,11 +60,11 @@ export default function CardMusic(props: CardMusicProps) {
 
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={source} style={styles.image} />
+        <Image source={{ uri: props.music.cover }} style={styles.image} />
       </View>
       <View style={styles.textContainer}>
-        <Text style={[styles.title]}>{props.title}</Text>
-        <Text style={[styles.description]}>{props.description}</Text>
+        <Text style={[styles.title]}>{props.music.name}</Text>
+        <Text style={[styles.description]}>{props.music.artists.map((artist: Artist) => artist.name).join(', ')}</Text>
       </View>
     </View>
   );

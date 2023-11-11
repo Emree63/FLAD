@@ -11,8 +11,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { deleteUser } from '../redux/thunk/authThunk';
-import { setMail, setName } from '../redux/thunk/userThunk';
+import { setImage, setMail, setName, setPassword } from '../redux/thunk/userThunk';
 import { setErrorUpdate } from '../redux/actions/userActions';
+import * as FileSystem from 'expo-file-system';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -32,6 +33,9 @@ export default function ProfilScreen() {
     const userCurrent = useSelector(state => state.userReducer.user);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [oldPassword, setOldPassword] = React.useState('');
+    const [newPassword, setNewPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
     const style = isDark ? colorsDark : colorsLight;
     const navigation = useNavigation();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -60,12 +64,25 @@ export default function ProfilScreen() {
     };
 
     const pickImage = async () => {
-        await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+            aspect: [3, 3],
+            quality: 0.2,
         });
+
+        if (result.assets !== null) {
+            const base64Image = await convertImageToBase64(result.assets[0].uri);
+            //@ts-ignore
+            dispatch(setImage(base64Image));
+        }
+    };
+
+    const convertImageToBase64 = async (imageUri: any) => {
+        const base64 = await FileSystem.readAsStringAsync(imageUri, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+        return `data:image/jpg;base64,${base64}`;
     };
 
     const submitUsername = () => {
@@ -132,6 +149,14 @@ export default function ProfilScreen() {
             ],
             { cancelable: false }
         );
+    }
+
+    const submitPassword = () => {
+        //@ts-ignore
+        dispatch(setPassword(oldPassword, newPassword));
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
     }
 
     useEffect(() => {
@@ -355,6 +380,7 @@ export default function ProfilScreen() {
         textInputConfirmModal: {
             marginLeft: 30,
             color: style.Text,
+            width: '67.5%',
             fontSize: normalize(18)
         },
         textInputOldModal: {
@@ -445,28 +471,35 @@ export default function ProfilScreen() {
                                         </View>
                                     </TouchableOpacity>
                                     <Text style={styles.titlePassword}>Mot de passe</Text>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity
+                                        disabled={newPassword.length < 6 || newPassword !== confirmPassword || oldPassword.length < 6}
+                                        onPress={() => submitPassword()}>
                                         <View>
-                                            <Text style={styles.updateText}>Modifier</Text>
+                                            <Text style={[styles.updateText, {
+                                                color: newPassword.length >= 6 && newPassword === confirmPassword && oldPassword.length >= 6 ? '#1c77fb' : '#404040',
+                                            }]}>Modifier</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.bodyModal}>
                                     <View style={styles.optionModalWithUnderline}>
                                         <Text style={styles.textOptionModal}>Ancien</Text>
-                                        <TextInput placeholderTextColor='#828288' placeholder="saisir l'ancien mot de passe" style={styles.textInputOldModal} />
+                                        <TextInput placeholderTextColor='#828288' value={oldPassword} secureTextEntry={true}
+                                            onChangeText={setOldPassword} placeholder="saisir l'ancien mot de passe" style={styles.textInputOldModal} />
                                     </View>
                                     <View style={styles.optionModalWithUnderline}>
                                         <Text style={styles.textOptionModal}>Nouveau</Text>
-                                        <TextInput placeholderTextColor='#828288' placeholder='saisir le mot de passe' style={styles.textInputNewModal} />
+                                        <TextInput placeholderTextColor='#828288' value={newPassword} secureTextEntry={true}
+                                            onChangeText={setNewPassword} placeholder='saisir le mot de passe' style={styles.textInputNewModal} />
                                     </View>
                                     <View style={styles.optionModal}>
                                         <Text style={styles.textOptionModal}>Confirmer</Text>
-                                        <TextInput placeholderTextColor='#828288' placeholder='mot de passe' style={styles.textInputConfirmModal} />
+                                        <TextInput placeholderTextColor='#828288' value={confirmPassword} secureTextEntry={true}
+                                            onChangeText={setConfirmPassword} placeholder='mot de passe' style={styles.textInputConfirmModal} />
                                     </View>
                                 </View>
                                 <View style={styles.warningView}>
-                                    <Text style={styles.warning}>Votre mot de passe doit comporter au moins 8 caractères, dont au moins un chiffre, une majuscule et une minuscule.</Text>
+                                    <Text style={styles.warning}>Votre mot de passe doit comporter au moins 6 caractères.</Text>
                                 </View>
                             </View>
                         </Modal>

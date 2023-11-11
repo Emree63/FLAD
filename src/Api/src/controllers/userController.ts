@@ -42,6 +42,8 @@ class UserController implements IController {
         this.router.get(`${this.path}/musics`, authenticator, this.getMusics);
         this.router.put(`${this.path}/name`, authenticator, this.setName);
         this.router.put(`${this.path}/email`, authenticator, this.setEmail);
+        this.router.put(`${this.path}/image`, authenticator, this.setImage);
+        this.router.put(`${this.path}/password`, authenticator, this.setPassword);
 
     }
 
@@ -271,6 +273,40 @@ class UserController implements IController {
             res.status(200).json({ message: 'Email updated successfully' });
         } catch (error: any) {
             next(new HttpException(409, error.message));
+        }
+    }
+
+    private setImage = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id } = req.user;
+            const { image } = req.body;
+
+            await this.userService.setImage(_id, image);
+
+            res.status(200).json({ message: 'Image updated successfully' });
+        } catch (error: any) {
+            next(new HttpException(500, error.message));
+        }
+    }
+
+    private setPassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id } = req.user;
+            const { oldPassword, newPassword } = req.body;
+
+            await this.userService.setPassword(_id, oldPassword, newPassword);
+
+            res.status(200).json({ message: 'Password updated successfully' });
+        } catch (error: any) {
+            next(new HttpException(500, error.message));
         }
     }
 }

@@ -1,11 +1,11 @@
 import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
-import { Spot } from "../../models/Spot";
+import { Spot } from "../../model/Spot";
 import configs from "../../constants/config";
-import { MusicServiceProvider } from "../../models/MusicServiceProvider";
+import { MusicServiceProvider } from "../../model/MusicServiceProvider";
 import { setFavoriteMusic, setUserCurrentMusic } from "../actions/appActions";
 import { setAccessError, setErrorEmptyMusic } from "../actions/userActions";
-import { SpotMapper } from "../../models/mapper/SpotMapper";
+import { SpotMapper } from "../../model/mapper/SpotMapper";
 
 export const getUserCurrentMusic = () => {
   //@ts-ignore
@@ -26,12 +26,12 @@ export const getUserCurrentMusic = () => {
       const music = await MusicServiceProvider.musicService.getMusicById(idTrack);
       dispatch(setUserCurrentMusic(music))
     } catch (error: any) {
-      console.error("Error retrieving music currently listened : " + error);
       switch (error.response.status) {
         case 403:
           dispatch(setAccessError(true));
           break;
         default:
+          console.error("Error retrieving music currently listened : " + error);
           dispatch(setAccessError(true));
           break;
       }

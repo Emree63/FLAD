@@ -6,6 +6,7 @@ export default class Music {
   private _url: string;
   private _artists: Artist[];
   private _cover: string;
+  private _littleCover: string;
   private _date: number;
   private _duration: number;
   private _explicit: boolean = false;
@@ -17,6 +18,7 @@ export default class Music {
     url: string,
     artists: Artist[],
     cover: string,
+    littleCover: string,
     date: number,
     duration: number,
     explicit: boolean,
@@ -27,6 +29,7 @@ export default class Music {
     this._url = url;
     this._artists = artists;
     this._cover = cover;
+    this._littleCover = littleCover;
     this._date = date;
     this._duration = duration;
     this._explicit = explicit;
@@ -71,6 +74,14 @@ export default class Music {
 
   set cover(value: string) {
     this._cover = value;
+  }
+
+  get littleCover(): string {
+    return this._littleCover;
+  }
+
+  set littleCover(value: string) {
+    this._littleCover = value;
   }
 
   get date(): number {

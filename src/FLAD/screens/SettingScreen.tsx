@@ -11,8 +11,8 @@ import { logout } from '../redux/thunk/authThunk';
 import { darkMode } from '../redux/thunk/userThunk';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import { User } from '../models/User';
-import Artist from '../models/Artist';
+import { User } from '../model/User';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -63,10 +63,15 @@ export default function SettingScreen() {
     const toggleLocalisation =
         () => setIsCheckedLocalisation(value => !value);
 
+    const insets = useSafeAreaInsets();
+
+
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
+            paddingTop: insets.top
+
         },
         container: {
             marginTop: 30,
@@ -92,7 +97,7 @@ export default function SettingScreen() {
         inputSearch: {
             placeholderTextColor: 'red',
             color: style.Text,
-            width: normalize(350),
+            width: "80%",
         },
         profil: {
             paddingVertical: 9,
@@ -336,7 +341,7 @@ export default function SettingScreen() {
                                 </View>
 
                                 <View style={styles.musicActually}>
-                                    <CardMusic image={currentMusic.cover} title={currentMusic.name} description={currentMusic.artists.map((artist: Artist) => artist.name).join(', ')} id='1' />
+                                    <CardMusic music={currentMusic} />
                                     <Image source={require("../assets/images/flady_icon.png")} style={styles.mascot} />
                                 </View>
                             </>
@@ -353,14 +358,14 @@ export default function SettingScreen() {
                                 <Text style={styles.textDeconnectionOption}>Se deconnecter</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{alignItems: 'center'}}>
-                        <Text style={styles.creationDateText}>Compte créer le {currentUser.creationDate.toLocaleString('fr-FR', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                        })}</Text>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.creationDateText}>Compte créer le {currentUser.creationDate.toLocaleString('fr-FR', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                            })}</Text>
                         </View>
                     </View>
                 </ScrollView>
