@@ -34,8 +34,8 @@ const userSchema = new Schema({
     },
     musics_likes: {
         type: [{
-            idMusic: String,
-            idUser: String,
+            musicId: String,
+            userId: String,
             date: Date
         }],
         default: [] 

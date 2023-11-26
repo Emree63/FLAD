@@ -1,4 +1,3 @@
-
 import IController from './interfaces/IController';
 import { Router, Request, Response, NextFunction } from 'express';
 import HttpException from '../exception/HttpException';

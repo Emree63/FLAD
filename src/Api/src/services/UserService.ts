@@ -2,6 +2,8 @@ import { IMusic } from "../models/Music";
 import LocationSchema from "../database/LocationSchema";
 import UserSchema from "../database/UserSchema";
 import token from "./TokenService";
+import { IPerson } from "../models/Person";
+import mongoose from "mongoose";
 
 class UserService {
     private user = UserSchema;
@@ -51,6 +53,23 @@ class UserService {
         try {
             await this.user.findByIdAndRemove(id);
             await this.location.findByIdAndRemove(id);
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async getUsers(
+        ids: string[]
+    ): Promise<IPerson[] | Error> {
+        try {
+            const validIds = ids.filter(id => mongoose.Types.ObjectId.isValid(id));
+
+            if (validIds.length === 0) {
+                return [];
+            }
+    
+            return await this.user.find({ _id: { $in: validIds } })
+                .select('_id name image')
         } catch (error: any) {
             throw new Error(error.message);
         }

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from "../../model/User";
+import { User } from "../../models/User";
 import { userTypes } from "../types/userTypes";
 
 const initialState = {

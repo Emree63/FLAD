@@ -5,16 +5,16 @@ import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, wi
 export default function Loading() {
 
   const size = 100
-  const progresse = useSharedValue(1);
+  const progress = useSharedValue(1);
 
   useEffect(() => {
-    progresse.value = withRepeat(withTiming(0.01, { duration: 750 }), -1, true);
-  }, [progresse]);
+    progress.value = withRepeat(withTiming(0.01, { duration: 750 }), -1, true);
+  }, [progress]);
 
 
   const breatheStyleSquare = useAnimatedStyle(() => {
     const borderRange = interpolate
-      (progresse.value,
+      (progress.value,
         [0, 1],
         [(size + 20), (size)],
       );
@@ -26,7 +26,6 @@ export default function Loading() {
       borderWidth: size / 10,
       borderColor: "#F80404",
       shadowColor: "#F40C1C",
-      //shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 1,
       shadowRadius: 10,
     };

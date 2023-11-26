@@ -2,7 +2,7 @@ import axios from "axios";
 import configs from "../../constants/config";
 import { setDarkMode, setErrorNetwork, setErrorUpdateMessage, userLogin } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
-import { UserMapper } from "../../model/mapper/UserMapper";
+import { UserMapper } from "../../models/mapper/UserMapper";
 
 export const darkMode = (value: boolean) => {
     //@ts-ignore

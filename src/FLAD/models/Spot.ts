@@ -1,22 +1,31 @@
 import Music from "./Music";
-import { Person } from "./Person";
 
 export class Spot {
+  private _id: string;
   private _user: string;
   private _music: Music;
   private _date: Date;
 
-  constructor(userId: string, music: Music, date: Date) {
-    this._user = userId;
+  constructor(id: string, user: string, music: Music, date: Date) {
+    this._id = id;
+    this._user = user;
     this._music = music;
     this._date = date;
   }
 
-  get userSpotifyId(): string {
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
+  }
+
+  get user(): string {
     return this._user;
   }
 
-  set userSpotifyId(value: string) {
+  set user(value: string) {
     this._user = value;
   }
 

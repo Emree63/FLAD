@@ -1,4 +1,4 @@
-import Music from "../../../model/Music";
+import Music from "../../../models/Music";
 
 export default interface IMusicService {
     getMusicById(id: string): Promise<Music>;

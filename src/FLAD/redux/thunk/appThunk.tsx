@@ -1,11 +1,11 @@
 import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
-import { Spot } from "../../model/Spot";
+import { Spot } from "../../models/Spot";
 import configs from "../../constants/config";
-import { MusicServiceProvider } from "../../model/MusicServiceProvider";
+import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 import { setFavoriteMusic, setUserCurrentMusic } from "../actions/appActions";
 import { setAccessError, setErrorEmptyMusic } from "../actions/userActions";
-import { SpotMapper } from "../../model/mapper/SpotMapper";
+import { SpotMapper } from "../../models/mapper/SpotMapper";
 
 export const getUserCurrentMusic = () => {
   //@ts-ignore
@@ -59,12 +59,12 @@ export const getFavoriteMusic = () => {
         { headers }
       )
 
-      const musicIds = resp.data.musics.map((music: any) => music.idMusic);
+      const musicIds = resp.data.musics.map((music: any) => music.musicId);
       const musics = await MusicServiceProvider.musicService.getMusicsWithIds(musicIds);
       const result = resp.data.musics
-        .filter((music: any) => musics.some((m: any) => m.id === music.idMusic))
+        .filter((music: any) => musics.some((m: any) => m.id === music.musicId))
         .map((music: any) => {
-          const matchingMusic = musics.find((m: any) => m.id === music.idMusic);
+          const matchingMusic = musics.find((m: any) => m.id === music.musicId);
           return {
             ...music,
             music: matchingMusic,

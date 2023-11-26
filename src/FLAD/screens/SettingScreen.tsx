@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,8 +11,9 @@ import { logout } from '../redux/thunk/authThunk';
 import { darkMode } from '../redux/thunk/userThunk';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
-import { User } from '../model/User';
+import { User } from '../models/User';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Location from 'expo-location';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -38,7 +39,7 @@ export default function SettingScreen() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
-
+    const [locationPermission, setLocationPermission] = useState(false);
     const style = isDark ? colorsDark : colorsLight;
 
     async function ChangeDarkMode() {
@@ -47,6 +48,19 @@ export default function SettingScreen() {
         // @ts-ignore
         dispatch(darkMode(JSON.parse(newValue)))
     }
+
+    const checkLocationPermission = async () => {
+        const { status } = await Location.getForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setLocationPermission(false);
+        } else {
+            setLocationPermission(true);
+        }
+    }
+
+    useEffect(() => {
+        checkLocationPermission();
+    }, []);
 
     const [isCheckedNotif, setIsCheckedNotif] = useState(false);
 
@@ -58,20 +72,21 @@ export default function SettingScreen() {
         dispatch(logout());
     }
 
-    const [isCheckedLocalisation, setIsCheckedLocalisation] = useState(false);
-
     const toggleLocalisation =
-        () => setIsCheckedLocalisation(value => !value);
+        () => {
+            Alert.alert(
+                'Localisation',
+                "Pour changer la permission de localisation, veuillez aller dans les paramètres de votre téléphone et ajuster les autorisations pour l'application."
+            );
+        };
 
     const insets = useSafeAreaInsets();
-
 
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
             paddingTop: insets.top
-
         },
         container: {
             marginTop: 30,
@@ -323,7 +338,7 @@ export default function SettingScreen() {
                                 </View>
                                 <View style={styles.lastOptionView}>
                                     <Text style={styles.textOption}>Localisation</Text>
-                                    <Switch style={{ marginBottom: normalize(10), marginRight: 20 }} value={isCheckedLocalisation} onValueChange={toggleLocalisation} />
+                                    <Switch style={{ marginBottom: normalize(10), marginRight: 20 }} value={locationPermission} onValueChange={toggleLocalisation} />
                                 </View>
                             </View>
                         </View>

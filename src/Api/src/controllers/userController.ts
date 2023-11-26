@@ -35,6 +35,7 @@ class UserController implements IController {
             this.login
         );
         this.router.get(`${this.path}`, authenticator, this.getUser);
+        this.router.get(`${this.path}s`, authenticator, this.getUsers);
         this.router.delete(`${this.path}`, authenticator, this.deleteUser);
         this.router.get(`${this.path}/nextTo`, authenticator, this.getUserNext);
         this.router.delete(`${this.path}/musics/:id`, authenticator, this.deleteMusic);
@@ -134,6 +135,27 @@ class UserController implements IController {
         res.status(200).send({ data: req.user });
     };
 
+    private getUsers = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        const userIds = req.query.ids as string;
+
+        if (!userIds) {
+            return res.status(400).json({ message: 'Please provide user ids' });
+        }
+
+        const userIdArray = userIds.split('&');
+
+        try {
+            const users = await this.userService.getUsers(userIdArray);
+            res.json(users);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
+
     private deleteUser = async (
         req: Request,
         res: Response,
@@ -202,13 +224,13 @@ class UserController implements IController {
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
-            const { idMusic, idUser } = req.body;
-            if (!idMusic || !idUser) {
-                return res.status(400).json({ error: 'idMusic and idUser are required fields.' });
+            const { musicId, userId } = req.body;
+            if (!musicId || !userId) {
+                return res.status(400).json({ error: 'musicId and userId are required fields.' });
             }
             const music: IMusic = {
-                idMusic,
-                idUser,
+                musicId,
+                userId,
                 date: new Date(),
             };
             await this.userService.addMusic(_id, music);

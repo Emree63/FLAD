@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Platform, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,17 +15,23 @@ import { colorsLight } from '../constants/colorsLight';
 import { getUserCurrentMusic } from '../redux/thunk/appThunk';
 import { logout } from '../redux/thunk/authThunk';
 import { setAccessError, setErrorEmptyMusic } from '../redux/actions/userActions';
-
+import * as Location from 'expo-location';
+import { getSpotList } from '../redux/thunk/spotThunk';
+import Music from '../models/Music';
 
 export default function HomeNavigation() {
   //@ts-ignore
-  const favoritesMusicLength = useSelector(state => state.appReducer.nbAddedFavoritesMusic);
+  const favoritesMusicLength = useSelector(state => state.appReducer.nbAddedFavoriteMusic);
   //@ts-ignore
   const accessError = useSelector(state => state.userReducer.accessError);
   //@ts-ignore
   const errorEmptyMusic = useSelector(state => state.userReducer.errorEmptyMusic);
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
+  // @ts-ignore
+  const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
+  const [locationPermission, setLocationPermission] = useState(false);
+
   const style = isDark ? colorsDark : colorsLight;
   const BottomTabNavigator = createBottomTabNavigator();
   const MyTheme = {
@@ -40,10 +46,48 @@ export default function HomeNavigation() {
 
   const dispatch = useDispatch();
 
+  const requestLocationPermission = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      alert(
+        "Oups ! Il semble que l'accès à votre localisation soit désactivé. Pour découvrir la musique des personnes autour de vous, veuillez autoriser l'accès à la localisation dans les paramètres de votre appareil."
+      );
+    } else {
+      setLocationPermission(true);
+    }
+  }
+
   useEffect(() => {
-    //@ts-ignore
-    dispatch(getUserCurrentMusic());
+    requestLocationPermission();
   }, []);
+
+  useEffect(() => {
+    const getSpots = async () => {
+      //@ts-ignore
+      dispatch(getUserCurrentMusic());
+    }
+
+    getSpots();
+
+    const interval = setInterval(getSpots, 30000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    getSpots();
+  }, [currentMusic]);
+
+  const getSpots = async () => {
+    if (currentMusic && locationPermission) {
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Low,
+      });
+      //@ts-ignore
+      dispatch(getSpotList(location.coords.longitude, location.coords.latitude, currentMusic._id));
+    }
+  }
 
   useEffect(() => {
     if (accessError) {

@@ -1,5 +1,5 @@
-import Music from "../../model/Music";
-import { Spot } from "../../model/Spot";
+import Music from "../../models/Music";
+import { Spot } from "../../models/Spot";
 import { favoritesTypes } from "../types/favoritesTypes";
 import { spotifyTypes } from "../types/spotifyTypes";
 

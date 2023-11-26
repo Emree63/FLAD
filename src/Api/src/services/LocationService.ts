@@ -17,17 +17,14 @@ class LocationService {
         }
 
         let usersLocation: UserLocation[] = [];
-        snapshot.forEach(doc => {
-            usersLocation.push(new UserLocation(doc.userId, doc.musicId, doc.latitude, doc.longitude));
-        });
-        const listUser: Record<string, string> = {};
-        usersLocation.forEach(user => {
-            const distance = this.distanceBetween(latitude, longitude, user.latitude, user.longitude);
-            if (distance <= 100) {
-                listUser[user.userId] = user.musicId;
+
+        snapshot.forEach(location => {
+            const distance = this.distanceBetween(latitude, longitude, location.latitude, location.longitude);
+            if (distance <= 1000) {
+                usersLocation.push(new UserLocation(location._id, location.userId, location.musicId, Math.ceil(distance / 200) * 200, location.updatedAt));
             }
         });
-        return { listUser };
+        return { data: usersLocation };
     }
 
     private distanceBetween(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -48,7 +45,7 @@ class LocationService {
             dist = Math.acos(dist);
             dist = dist * 180 / Math.PI;
             dist = dist * 60 * 1.1515;
-            dist = dist * 1.609344;
+            dist = dist * 1.609344 * 1000;
 
             return dist;
         }

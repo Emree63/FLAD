@@ -4,12 +4,12 @@ import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle,
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";
 import normalize from '../components/Normalize';
-import Music from "../model/Music";
+import Music from "../models/Music";
 import { LinearGradient } from "expo-linear-gradient";
-import { MusicServiceProvider } from "../model/MusicServiceProvider";
+import { MusicServiceProvider } from "../models/MusicServiceProvider";
 import { SimilarMusic } from "../components/SimilarMusicComponent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Artist from "../model/Artist";
+import Artist from "../models/Artist";
 import { BlurView } from 'expo-blur';
 
 const halfPi = Math.PI / 2;

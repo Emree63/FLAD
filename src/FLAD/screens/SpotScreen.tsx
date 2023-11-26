@@ -10,12 +10,13 @@ import Lotties from '../assets/lottie/Lottie';
 import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spot } from '../model/Spot';
+import { Spot } from '../models/Spot';
 import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
+import { MusicServiceProvider } from '../models/MusicServiceProvider';
 
 export default function SpotScreen() {
   //@ts-ignore
-  const spotReducer = useSelector(state => state.appReducer.spot)
+  const spotReducer: Spot[] = useSelector(state => state.appReducer.spot)
 
   const [cards, setCards] = useState<Spot[]>(spotReducer);
   const [currentCard, setcurrentCard] = useState(cards[cards.length - 1]);
@@ -33,8 +34,8 @@ export default function SpotScreen() {
       removeSpots(currentCard);
     }
     else if (direction === 'down') {
-      addMockSpots();
-      console.log('Swiped down');
+      MusicServiceProvider.musicService.addToPlaylist(currentCard.music.id);
+      removeSpots(currentCard);
     }
   };
 
@@ -69,11 +70,10 @@ export default function SpotScreen() {
     // @ts-ignore
     navigator.navigate("Detail", { "music": card.music })
   };
+
   return (
 
-    <View style={{
-      flex: 1,
-    }}>
+    <>
       {cards.length > 0 ? (
         <>
           <ImageBackground blurRadius={7}
@@ -96,7 +96,7 @@ export default function SpotScreen() {
                   left: wWidht / 9,
                   top: normalize(87),
                   color: "#FFFFFF",
-                  fontSize: normalize(currentCard.music.name),
+                  fontSize: normalize(40),
                   fontWeight: "800",
                 }}>{currentCard.music.name}</Text>
               <Text
@@ -149,11 +149,11 @@ export default function SpotScreen() {
           <View style={{ position: "absolute" }}>
             <Loading />
           </View>
-          <Text style={{ color: "grey", fontWeight: "400", textAlign: "center", top: 100 }}>Vous avez explorer toutes les spot autour de vous.
+          <Text style={{ color: "grey", fontWeight: "400", textAlign: "center", top: "10%" }}>Vous avez explorer toutes les spot autour de vous.
             {"\n"}Continuer dans discoverie pour découvrir de nouvelles music basées sur vos gouts musicaux.</Text>
         </View>)
       }
-    </View>
+    </>
 
   );
 };

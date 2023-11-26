@@ -1,5 +1,5 @@
 export interface IMusic {
-    idMusic: string;
-    idUser: string;
+    musicId: string;
+    userId: string;
     date: Date;
 }

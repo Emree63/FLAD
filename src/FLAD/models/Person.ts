@@ -3,7 +3,7 @@ export class Person {
     private _name: string;
     public image: string;
 
-    constructor(id: string, idSpotify: string, name: string, email: string, creationDate: Date, image: string) {
+    constructor(id: string, name: string, image: string) {
         this._id = id;
         this._name = name;
         this.image = image;
@@ -13,7 +13,15 @@ export class Person {
         return this._id;
     }
 
+    set id(value: string) {
+        this._id = value;
+    }
+
     get name(): string {
         return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
     }
 }

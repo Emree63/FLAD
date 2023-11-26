@@ -2,6 +2,9 @@ import Music from "../models/Music";
 import IMusicService from "./musics/interfaces/IMusicService";
 
 export default class EmptyMusicService implements IMusicService {
+    getImageArtistWithId(idArtist: string): Promise<string | null> {
+        throw new Error("Method not implemented.");
+    }
     getMusicById(id: string): Promise<Music> {
         throw new Error("Method not implemented.");
     }

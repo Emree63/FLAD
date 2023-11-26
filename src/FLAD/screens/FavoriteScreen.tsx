@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { getFavoriteMusic } from '../redux/thunk/appThunk';
-import { Spot } from '../model/Spot';
+import { Spot } from '../models/Spot';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function FavoriteScreen() {

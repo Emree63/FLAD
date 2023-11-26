@@ -1,8 +1,8 @@
 import axios from "axios";
-import Music from "../../../model/Music";
+import Music from "../../../models/Music";
 import IMusicService from "../interfaces/IMusicService";
 import TokenSpotify from "./TokenSpotify";
-import MusicMapper from "../../../model/mapper/MusicMapper";
+import MusicMapper from "../../../models/mapper/MusicMapper";
 
 export default class SpotifyService implements IMusicService {
     private readonly API_URL = "https://api.spotify.com/v1";

@@ -3,7 +3,7 @@ import User from '../models/User';
 import Token from '../models/Token';
 
 export const createToken = (user: User): string => {
-    return jwt.sign({ id: user._id }, "dave" as jwt.Secret, {
+    return jwt.sign({ id: user._id }, process.env.SECRET_JWT as jwt.Secret, {
         expiresIn: '1d',
     });
 };
@@ -14,7 +14,7 @@ export const verifyToken = async (
     return new Promise((resolve, reject) => {
         jwt.verify(
             token,
-            "dave" as jwt.Secret,
+            process.env.SECRET_JWT as jwt.Secret,
             (err, payload) => {
                 if (err) return reject(err);
                 resolve(payload as Token);

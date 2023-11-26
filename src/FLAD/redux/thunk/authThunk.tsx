@@ -2,8 +2,8 @@ import axios from "axios";
 import configs from "../../constants/config";
 import { LoginCredentials, RegisterCredentials, restoreToken, userLogin, userLogout, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
-import { UserMapper } from "../../model/mapper/UserMapper";
-import { MusicServiceProvider } from "../../model/MusicServiceProvider";
+import { UserMapper } from "../../models/mapper/UserMapper";
+import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 
 const keyRemember = 'rememberUser';
 
