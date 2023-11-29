@@ -17,7 +17,6 @@ const DismissKeyboard = ({ children }) => (
 )
 
 export default function RegisterScreen() {
-  const [sound, setSound] = useState<Audio.Sound>();
   const navigation = useNavigation();
   const [spotifyToken, setSpotifyToken] = useState();
   const [username, setUsername] = useState('');
@@ -33,7 +32,6 @@ export default function RegisterScreen() {
     const { sound } = await Audio.Sound.createAsync(
       require('../assets/sounds/click.mp3')
     );
-    setSound(sound);
     await sound.playAsync();
   }
 
@@ -91,7 +89,6 @@ export default function RegisterScreen() {
           encodeURIComponent(redirectUri)
       })
       const {
-        access_token: access_token,
         refresh_token: refresh_token,
       } = result.params
       setSpotifyToken(refresh_token)

@@ -1,4 +1,4 @@
-import EmptyMusicService from "../services/EmptyMusicService";
+import EmptyMusicService from "../services/musics/EmptyMusicService";
 import IMusicService from "../services/musics/interfaces/IMusicService";
 import SpotifyService from "../services/musics/spotify/SpotifyService";
 

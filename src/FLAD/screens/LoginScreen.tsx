@@ -15,7 +15,6 @@ const DismissKeyboard = ({ children }) => (
 )
 
 export default function LoginScreen() {
-    const [sound, setSound] = useState<Audio.Sound>();
     const [rememberMe, setRememberMe] = useState(false);
     const navigation = useNavigation();
     // @ts-ignore
@@ -30,7 +29,6 @@ export default function LoginScreen() {
         const { sound } = await Audio.Sound.createAsync(
             require('../assets/sounds/click.mp3')
         );
-        setSound(sound);
         await sound.playAsync();
     }
 

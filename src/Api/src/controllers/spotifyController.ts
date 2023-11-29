@@ -92,7 +92,7 @@ class SpotifyController implements IController {
   ): Promise<Response | void> => {
     let code = req.query.code;
     let storedRedirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
-    var authOptions = {
+    let authOptions = {
       method: 'POST',
       url: this.API_URL,
       data: qs.stringify({

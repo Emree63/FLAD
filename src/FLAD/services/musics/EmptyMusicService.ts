@@ -1,5 +1,5 @@
-import Music from "../models/Music";
-import IMusicService from "./musics/interfaces/IMusicService";
+import Music from "../../models/Music";
+import IMusicService from "./interfaces/IMusicService";
 
 export default class EmptyMusicService implements IMusicService {
     getImageArtistWithId(idArtist: string): Promise<string | null> {

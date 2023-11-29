@@ -36,7 +36,7 @@ class LocationService {
             const radlat2 = Math.PI * lat2 / 180;
             const theta = lon1 - lon2;
             const radtheta = Math.PI * theta / 180;
-            var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
 
             if (dist > 1) {
                 dist = 1;

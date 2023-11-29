@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import normalize from './Normalize';
-import Music from '../model/Music';
-import Artist from '../model/Artist';
+import Music from '../models/Music';
+import Artist from '../models/Artist';
 
 type CardMusicProps = {
   music: Music
@@ -35,7 +35,6 @@ export default function CardMusic(props: CardMusicProps) {
       width: '100%',
       height: '100%',
       borderRadius: 10
-
     },
     textContainer: {
       flex: 1,

@@ -1,197 +1,200 @@
 import { View, Text, Dimensions, StyleSheet, ImageBackground, Image, Pressable, TouchableOpacity, SafeAreaView } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
-import Animated from 'react-native-reanimated';
-import Card from '../components/Card';
+import Card from '../components/CardComponent';
 import normalize from '../components/Normalize';
-import LottieView from 'lottie-react-native'
-import Lotties from '../assets/lottie/Lottie';
 import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spot } from '../models/Spot';
-import { removeFromSpotList, setSpotList } from '../redux/actions/spotActions';
+import { removeFromSpotList } from '../redux/actions/spotActions';
 import { MusicServiceProvider } from '../models/MusicServiceProvider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Artist from '../models/Artist';
 
 export default function SpotScreen() {
   //@ts-ignore
   const spotReducer: Spot[] = useSelector(state => state.appReducer.spot)
 
   const [cards, setCards] = useState<Spot[]>(spotReducer);
-  const [currentCard, setcurrentCard] = useState(cards[cards.length - 1]);
+  const [currentCard, setcurrentCard] = useState<Spot>(cards[cards.length - 1]);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setCards(spotReducer);
     setcurrentCard(spotReducer[spotReducer.length - 1]);
   }, [spotReducer]);
 
   const onSwipe = (direction: 'left' | 'right' | 'down') => {
-
     if (direction === 'right') {
-      addLike(currentCard);
+      dispatch(removeFromSpotList(currentCard));
     } else if (direction === 'left') {
-      console.log('Swiped left');
-      removeSpots(currentCard);
+      dispatch(removeFromSpotList(currentCard));
     }
     else if (direction === 'down') {
       MusicServiceProvider.musicService.addToPlaylist(currentCard.music.id);
-      removeSpots(currentCard);
+      dispatch(removeFromSpotList(currentCard));
     }
   };
 
-  const likeButtonref = useRef<LottieView>(null);
-  const onLike = useCallback(() => {
-    likeButtonref.current?.reset();
-    likeButtonref.current?.play(0, 55);
-    likeButtonref.current?.play(55, 0);
-  }, [])
-
-  const dispatch = useDispatch();
-
-  function addLike(spot: Spot) {
-    onLike();
-    //dispatch(addFavoritesMusic(spot.music))
-    dispatch(removeFromSpotList(spot));
-  }
-  function removeSpots(spot: Spot) {
-    dispatch(removeFromSpotList(spot));
-  }
-
-  function addMockSpots() {
-    //@ts-ignore
-    dispatch(setSpotList(spotsData))
-  }
-
   const navigator = useNavigation();
 
-  const { width: wWidht } = Dimensions.get("window");
+  const { width: width } = Dimensions.get("window");
   const hapti = (card: Spot) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     // @ts-ignore
     navigator.navigate("Detail", { "music": card.music })
   };
 
-  return (
+  const insets = useSafeAreaInsets();
 
+  const styles = StyleSheet.create({
+    background1: {
+      backgroundColor: 'black',
+      height: '100%',
+      width: '100%',
+      paddingTop: insets.top,
+    },
+    background2: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      backgroundColor: "#141414",
+      paddingTop: insets.top
+    },
+    posterBackground: {
+      width: "130%",
+      height: "130%",
+      justifyContent: "center",
+      alignItems: "center",
+      position: 'absolute',
+      left: "-40%",
+      top: "-20%"
+    },
+    gradient: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: insets.top + 150,
+    },
+    titleLabel: {
+      fontStyle: 'normal',
+      left: width / 9,
+      top: '5%',
+      color: "#FFFFFF",
+      fontSize: normalize(40),
+      fontWeight: "800",
+    },
+    artistLabel: {
+      fontStyle: 'normal',
+      left: width / 9,
+      top: '5%',
+      color: "#FFFFFF",
+      fontSize: normalize(20),
+    },
+    buttonSection: {
+      flexDirection: 'row',
+      justifyContent: "space-evenly",
+      paddingHorizontal: 30,
+      width: '100%',
+      position: "absolute",
+      top: "74%"
+    },
+    button: {
+      alignItems: 'center',
+      borderRadius: 100,
+      justifyContent: 'center',
+      width: 61,
+      height: 61,
+      backgroundColor: '#24243A',
+      opacity: 0.8
+    },
+    dislikeIcon: {
+      resizeMode: "stretch",
+      height: '44%',
+      aspectRatio: 1.05,
+    },
+    discoveryIcon: {
+      resizeMode: "stretch",
+      height: '50%',
+      aspectRatio: 1.5,
+      marginLeft: '7%'
+    },
+    likeIcon: {
+      resizeMode: "stretch",
+      height: '50%',
+      aspectRatio: 1.1
+    },
+    loading: {
+      position: 'absolute',
+      paddingBottom: 50
+    },
+    explanation: {
+      color: "grey",
+      fontSize: 13,
+      fontWeight: "400",
+      textAlign: "center",
+      marginTop: 150
+    }
+  });
+
+  return (
     <>
       {cards.length > 0 ? (
-        <>
-          <ImageBackground blurRadius={7}
-            style={{
-              position: 'absolute',
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+        <SafeAreaView style={styles.background1}>
+          <ImageBackground blurRadius={5}
+            style={styles.posterBackground}
             source={{
               uri: currentCard.music.cover,
             }}
-          ></ImageBackground>
-          <SafeAreaView style={styles.mainSafeArea}>
-            <LinearGradient colors={['rgba(2, 2, 2, 0.58) 0%', 'rgba(0, 0, 0, 0) 100.56%']} style={styles.gradient}>
-              <Text
+          />
+          <LinearGradient colors={['rgba(2, 2, 2, 0.40) 0%', 'rgba(0, 0, 0, 0) 100%']} style={styles.gradient} />
+          <Text style={styles.titleLabel}>{currentCard.music.name}</Text>
+          <Text style={styles.artistLabel}>{currentCard.music.artists.map((artist: Artist) => artist.name).join(', ')}</Text>
+          <View style={{ flex: 0.7, justifyContent: 'center', alignItems: 'center' }}>
+            {cards.map((card, index) => (
+              <View
+                key={index}
                 style={{
-                  fontStyle: 'normal',
-                  left: wWidht / 9,
-                  top: normalize(87),
-                  color: "#FFFFFF",
-                  fontSize: normalize(40),
-                  fontWeight: "800",
-                }}>{currentCard.music.name}</Text>
-              <Text
-                style={{
-                  fontStyle: 'normal',
-                  left: wWidht / 9,
-                  top: normalize(87),
-                  color: "#FFFFFF",
-                  fontSize: normalize(20),
-                }}>{currentCard.music.artists[0].name}</Text>
-            </LinearGradient>
-          </SafeAreaView>
-          <View style={{ flex: 8.35 }}>
-
-            <View style={{ flex: 1.83, justifyContent: 'center', alignItems: 'center' }}>
-
-              {cards.map((card) => (
-                <View style={{ position: 'absolute' }} >
-                  <Pressable onLongPress={() => { hapti(card) }} >
-                    <Card
-                      title={card.music.name}
-                      image={card.music.cover}
-                      onSwipe={(direction) => { onSwipe(direction) }}
-                    />
-                  </Pressable>
-                </View>
-              ))
-              }
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: "flex-start", justifyContent: 'center' }}>
-              <Animated.View style={{ flexDirection: 'row', width: '92%', alignItems: "center", justifyContent: 'space-evenly' }}>
-                <TouchableOpacity style={styles.button} onPress={() => onSwipe('left')}>
-                  <Image source={require("../assets/images/dislike_icon_no_text.png")} style={{ width: '45%', height: '40%' }} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => onSwipe('down')}>
-                  <Image source={require("../assets/images/discovery_icon_no_text.png")} style={{ width: '58%', height: '50%', marginLeft: '7%' }} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => onSwipe('right')}>
-                  <LottieView autoPlay={false} loop={false} ref={likeButtonref} speed={2} source={Lotties.likeAnimation} style={styles.lottie} />
-                </TouchableOpacity>
-
-              </Animated.View>
-            </View>
-
+                  position: 'absolute',
+                }}
+              >
+                <Pressable onLongPress={() => hapti(card)}>
+                  <Card
+                    image={card.music.cover}
+                    onSwipe={(direction) => onSwipe(direction)}
+                  />
+                </Pressable>
+              </View>
+            ))}
           </View>
-        </>
+
+          <View style={styles.buttonSection}>
+            <TouchableOpacity style={styles.button} onPress={() => onSwipe('left')}>
+              <Image source={require("../assets/images/dislike_icon_no_text.png")} style={styles.dislikeIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => onSwipe('down')}>
+              <Image source={require("../assets/images/discovery_icon_no_text.png")} style={styles.discoveryIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => onSwipe('right')}>
+              <Image source={require("../assets/images/like_icon_no_text.png")} style={styles.likeIcon} />
+            </TouchableOpacity>
+          </View>
+
+        </SafeAreaView>
       )
-        : (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: "#141414" }}>
-          <View style={{ position: "absolute" }}>
+        : (<SafeAreaView style={styles.background2}>
+          <View style={styles.loading}>
             <Loading />
           </View>
-          <Text style={{ color: "grey", fontWeight: "400", textAlign: "center", top: "10%" }}>Vous avez explorer toutes les spot autour de vous.
+          <Text style={styles.explanation}>Vous avez explorer toutes les spot autour de vous.
             {"\n"}Continuer dans discoverie pour découvrir de nouvelles music basées sur vos gouts musicaux.</Text>
-        </View>)
+        </SafeAreaView>)
       }
     </>
 
   );
 };
-
-const styles = StyleSheet.create({
-  mainSafeArea: {
-    flex: 1,
-  },
-  spot: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'column',
-    backgroundColor: '#000'
-  },
-  lottie: {
-    width: '100%',
-  },
-  button: {
-    setOpacityTo: 0.8,
-    alignItems: 'center',
-    borderRadius: 100,
-    justifyContent: 'center',
-    width: 61,
-    height: 61,
-
-    backgroundColor: '#24243A',
-    opacity: 0.8,
-    shadowRadius: 2,
-
-  },
-  gradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 209,
-  },
-})
-

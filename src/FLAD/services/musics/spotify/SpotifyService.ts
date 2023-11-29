@@ -61,7 +61,7 @@ export default class SpotifyService implements IMusicService {
 
     async getMusicsWithIds(ids: string[]): Promise<Music[]> {
         const access_token = await this._token.getAccessToken();
-        var url = `${this.API_URL}/tracks?market=FR&ids=`;
+        let url = `${this.API_URL}/tracks?market=FR&ids=`;
         if (ids.length == 0) {
             return [];
         }
@@ -122,7 +122,7 @@ export default class SpotifyService implements IMusicService {
             description: 'Retrouvez toutes vos découvertes faites sur FladMusic 🎵',
             public: true
         };
-        var headers = {
+        const headers = {
             'Authorization': `Bearer ${access_token}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -132,20 +132,20 @@ export default class SpotifyService implements IMusicService {
         return response.data.id;
     }
 
-    async _isInPlaylist(idTrack: string, idPlaylist: string): Promise<Boolean> {
+    async _isInPlaylist(idTrack: string, idPlaylist: string): Promise<boolean> {
         const access_token = await this._token.getAccessToken();
         const response = await axios.get(`${this.API_URL}/playlists/${idPlaylist}/tracks?limit=100`, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             },
         });
-        var nbTracks = response.data.items.filter((item: any) => item.track.id === idTrack).length;
+        const nbTracks = response.data.items.filter((item: any) => item.track.id === idTrack).length;
 
         return (nbTracks >= 1) ? true : false;
     }
 
     async addToPlaylist(idTrack: string): Promise<void> {
-        var idPlaylist = await this._getPlaylistId();
+        const idPlaylist = await this._getPlaylistId();
 
         if (await this._isInPlaylist(idTrack, idPlaylist)) {
             return;

@@ -1,6 +1,5 @@
 import { Spot } from "../../models/Spot";
 import { spotTypes } from "../types/spotTypes";
-import { userTypes } from "../types/userTypes";
 
 export const setSpotList = (spotList: Spot[]) => {
   return {
