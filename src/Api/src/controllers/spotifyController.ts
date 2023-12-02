@@ -18,8 +18,79 @@ class SpotifyController implements IController {
   }
 
   initRoutes() {
+    /**
+     * @swagger
+     * /api/spotify/exchange:
+     *   get:
+     *     summary: Initiate the Spotify login flow
+     *     description: Redirect the user to the Spotify login page for authorization
+     *     tags:
+     *       - Spotify
+     *     parameters:
+     *       - in: query
+     *         name: redirectUrl
+     *         schema:
+     *           type: string
+     *         description: The URL to redirect the user after Spotify authorization (optional)
+     *     responses:
+     *       302:
+     *         description: Redirecting to Spotify login page
+     *       400:
+     *         description: Bad request - Cannot connect to Spotify
+     */
     this.router.get(`${this.path}/exchange`, this.login);
+
+    /**
+     * @swagger
+     * /api/spotify/callback:
+     *   get:
+     *     summary: Handle Spotify callback and exchange code for access token
+     *     description: Handle Spotify callback and exchange the received code for an access token
+     *     tags:
+     *       - Spotify
+     *     responses:
+     *       302:
+     *         description: Redirecting with access token information
+     *       400:
+     *         description: Bad request - Error connecting to Spotify
+     */
     this.router.get(`${this.path}/callback`, this.getAccessToken);
+
+    /**
+     * @swagger
+     * /api/spotify/refresh:
+     *   get:
+     *     summary: Refresh the Spotify access token using a refresh token
+     *     description: Refresh the Spotify access token using a refresh token
+     *     tags:
+     *       - Spotify
+     *     parameters:
+     *       - in: query
+     *         name: refresh_token
+     *         schema:
+     *           type: string
+     *         required: true
+     *         description: The refresh token obtained during the initial authorization
+     *     responses:
+     *       200:
+     *         description: Successfully refreshed access token
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 access_token:
+     *                   type: string
+     *                   description: The new access token
+     *                 refresh_token:
+     *                   type: string
+     *                   description: The new refresh token
+     *                 expires_in:
+     *                   type: number
+     *                   description: The time until the access token expires (in seconds)
+     *       400:
+     *         description: Bad request - Cannot refresh the access token
+     */
     this.router.get(`${this.path}/refresh`, this.getRefreshToken);
   }
 

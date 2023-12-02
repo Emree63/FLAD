@@ -2,22 +2,23 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import Controller from './controllers/interfaces/IController';
+import IController from './controllers/interfaces/IController';
 import mongoose from 'mongoose';
+import swaggerUi from "swagger-ui-express";
+import { specs } from './utils/swagger';
 
 class App {
     public express: Application;
     public port: number;
-    public dataBase: null;
-    public server: any;
 
-    constructor(controllers: Controller[], port: number) {
+    constructor(controllers: IController[], port: number) {
         this.express = express();
         this.port = port;
 
         this.initDatabase();
         this.initMiddleware();
         this.initControllers(controllers);
+        this.initSwagger();
     }
 
     private initMiddleware(): void {
@@ -31,15 +32,15 @@ class App {
         }));
     }
 
-    private initControllers(controllers: Controller[]): void {
-        controllers.forEach((controller: Controller) => {
+    private initControllers(controllers: IController[]): void {
+        controllers.forEach((controller: IController) => {
             this.express.use('/api', controller.router);
         });
     }
 
     public listen(): void {
         this.express.listen(this.port, () => {
-            console.log(`[server] : App listening on the port ${this.port}`);
+            console.log(`⚡️[server] : App listening on the port ${this.port}`);
         });
     }
 
@@ -48,6 +49,11 @@ class App {
         mongoose.connect(MONGO_URL)
             .then(() => console.log("Connect to MongoDB database successfully"))
             .catch(error => console.log("Error connecting : " + error));
+    }
+
+    public initSwagger(): void {
+        this.express.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs),);
+        console.log(`Docs available at /${this.port}/swagger`);
     }
 }
 

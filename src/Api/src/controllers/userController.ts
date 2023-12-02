@@ -24,28 +24,410 @@ class UserController implements IController {
     }
 
     private initRoutes(): void {
+        /**
+         * @swagger
+         * /api/auth/register:
+         *   post:
+         *     summary: Register a new user
+         *     description: Register a new user with the provided details
+         *     tags:
+         *       - Authentication
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *              type: object
+         *              properties:
+         *                 email:
+         *                   type: string
+         *                   default: john.doe@example.com
+         *                 password:
+         *                   type: string
+         *                   default: stringPassword123
+         *                 name:
+         *                   type: string
+         *                   default: john_doe
+         *                 tokenSpotify:
+         *                   type: string
+         *     responses:
+         *       201:
+         *         description: User registered successfully
+         *       400:
+         *         description: Bad request - Invalid input data
+         *       401:
+         *         description: Unauthorized - Spotify token is invalid
+         *       409:
+         *         description: Conflict - Email or username is already in use
+         *       500:
+         *         description: Internal Server Error - Spotify account not authorized or not found
+         */
         this.router.post(
             `${this.authPath}/register`,
             validationMiddleware(validator.register),
             this.register
         );
+
+        /**
+         * @swagger
+         * /api/auth/login:
+         *   post:
+         *     summary: Login a user
+         *     description: Login with the provided email and password
+         *     tags:
+         *       - Authentication
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *              type: object
+         *              properties:
+         *                 email:
+         *                   type: string
+         *                   default: john.doe@example.com
+         *                 password:
+         *                   type: string
+         *                   default: stringPassword123
+         *     responses:
+         *       200:
+         *         description: User logged in successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 token:
+         *                   type: string
+         *       400:
+         *         description: Bad request - Invalid input data
+         */
         this.router.post(
             `${this.authPath}/login`,
             validationMiddleware(validator.login),
             this.login
         );
-        this.router.get(`${this.path}`, authenticator, this.getUser);
-        this.router.get(`${this.path}s`, authenticator, this.getUsers);
-        this.router.delete(`${this.path}`, authenticator, this.deleteUser);
-        this.router.get(`${this.path}/nextTo`, authenticator, this.getUserNext);
-        this.router.delete(`${this.path}/musics/:id`, authenticator, this.deleteMusic);
-        this.router.post(`${this.path}/musics`, authenticator, this.addMusic);
-        this.router.get(`${this.path}/musics`, authenticator, this.getMusics);
-        this.router.put(`${this.path}/name`, authenticator, this.setName);
-        this.router.put(`${this.path}/email`, authenticator, this.setEmail);
-        this.router.put(`${this.path}/image`, authenticator, this.setImage);
-        this.router.put(`${this.path}/password`, authenticator, this.setPassword);
 
+        /**
+         * @swagger
+         * /api/user:
+         *   get:
+         *     summary: Get user information
+         *     description: Get information about the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     responses:
+         *       200:
+         *         description: User logged in successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         */
+        this.router.get(`${this.path}`, authenticator, this.getUser);
+
+
+        /**
+         * @swagger
+         * /api/users:
+         *   get:
+         *     summary: Get information about multiple users
+         *     description: Get information about multiple users based on provided user ids
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     parameters:
+         *       - in: query
+         *         name: ids
+         *         schema:
+         *           type: string
+         *         description: Comma-separated list of user ids
+         *     responses:
+         *       200:
+         *         description: Users information retrieved successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       400:
+         *         description: Bad request - Invalid input data
+         */
+        this.router.get(`${this.path}s`, authenticator, this.getUsers);
+
+        /**
+         * @swagger
+         * /api/user:
+         *   delete:
+         *     summary: Delete the authenticated user
+         *     description: Delete the authenticated user and associated data
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     responses:
+         *       204:
+         *         description: User deleted successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       404:
+         *         description: User not found
+         */
+        this.router.delete(`${this.path}`, authenticator, this.deleteUser);
+
+        /**
+         * @swagger
+         * /api/user/nextTo:
+         *   get:
+         *     summary: Get users near the authenticated user
+         *     description: Get information about users near the authenticated user based on location
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     parameters:
+         *       - in: query
+         *         name: longitude
+         *         schema:
+         *           type: number
+         *         description: Longitude of the user's current location
+         *       - in: query
+         *         name: latitude
+         *         schema:
+         *           type: number
+         *         description: Latitude of the user's current location
+         *       - in: query
+         *         name: currentMusic
+         *         schema:
+         *           type: string
+         *         description: The ID of the currently playing music
+         *     responses:
+         *       201:
+         *         description: Users near the authenticated user retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 data:
+         *                   type: array
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       400:
+         *         description: Bad request - Invalid input data
+         */
+        this.router.get(`${this.path}/nextTo`, authenticator, this.getUserNext);
+
+        /**
+         * @swagger
+         * /api/user/musics/{id}:
+         *   delete:
+         *     summary: Delete a music from the authenticated user's liked list
+         *     description: Delete a music from the authenticated user's liked list by music id
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         schema:
+         *           type: string
+         *         description: The ID of the music to delete
+         *     responses:
+         *       200:
+         *         description: Music deleted successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       404:
+         *         description: Music not found
+         */
+        this.router.delete(`${this.path}/musics/:id`, authenticator, this.deleteMusic);
+
+        /**
+         * @swagger
+         * /api/user/musics:
+         *   post:
+         *     summary: Add a music to the authenticated user's liked list
+         *     description: Add a music to the authenticated user's liked list
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               musicId:
+         *                 type: string
+         *                 description: The ID of the music to add
+         *               userId:
+         *                 type: string
+         *                 description: The ID of the user who liked the music
+         *     responses:
+         *       201:
+         *         description: Music added to liked list successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       400:
+         *         description: Bad request - Invalid input data
+         */
+        this.router.post(`${this.path}/musics`, authenticator, this.addMusic);
+
+        /**
+         * @swagger
+         * /api/user/musics:
+         *   get:
+         *     summary: Get the list of musics liked by the authenticated user
+         *     description: Get the list of musics liked by the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     responses:
+         *       200:
+         *         description: List of musics retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 musics:
+         *                   type: array
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         */
+        this.router.get(`${this.path}/musics`, authenticator, this.getMusics);
+
+        /**
+         * @swagger
+         * /api/user/name:
+         *   put:
+         *     summary: Update the name of the authenticated user
+         *     description: Update the name of the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               name:
+         *                 type: string
+         *                 description: The new name for the user
+         *     responses:
+         *       200:
+         *         description: User name updated successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       400:
+         *         description: Bad request - Invalid input data
+         *       409:
+         *         description: Conflict - The provided name is already in use by another user
+         */
+        this.router.put(`${this.path}/name`, authenticator, this.setName);
+
+        /**
+         * @swagger
+         * /api/user/email:
+         *   put:
+         *     summary: Update the email of the authenticated user
+         *     description: Update the email of the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               email:
+         *                 type: string
+         *                 format: email
+         *                 description: The new email for the user
+         *     responses:
+         *       200:
+         *         description: User email updated successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       400:
+         *         description: Bad request - Invalid input data
+         *       409:
+         *         description: Conflict - The provided email is already in use by another user
+         */
+        this.router.put(`${this.path}/email`, authenticator, this.setEmail);
+
+        /**
+         * @swagger
+         * /api/user/image:
+         *   put:
+         *     summary: Update the profile image of the authenticated user
+         *     description: Update the profile image of the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               image:
+         *                 type: string
+         *                 format: base64
+         *                 description: The new profile image for the user (base64 encoded)
+         *     responses:
+         *       200:
+         *         description: User profile image updated successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       500:
+         *         description: Internal Server Error - Unable to update the profile image
+         */
+        this.router.put(`${this.path}/image`, authenticator, this.setImage);
+
+        /**
+         * @swagger
+         * /api/user/password:
+         *   put:
+         *     summary: Update the password of the authenticated user
+         *     description: Update the password of the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               oldPassword:
+         *                 type: string
+         *                 description: The current password of the user
+         *               newPassword:
+         *                 type: string
+         *                 description: The new password for the user
+         *     responses:
+         *       200:
+         *         description: User password updated successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       500:
+         *         description: Internal Server Error - Unable to update the password
+         */
+        this.router.put(`${this.path}/password`, authenticator, this.setPassword);
     }
 
     private register = async (

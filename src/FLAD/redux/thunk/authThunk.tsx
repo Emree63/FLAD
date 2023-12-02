@@ -7,7 +7,7 @@ import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 
 const keyRemember = 'rememberUser';
 
-export const register = (resgisterCredential: RegisterCredentials) => {
+export const register = (registerCredential: RegisterCredentials) => {
   //@ts-ignore
   return async dispatch => {
     try {
@@ -18,7 +18,7 @@ export const register = (resgisterCredential: RegisterCredentials) => {
       }
       const resp = await axios.post(
         configs.API_URL + '/auth/register',
-        resgisterCredential,
+        registerCredential,
         config
       )
       const token = resp.data.token;
