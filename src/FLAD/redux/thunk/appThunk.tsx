@@ -3,9 +3,11 @@ import * as SecureStore from 'expo-secure-store';
 import { Spot } from "../../models/Spot";
 import configs from "../../constants/config";
 import { MusicServiceProvider } from "../../models/MusicServiceProvider";
-import { setFavoriteMusic, setUserCurrentMusic } from "../actions/appActions";
+import { addFavoriteMusic, setFavoriteMusic, setUserCurrentMusic } from "../actions/appActions";
 import { setAccessError, setErrorEmptyMusic } from "../actions/userActions";
 import { SpotMapper } from "../../models/mapper/SpotMapper";
+import { logout } from "./authThunk";
+import { removeFromSpotList } from "../actions/spotActions";
 
 export const getUserCurrentMusic = () => {
   //@ts-ignore
@@ -27,6 +29,9 @@ export const getUserCurrentMusic = () => {
       dispatch(setUserCurrentMusic(music))
     } catch (error: any) {
       switch (error.response.status) {
+        case 401:
+          dispatch(logout);
+          break;
         case 403:
           dispatch(setAccessError(true));
           break;
@@ -37,13 +42,6 @@ export const getUserCurrentMusic = () => {
       }
     }
   }
-}
-
-export const addFavoriteMusic = (spot: Spot) => {
-  //@ts-ignore
-  return async dispatch => {
-
-  };
 }
 
 export const getFavoriteMusic = () => {
@@ -71,11 +69,38 @@ export const getFavoriteMusic = () => {
           };
         });
 
-        dispatch(setFavoriteMusic(result.map((item: any) => SpotMapper.toModel(item))));
+      dispatch(setFavoriteMusic(result.map((item: any) => SpotMapper.toModel(item))));
 
     } catch (error: any) {
       console.error(error);
       dispatch(setAccessError(true));
     }
   };
-} 
+}
+
+export const addMusicToFavorite = (spot: Spot) => {
+  //@ts-ignore
+  return async dispatch => {
+    try {
+      dispatch(removeFromSpotList(spot));
+      let token: string | null = await SecureStore.getItemAsync(configs.key);
+      const headers = {
+        'Authorization': 'Bearer ' + token
+      };
+      const body = {
+        "musicId": spot.music.id,
+        "userId": spot.user
+      }
+      await axios.post(configs.API_URL + '/user/musics', body, { headers });
+
+      spot.date = new Date(Date.now());
+      dispatch(addFavoriteMusic(spot));
+    } catch (error: any) {
+      switch (error.response.status) {
+        default:
+          console.error("Error like spot : " + error);
+          break;
+      }
+    }
+  };
+}

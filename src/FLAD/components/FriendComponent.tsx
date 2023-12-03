@@ -26,7 +26,7 @@ export default function Friend(props: FriendProps) {
             paddingVertical: 9,
         },
         image: {
-            marginLeft: 15,
+            marginLeft: "7%",
             marginRight: 12,
             width: 55,
             height: 55,
@@ -51,7 +51,7 @@ export default function Friend(props: FriendProps) {
         },
         time: {
             fontSize: normalize(18),
-            color: '#989898'
+            color: style.Text
         },
         profilContainer: {
             marginTop: 5,

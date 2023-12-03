@@ -97,7 +97,7 @@ Tout d'abord, il faut fournir votre *adresse e-mail* et votre *nom Spotify* aux 
 
 <div align = center>
 
-<img src="doc/Images/Real_RegisterPage.png" width="250" >
+<img src="doc/Maquettes/RegisterPage.png" width="200" >
 
 </div>
 
@@ -108,10 +108,7 @@ Vous serez normalement redirigé sur la page Spotify où vous devrez vous connec
 
 <div align = center>
 
-<img src="doc/Images/Real_HomePage.png" width="250" >
-<img src="doc/Images/Real_FavoritePage.png" width="250" >
-<img src="doc/Images/Real_ConversationPage.png" width="250" >
-<img src="doc/Images/Real_SettingPage.png" width="250" >
+<img src="doc/Images/Overview.png">
 
 </div>
 

@@ -12,6 +12,9 @@ import { removeFromSpotList } from '../redux/actions/spotActions';
 import { MusicServiceProvider } from '../models/MusicServiceProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Artist from '../models/Artist';
+import { addMusicToFavorite } from '../redux/thunk/appThunk';
+import { addToPlaylist, removeSpot } from '../redux/thunk/spotThunk';
+import UserInfoBadge from '../components/UserInfoBadgeComponent';
 
 export default function SpotScreen() {
   //@ts-ignore
@@ -29,13 +32,15 @@ export default function SpotScreen() {
 
   const onSwipe = (direction: 'left' | 'right' | 'down') => {
     if (direction === 'right') {
-      dispatch(removeFromSpotList(currentCard));
+      //@ts-ignore
+      dispatch(addMusicToFavorite(currentCard));
     } else if (direction === 'left') {
-      dispatch(removeFromSpotList(currentCard));
+      //@ts-ignore
+      dispatch(removeSpot(currentCard));
     }
     else if (direction === 'down') {
-      MusicServiceProvider.musicService.addToPlaylist(currentCard.music.id);
-      dispatch(removeFromSpotList(currentCard));
+      //@ts-ignore
+      dispatch(addToPlaylist(currentCard));
     }
   };
 
@@ -80,18 +85,18 @@ export default function SpotScreen() {
       right: 0,
       height: insets.top + 150,
     },
+    header: {
+      left: width / 11,
+      top: '2.5%',
+    },
     titleLabel: {
       fontStyle: 'normal',
-      left: width / 9,
-      top: '5%',
       color: "#FFFFFF",
       fontSize: normalize(40),
       fontWeight: "800",
     },
     artistLabel: {
       fontStyle: 'normal',
-      left: width / 9,
-      top: '5%',
       color: "#FFFFFF",
       fontSize: normalize(20),
     },
@@ -101,7 +106,7 @@ export default function SpotScreen() {
       paddingHorizontal: 30,
       width: '100%',
       position: "absolute",
-      top: "74%"
+      top: "85%"
     },
     button: {
       alignItems: 'center',
@@ -114,18 +119,18 @@ export default function SpotScreen() {
     },
     dislikeIcon: {
       resizeMode: "stretch",
-      height: '44%',
+      height: '40%',
       aspectRatio: 1.05,
     },
     discoveryIcon: {
       resizeMode: "stretch",
-      height: '50%',
+      height: '42%',
       aspectRatio: 1.5,
       marginLeft: '7%'
     },
     likeIcon: {
       resizeMode: "stretch",
-      height: '50%',
+      height: '42%',
       aspectRatio: 1.1
     },
     loading: {
@@ -152,8 +157,11 @@ export default function SpotScreen() {
             }}
           />
           <LinearGradient colors={['rgba(2, 2, 2, 0.40) 0%', 'rgba(0, 0, 0, 0) 100%']} style={styles.gradient} />
-          <Text style={styles.titleLabel}>{currentCard.music.name}</Text>
-          <Text style={styles.artistLabel}>{currentCard.music.artists.map((artist: Artist) => artist.name).join(', ')}</Text>
+          <View style={styles.header}>
+            <UserInfoBadge image={currentCard.user.image} date={currentCard.date} distance={currentCard.distance} />
+            <Text style={styles.titleLabel}>{currentCard.music.name}</Text>
+            <Text style={styles.artistLabel}>{currentCard.music.artists.map((artist: Artist) => artist.name).join(', ')}</Text>
+          </View>
           <View style={{ flex: 0.7, justifyContent: 'center', alignItems: 'center' }}>
             {cards.map((card, index) => (
               <View

@@ -16,3 +16,16 @@ export const setFavoriteMusic = (spots: Spot[]) => {
     payload: spots,
   };
 }
+
+export const addFavoriteMusic = (spot: Spot) => {
+  return {
+    type: favoritesTypes.ADD_FAVORITE_MUSICS,
+    payload: spot,
+  };
+}
+
+export const resetNbAddedFavoriteMusic = () => {
+  return {
+    type: favoritesTypes.RESET_NB_ADDED_FAVORITE_MUSIC
+  };
+}

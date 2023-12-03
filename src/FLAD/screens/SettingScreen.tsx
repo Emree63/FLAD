@@ -291,7 +291,7 @@ export default function SettingScreen() {
 
                         <TouchableOpacity
                             // @ts-ignore
-                            onPress={() => navigation.navigate('Profil')}
+                            onPress={() => navigation.navigate('Account')}
                         >
                             <View style={styles.profil}>
                                 <Image source={{ uri: currentUser.image }} style={styles.imageProfil} />

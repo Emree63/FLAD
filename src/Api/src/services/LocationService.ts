@@ -21,7 +21,7 @@ class LocationService {
         snapshot.forEach(location => {
             const distance = this.distanceBetween(latitude, longitude, location.latitude, location.longitude);
             if (distance <= 1000) {
-                usersLocation.push(new UserLocation(location._id, location.userId, location.musicId, Math.ceil(distance / 200) * 200, location.updatedAt));
+                usersLocation.push(new UserLocation(location._id, location.userId, location.musicId, Math.ceil(distance + 0.1 / 200) * 200, location.updatedAt));
             }
         });
         return { data: usersLocation };

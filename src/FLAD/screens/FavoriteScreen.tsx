@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, SectionList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, SectionList, TouchableOpacity, RefreshControl } from 'react-native';
 import CardMusic from '../components/CardMusicComponent';
 import normalize from '../components/Normalize';
 import { Svg, Path } from 'react-native-svg';
@@ -11,12 +11,15 @@ import { colorsLight } from '../constants/colorsLight';
 import { getFavoriteMusic } from '../redux/thunk/appThunk';
 import { Spot } from '../models/Spot';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { resetNbAddedFavoriteMusic } from '../redux/actions/appActions';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function FavoriteScreen() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
     const style = isDark ? colorsDark : colorsLight;
+    const [refreshing, setRefreshing] = useState(false);
 
     const images = [
         { id: 1, source: require('../assets/images/flady_love.png') },
@@ -34,6 +37,21 @@ export default function FavoriteScreen() {
         //@ts-ignore
         dispatch(getFavoriteMusic());
     }, []);
+
+    const handleRefresh = () => {
+        setRefreshing(true);
+        //@ts-ignore
+        dispatch(getFavoriteMusic());
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 900);
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(resetNbAddedFavoriteMusic());
+        }, [])
+    );
 
     const groupByDate = (data: Spot[]) => {
         const groupedData: { [key: string]: Spot[] } = {};
@@ -74,8 +92,8 @@ export default function FavoriteScreen() {
             paddingTop: insets.top
         },
         titleContainer: {
-            marginVertical: 10,
-            marginLeft: 20,
+            marginTop: 5,
+            marginLeft: "7%",
         },
         header: {
             flexDirection: 'row',
@@ -89,7 +107,6 @@ export default function FavoriteScreen() {
             color: style.Text,
         },
         description: {
-            marginTop: 10,
             fontSize: normalize(20),
             color: '#787878',
             marginBottom: 5
@@ -97,9 +114,13 @@ export default function FavoriteScreen() {
         titleSection: {
             fontSize: normalize(20),
             color: style.Text,
-            fontWeight: 'medium',
-            marginLeft: 20,
+            fontWeight: '500',
+            marginLeft: "7%",
             marginBottom: 10
+        },
+        collection: {
+            marginTop: "3%",
+            marginLeft: "1%",
         }
     });
 
@@ -116,8 +137,16 @@ export default function FavoriteScreen() {
                 <Text style={styles.description}>Retrouvez ici vos musiques favorites</Text>
             </View>
             <SectionList
+                style = {styles.collection}
                 sections={groupByDate(favoriteMusic)}
-                keyExtractor={(item: Spot) => item.music.id}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={handleRefresh}
+                        tintColor={style.Text}
+                    />
+                }
+                keyExtractor={(item: Spot) => item.music.id + item.user + item.date}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => {

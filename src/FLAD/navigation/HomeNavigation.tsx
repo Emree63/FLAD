@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { faUser, faEnvelope, faHeart, faMusic } from "@fortawesome/free-solid-svg-icons"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import FavoriteNavigation from './FavoriteNavigation';
 import SettingNavigation from './SettingNavigation';
-import normalize from '../components/Normalize';
-// @ts-ignore
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import SpotNavigation from './SpotNavigation';
 import MessagingNavigation from './MessagingNavigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
 import { getUserCurrentMusic } from '../redux/thunk/appThunk';
 import { logout } from '../redux/thunk/authThunk';
 import { setAccessError, setErrorEmptyMusic } from '../redux/actions/userActions';
 import * as Location from 'expo-location';
 import { getSpotList } from '../redux/thunk/spotThunk';
 import Music from '../models/Music';
+import normalize from '../components/Normalize';
 
 export default function HomeNavigation() {
   //@ts-ignore
@@ -32,17 +30,7 @@ export default function HomeNavigation() {
   const currentMusic: Music = useSelector(state => state.appReducer.userCurrentMusic);
   const [locationPermission, setLocationPermission] = useState(false);
 
-  const style = isDark ? colorsDark : colorsLight;
   const BottomTabNavigator = createBottomTabNavigator();
-  const MyTheme = {
-    dark: false,
-    colors: {
-      primary: 'rgb(255, 45, 85)',
-      card: style.Card,
-      border: style.Card,
-      text: 'rgb(138, 138, 138)',
-    }
-  };
 
   const dispatch = useDispatch();
 
@@ -128,38 +116,44 @@ export default function HomeNavigation() {
 
   return (
     // @ts-ignore
-    <NavigationContainer theme={MyTheme}>
+    <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
       <BottomTabNavigator.Navigator
         initialRouteName="Spots"
         screenOptions={{
-          tabBarStyle: styles.tabBar,
-          ...(Platform.OS === 'android'
-            ? { tabBarLabelStyle: { bottom: normalize(10) } }
-            : { tabBarLabelStyle: { bottom: normalize(-25) } }
-          ),
-
+          tabBarActiveTintColor: isDark ? "white" : "rgb(255, 45, 85)",
+          tabBarStyle: {
+            backgroundColor: isDark ? "rgb(46,46,46)" : "white",
+          },
         }}>
         <BottomTabNavigator.Screen name="Spots" component={SpotNavigation}
           options={{
             headerShown: false,
-            tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="music" color={color} /></View>,
+            tabBarIcon: ({ color }) => <TabBarIcon name={faMusic} color={color} size={23} />,
           }} />
         <BottomTabNavigator.Screen name="Favorites" component={FavoriteNavigation}
           options={{
             tabBarBadge: favoritesMusicLength,
-            tabBarBadgeStyle: { backgroundColor: 'yellow' },
+            tabBarBadgeStyle: {
+              backgroundColor: 'yellow',
+              maxWidth: 12.5,
+              marginTop: 3,
+              maxHeight: 13,
+              borderRadius: 7,
+              fontSize: normalize(10),
+              lineHeight: 12,
+            },
             headerShown: false,
-            tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="heart" color={color} /></View>,
+            tabBarIcon: ({ color }) => <View><TabBarIcon name={faHeart} color={color} size={23} /></View>,
           }} />
         <BottomTabNavigator.Screen name="Messages" component={MessagingNavigation}
           options={{
             headerShown: false,
-            tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="comment" color={color} /></View>,
+            tabBarIcon: ({ color }) => <View ><TabBarIcon name={faEnvelope} color={color} size={23} /></View>,
           }} />
-        <BottomTabNavigator.Screen name="Settings" component={SettingNavigation}
+        <BottomTabNavigator.Screen name="Profil" component={SettingNavigation}
           options={{
             headerShown: false,
-            tabBarIcon: ({ color }) => <View style={styles.IconContainer}><TabBarIcon name="cog" color={color} /></View>,
+            tabBarIcon: ({ color, size }) => <TabBarIcon name={faUser} color={color} size={23} />,
           }} />
       </BottomTabNavigator.Navigator>
     </NavigationContainer>
@@ -167,22 +161,9 @@ export default function HomeNavigation() {
 }
 
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: any;
   color: string;
+  size: number;
 }) {
-  return <FontAwesome size={30} {...props} />;
+  return <FontAwesomeIcon icon={props.name} style={{ marginBottom: -5 }} size={props.size} color={props.color} />;
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    height: 60,
-    position: 'absolute',
-    bottom: normalize(50),
-    borderRadius: 30,
-    marginHorizontal: 25
-  },
-  IconContainer: {
-    position: 'absolute',
-    top: 6,
-  }
-})

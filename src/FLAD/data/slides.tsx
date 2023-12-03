@@ -1,7 +1,7 @@
 export default [
     {
         id: '1',
-        title: 'Bienvenue sur Flad',
+        title: 'Bienvenue sur Flad 🎶',
         description: 'L\'application pour découvrir de nouvelles musiques et vous faire de nouveaux amis',
         image: require('../assets/images/board_1.png')
     },

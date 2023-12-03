@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
     const submitForm = () => {
         const credentials: LoginCredentials = {
-            email: username.toLowerCase(),
+            email: username.toLowerCase().trim(),
             password: password
         };
         //@ts-ignore

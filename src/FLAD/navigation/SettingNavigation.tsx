@@ -13,7 +13,7 @@ export default function SettingNavigation() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Profil"
+        name="Account"
         component={ProfilScreen}
         options={{ headerShown: false }}
       />

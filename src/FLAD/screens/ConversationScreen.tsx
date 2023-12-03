@@ -32,8 +32,7 @@ export default function ConversationScreen() {
             paddingTop: insets.top
         },
         titleContainer: {
-            marginTop: 10,
-            marginLeft: 20,
+            marginLeft: "7%",
         },
         title: {
             fontSize: normalize(28),
@@ -41,7 +40,7 @@ export default function ConversationScreen() {
             color: style.Text,
         },
         description: {
-            marginTop: 10,
+            marginTop: 3,
             fontSize: normalize(20),
             color: '#787878',
             marginBottom: 5
@@ -52,7 +51,7 @@ export default function ConversationScreen() {
         <SafeAreaView style={styles.mainSafeArea}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Messages</Text>
-                <Text style={styles.description}>Retrouvez ici tous vos amis!</Text>
+                <Text style={styles.description}>Retrouvez ici les discussions</Text>
             </View>
             <FlatList
                 style={{ marginTop: 10 }}

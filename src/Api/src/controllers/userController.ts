@@ -148,8 +148,6 @@ class UserController implements IController {
          *         description: Users information retrieved successfully
          *       401:
          *         description: Unauthorized - Invalid or missing authentication token
-         *       400:
-         *         description: Bad request - Invalid input data
          */
         this.router.get(`${this.path}s`, authenticator, this.getUsers);
 
@@ -525,7 +523,7 @@ class UserController implements IController {
         const userIds = req.query.ids as string;
 
         if (!userIds) {
-            return res.status(400).json({ message: 'Please provide user ids' });
+            return res.status(200).json([]);
         }
 
         const userIdArray = userIds.split('&');
