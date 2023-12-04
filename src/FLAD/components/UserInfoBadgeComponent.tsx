@@ -16,7 +16,7 @@ export default function UserInfoBadge(props: UserInfoProps) {
             height: 30,
             paddingHorizontal: normalize(10),
             backgroundColor: '#3F1DC3',
-            alignSelf: 'flex-start',            
+            alignSelf: 'flex-start',
             borderRadius: 12,
             paddingRight: 20,
         },
@@ -41,26 +41,36 @@ export default function UserInfoBadge(props: UserInfoProps) {
 
     const date = formatDate(props.date);
 
+    let timeSection;
+
+    if (date.days !== 0) {
+        timeSection = (
+            <View style={styles.section}>
+                <Text style={[styles.text, styles.boldText]}>{date.days}</Text>
+                <Text style={styles.text}>j </Text>
+            </View>
+        );
+    } else if (date.hours !== 0) {
+        timeSection = (
+            <View style={styles.section}>
+                <Text style={[styles.text, styles.boldText]}>{date.hours}</Text>
+                <Text style={styles.text}>h </Text>
+            </View>
+        );
+    } else {
+        timeSection = (
+            <View style={styles.section}>
+                <Text style={[styles.text, styles.boldText]}>{date.minutes}</Text>
+                <Text style={styles.text}>min</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <Image source={{ uri: props.image }} style={styles.image} />
             <Text style={styles.text}>Il y a </Text>
-            {date.days !== 0 ? (
-                <View style={styles.section}>
-                    <Text style={[styles.text, styles.boldText]}>{date.days}</Text>
-                    <Text style={styles.text}>j </Text>
-                </View>
-            ) : date.hours !== 0 ? (
-                <View style={styles.section}>
-                    <Text style={[styles.text, styles.boldText]}>{date.hours}</Text>
-                    <Text style={styles.text}>h </Text>
-                </View>
-            ) : (
-                <View style={styles.section}>
-                    <Text style={[styles.text, styles.boldText]}>{date.minutes}</Text>
-                    <Text style={styles.text}>min</Text>
-                </View>
-            )}
+            {timeSection}
             <Text style={styles.text}> {'<'} </Text>
             <Text style={[styles.text, styles.boldText]}>{props.distance}</Text>
             <Text style={styles.text}>m</Text>

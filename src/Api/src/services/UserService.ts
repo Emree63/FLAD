@@ -1,5 +1,4 @@
 import { IMusic } from "../models/Music";
-import LocationSchema from "../database/LocationSchema";
 import UserSchema from "../database/UserSchema";
 import token from "./TokenService";
 import { IPerson } from "../models/Person";
@@ -7,7 +6,6 @@ import mongoose from "mongoose";
 
 class UserService {
     private user = UserSchema;
-    private location = LocationSchema;
 
     public async register(
         name: string,
@@ -52,7 +50,6 @@ class UserService {
     ): Promise<void | Error> {
         try {
             await this.user.findByIdAndRemove(id);
-            await this.location.findByIdAndRemove(id);
         } catch (error: any) {
             throw new Error(error.message);
         }

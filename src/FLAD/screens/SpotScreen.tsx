@@ -8,17 +8,20 @@ import Loading from '../components/LoadingComponent';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spot } from '../models/Spot';
-import { removeFromSpotList } from '../redux/actions/spotActions';
-import { MusicServiceProvider } from '../models/MusicServiceProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Artist from '../models/Artist';
 import { addMusicToFavorite } from '../redux/thunk/appThunk';
 import { addToPlaylist, removeSpot } from '../redux/thunk/spotThunk';
 import UserInfoBadge from '../components/UserInfoBadgeComponent';
+import { colorsDark } from '../constants/colorsDark';
+import { colorsLight } from '../constants/colorsLight';
 
 export default function SpotScreen() {
   //@ts-ignore
   const spotReducer: Spot[] = useSelector(state => state.appReducer.spot)
+   // @ts-ignore
+   const isDark = useSelector(state => state.userReducer.dark);
+   const style = isDark ? colorsDark : colorsLight;
 
   const [cards, setCards] = useState<Spot[]>(spotReducer);
   const [currentCard, setcurrentCard] = useState<Spot>(cards[cards.length - 1]);
@@ -66,7 +69,7 @@ export default function SpotScreen() {
       justifyContent: 'center',
       alignItems: 'center',
       flex: 1,
-      backgroundColor: "#141414",
+      backgroundColor: style.body,
       paddingTop: insets.top
     },
     posterBackground: {
@@ -106,7 +109,7 @@ export default function SpotScreen() {
       paddingHorizontal: 30,
       width: '100%',
       position: "absolute",
-      top: "85%"
+      top: "80%"
     },
     button: {
       alignItems: 'center',

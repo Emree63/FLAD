@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Share, Alert, SafeAreaView, Linking, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Share, Alert, Linking, FlatList, ActivityIndicator, Platform, SafeAreaView } from "react-native";
 import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle, withSpring } from "react-native-reanimated";
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export default function DetailScreen({ route }) {
             if (sound) {
                 sound.unloadAsync();
             }
-          };
+        };
     }, []);
 
     const isFocused = useIsFocused();
@@ -133,12 +133,11 @@ export default function DetailScreen({ route }) {
         mainSafeArea: {
             height: '100%',
             width: '100%',
-            paddingTop: insets.top
         },
         backgroundSection: {
             height: "100%",
             width: "100%",
-            position: "absolute"
+            position: "absolute",
         },
         back_drop: {
             height: "100%",
@@ -149,13 +148,14 @@ export default function DetailScreen({ route }) {
             height: "100%",
         },
         card: {
-            alignItems: 'center'
+            alignItems: 'center',
+            paddingTop: insets.top
         },
         cardCover: {
             width: normalize(390),
             height: normalize(390),
             borderRadius: 16,
-            resizeMode: 'stretch'
+            resizeMode: 'stretch',
         },
         section1: {
             flexDirection: "row",
@@ -204,7 +204,7 @@ export default function DetailScreen({ route }) {
             fontWeight: "bold",
             color: "white",
             fontSize: normalize(17),
-            paddingLeft: normalize(5)
+            paddingLeft: "2%"
         },
         date: {
             fontWeight: "400",
@@ -279,12 +279,10 @@ export default function DetailScreen({ route }) {
     return (
         <View>
             <View style={styles.backgroundSection}>
-
                 <Image
+                    blurRadius={Platform.OS !== 'ios' ? 10 : undefined}
                     style={styles.back_drop}
-                    source={{
-                        uri: item.cover,
-                    }}
+                    source={{ uri: item.cover }}
                 />
                 <View style={styles.overlay} />
                 <BlurView
@@ -299,7 +297,6 @@ export default function DetailScreen({ route }) {
             </View>
             <SafeAreaView style={styles.mainSafeArea}>
                 <ScrollView>
-
                     <View style={styles.card}>
                         <TouchableOpacity onPress={() => { Linking.openURL(item.url); }}>
                             <Animated.Image source={{ uri: item.cover }} style={[styles.cardCover, styleAnimatedImage]} />
@@ -325,7 +322,7 @@ export default function DetailScreen({ route }) {
                             </View>
                         </View>
 
-                        {item.trackPreviewUrl && (
+                        {!!item.trackPreviewUrl && (
                             <TouchableOpacity style={styles.playButton} onPress={play}>
                                 <View style={styles.bodyPlayButton}>
                                     <Image style={styles.imagePlayButton} source={isPlaying ? require('../assets/images/play_icon.png') : require('../assets/images/pause_icon.png')} />
@@ -348,8 +345,6 @@ export default function DetailScreen({ route }) {
                             </View>
                         </TouchableOpacity>
                     </View>
-
-
 
                     <View style={{ paddingTop: normalize(25) }}>
                         <Text style={styles.similarTitle} >Similaire</Text>

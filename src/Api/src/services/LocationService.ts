@@ -2,15 +2,15 @@ import { UserLocation } from '../models/Location';
 import LocationSchema from "../database/LocationSchema";
 
 class LocationService {
-    private locations = LocationSchema;
+    private location = LocationSchema;
     public async getNearUser(userId: string, musicId: string, latitude: number, longitude: number) {
-        await this.locations.findOneAndUpdate(
+        await this.location.findOneAndUpdate(
             { userId },
             { userId, musicId, latitude, longitude },
             { upsert: true }
         );
 
-        const snapshot = await this.locations.find({ userId: { $ne: userId } });
+        const snapshot = await this.location.find({ userId: { $ne: userId } });
         if (!snapshot.length) {
             console.log('No matching documents.');
             return;
@@ -50,6 +50,17 @@ class LocationService {
             return dist;
         }
     }
+
+    public async delete(
+        id: string
+    ): Promise<void | Error> {
+        try {
+            await this.location.findByIdAndRemove(id);
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
 }
 
 export default LocationService;

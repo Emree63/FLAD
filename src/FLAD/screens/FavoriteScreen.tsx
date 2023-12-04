@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, SectionList, TouchableOpacity, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SectionList, TouchableOpacity, RefreshControl } from 'react-native';
 import CardMusic from '../components/CardMusicComponent';
 import normalize from '../components/Normalize';
 import { Svg, Path } from 'react-native-svg';
 import FladyComponent from '../components/FladyComponent';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
@@ -12,7 +12,6 @@ import { getFavoriteMusic } from '../redux/thunk/appThunk';
 import { Spot } from '../models/Spot';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { resetNbAddedFavoriteMusic } from '../redux/actions/appActions';
-import { useFocusEffect } from '@react-navigation/native';
 
 export default function FavoriteScreen() {
 
@@ -125,7 +124,7 @@ export default function FavoriteScreen() {
     });
 
     return (
-        <SafeAreaView style={styles.mainSafeArea}>
+        <View style={styles.mainSafeArea}>
             <View style={styles.titleContainer}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Favoris</Text>
@@ -176,6 +175,6 @@ export default function FavoriteScreen() {
                 nestedScrollEnabled={true}
 
             />
-        </SafeAreaView>
+        </View>
     );
 };

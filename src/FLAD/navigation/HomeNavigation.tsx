@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Platform } from 'react-native';
 import { faUser, faEnvelope, faHeart, faMusic } from "@fortawesome/free-solid-svg-icons"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import FavoriteNavigation from './FavoriteNavigation';
 import SettingNavigation from './SettingNavigation';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -16,6 +16,7 @@ import * as Location from 'expo-location';
 import { getSpotList } from '../redux/thunk/spotThunk';
 import Music from '../models/Music';
 import normalize from '../components/Normalize';
+import { BlurView } from 'expo-blur';
 
 export default function HomeNavigation() {
   //@ts-ignore
@@ -113,16 +114,25 @@ export default function HomeNavigation() {
     }
   }, [errorEmptyMusic]);
 
+  const MenuBlur = () => {
+    return (
+      <BlurView
+        intensity={30}
+        style={{ flex: 1, backgroundColor: isDark ? 'rgba(20, 20, 20, 0.9)' : 'rgba(255, 255, 255, 0.7)' }}
+      />
+    );
+  };
 
   return (
-    // @ts-ignore
-    <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+    <NavigationContainer>
       <BottomTabNavigator.Navigator
         initialRouteName="Spots"
         screenOptions={{
+          tabBarBackground: Platform.OS === 'ios' ? () => <MenuBlur /> : undefined,
           tabBarActiveTintColor: isDark ? "white" : "rgb(255, 45, 85)",
           tabBarStyle: {
-            backgroundColor: isDark ? "rgb(46,46,46)" : "white",
+            position: 'absolute',
+            borderTopColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(50, 50, 50, 0.07)',
           },
         }}>
         <BottomTabNavigator.Screen name="Spots" component={SpotNavigation}
@@ -138,7 +148,7 @@ export default function HomeNavigation() {
               maxWidth: 12.5,
               marginTop: 3,
               maxHeight: 13,
-              borderRadius: 7,
+              borderRadius: 6.5,
               fontSize: normalize(10),
               lineHeight: 12,
             },

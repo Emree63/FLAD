@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
@@ -48,7 +48,7 @@ export default function ConversationScreen() {
     })
 
     return (
-        <SafeAreaView style={styles.mainSafeArea}>
+        <View style={styles.mainSafeArea}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Messages</Text>
                 <Text style={styles.description}>Retrouvez ici les discussions</Text>
@@ -65,6 +65,6 @@ export default function ConversationScreen() {
                     </TouchableOpacity>
                 )}
             />
-        </SafeAreaView>
+        </View>
     )
 }

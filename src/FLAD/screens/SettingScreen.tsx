@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
@@ -272,7 +272,7 @@ export default function SettingScreen() {
     })
     return (
         <DismissKeyboard>
-            <SafeAreaView style={styles.mainSafeArea}>
+            <View style={styles.mainSafeArea}>
                 <ScrollView>
                     <View style={styles.container}>
                         <Text style={styles.title}>Réglages</Text>
@@ -384,7 +384,7 @@ export default function SettingScreen() {
                         </View>
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         </DismissKeyboard>
     );
 };

@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
 import normalize from '../components/Normalize';
 import * as ImagePicker from 'expo-image-picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { deleteUser } from '../redux/thunk/authThunk';
@@ -177,10 +177,13 @@ export default function ProfilScreen() {
         }
     }, [errorUpdate]);
 
+    const insets = useSafeAreaInsets();
+
     const styles = StyleSheet.create({
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
+            paddingTop: insets.top
         },
         container: {
             marginTop: 20,
@@ -393,7 +396,7 @@ export default function ProfilScreen() {
 
     return (
         <DismissKeyboard>
-            <SafeAreaView style={styles.mainSafeArea}>
+            <View style={styles.mainSafeArea}>
                 <ScrollView>
                     <View style={styles.container}>
                         <TouchableOpacity
@@ -505,7 +508,7 @@ export default function ProfilScreen() {
                         </Modal>
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         </DismissKeyboard>
     );
 };

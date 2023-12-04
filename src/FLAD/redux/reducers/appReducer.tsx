@@ -9,7 +9,7 @@ const initialState = {
   favoriteMusic: [] as Spot[],
   userCurrentMusic: null,
   nbAddedFavoriteMusic: 0,
-  oldSpot: [] as String[],
+  oldSpot: [] as string[],
 }
 
 const appReducer = (state = initialState, action: any) => {

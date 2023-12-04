@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
-import Music from '../model/Music';
+import Music from '../models/Music';
 import normalize from './Normalize';
 
 export interface RenderCellProps {
@@ -18,7 +18,7 @@ export const SimilarMusic = (props: RenderCellProps) => {
 const styles = StyleSheet.create({
 
     similarContainer: {
-        marginHorizontal: normalize(7)
+        marginHorizontal: 6
     },
     similarTitle: {
         color: "#DADADA",
