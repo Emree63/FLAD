@@ -86,10 +86,9 @@ export default function SettingScreen() {
         mainSafeArea: {
             flex: 1,
             backgroundColor: style.body,
-            paddingTop: insets.top
         },
         container: {
-            marginTop: 30,
+            marginTop: insets.top + 30,
             marginHorizontal: normalize(25),
             paddingBottom: normalize(400),
             flex: 1,

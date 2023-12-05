@@ -118,7 +118,7 @@ export default function HomeNavigation() {
     return (
       <BlurView
         intensity={30}
-        style={{ flex: 1, backgroundColor: isDark ? 'rgba(20, 20, 20, 0.9)' : 'rgba(255, 255, 255, 0.7)' }}
+        style={{ flex: 1, backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.7)' }}
       />
     );
   };

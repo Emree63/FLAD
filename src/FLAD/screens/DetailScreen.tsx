@@ -295,7 +295,7 @@ export default function DetailScreen({ route }) {
                     />
                 </BlurView>
             </View>
-            <SafeAreaView style={styles.mainSafeArea}>
+            <View style={styles.mainSafeArea}>
                 <ScrollView>
                     <View style={styles.card}>
                         <TouchableOpacity onPress={() => { Linking.openURL(item.url); }}>
@@ -368,7 +368,7 @@ export default function DetailScreen({ route }) {
                             />}
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         </View>
     );
 };
