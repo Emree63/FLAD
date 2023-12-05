@@ -33,6 +33,7 @@ steps:
         CONTAINERNAME: mqtt
         COMMAND: create
         OVERWRITE: true
+        ADMINS: emrekartal,davidd_almeida
     depends_on: [ docker-build-and-push ]
 
   - name: code-analysis
