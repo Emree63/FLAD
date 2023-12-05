@@ -29,9 +29,8 @@ steps:
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
-        CODEFIRST_CLIENTDRONE_ENV_TYPE: STUB
         IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
-        CONTAINERNAME: mqtt_flad
+        CONTAINERNAME: mqtt
         COMMAND: create
         OVERWRITE: true
     depends_on: [ docker-build-and-push ]
