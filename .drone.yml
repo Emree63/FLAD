@@ -22,9 +22,9 @@ steps:
       registry: hub.codefirst.iut.uca.fr
       repo: hub.codefirst.iut.uca.fr/david.d_almeida/flad
       username:
-        from_secret: SECRET_REGISTRY_USERNAME
+        from_secret: SECRET_REGISTRY_USERNAME_MQTT
       password:
-        from_secret: SECRET_REGISTRY_PASSWORD   
+        from_secret: SECRET_REGISTRY_PASSWORD_MQTT
 
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
