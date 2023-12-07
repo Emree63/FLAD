@@ -35,7 +35,7 @@ steps:
 
 kind: pipeline
 type: docker
-name: FLAD-API
+name: FLAD-API-MQTT
 
 trigger:
   event:
@@ -71,6 +71,28 @@ steps:
         OVERWRITE: true
         ADMINS: emrekartal,davidd_almeida,
     depends_on: [ docker-build-and-push ]
+
+  - name: docker-build-and-push-mqtt
+    image: plugins/docker
+    settings:
+      dockerfile: src/Mqtt/Dockerfile
+      context: src/Mqtt
+      registry: hub.codefirst.iut.uca.fr
+      repo: hub.codefirst.iut.uca.fr/david.d_almeida/flad
+      username:
+        from_secret: SECRET_REGISTRY_USERNAME_MQTT
+      password:
+        from_secret: SECRET_REGISTRY_PASSWORD_MQTT
+
+  - name: deploy-container-mqtt
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+        IMAGENAME: hub.codefirst.iut.uca.fr/david.d_almeida/flad:latest
+        CONTAINERNAME: mqtt
+        COMMAND: create
+        OVERWRITE: true
+        ADMINS: emrekartal,davidd_almeida
+    depends_on: [ docker-build-and-push-mqtt ]
 
   - name: code-analysis
     image: node:latest
