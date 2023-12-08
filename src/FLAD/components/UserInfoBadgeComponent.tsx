@@ -17,7 +17,7 @@ export default function UserInfoBadge(props: UserInfoProps) {
             paddingHorizontal: normalize(10),
             backgroundColor: '#3F1DC3',
             alignSelf: 'flex-start',
-            borderRadius: 12,
+            borderRadius: 10,
             paddingRight: 20,
         },
         section: {

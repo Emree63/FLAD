@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import IController from './interfaces/IController';
-import HttpException from '../exception/HttpException';
 import User from '../models/User';
 import UserService from '../services/UserService';
 import validator from '../middlewares/UserValidation'
@@ -365,6 +364,38 @@ class UserController implements IController {
 
         /**
          * @swagger
+         * /api/user/spotify:
+         *   put:
+         *     summary: Update the spotify account
+         *     description: Update the spotify account of the authenticated user
+         *     tags:
+         *       - User
+         *     security:
+         *       - bearerAuth: []
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             properties:
+         *               tokenSpotify:
+         *                 type: string
+         *                 description: Spotify token
+         *     responses:
+         *       200:
+         *         description: Spotify account updated successfully
+         *       401:
+         *         description: Unauthorized - Invalid or missing authentication token
+         *       409:
+         *         description: Conflict - The provided token is already in use by another user
+         *       500:
+         *         description: Internal Server Error - Spotify account not authorized or not found
+         */
+        this.router.put(`${this.path}/spotify`, authenticator, this.setSpotify);
+
+        /**
+         * @swagger
          * /api/user/image:
          *   put:
          *     summary: Update the profile image of the authenticated user
@@ -430,8 +461,7 @@ class UserController implements IController {
 
     private register = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
 
         let access_token;
@@ -489,36 +519,33 @@ class UserController implements IController {
             );
             res.status(201).json({ token });
         } catch (error: any) {
-            next(new HttpException(409, error.message));
+            res.status(409).json(error.message);
         }
     };
 
     private login = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { email, password } = req.body;
             const token = await this.userService.login(email, password);
             res.status(200).json({ token });
         } catch (error: any) {
-            next(new HttpException(400, error.message));
+            res.status(400).json(error.message)
         }
     };
 
     private getUser = (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Response | void => {
         res.status(200).send({ data: req.user });
     };
 
     private getUsers = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         const userIds = req.query.ids as string;
 
@@ -538,22 +565,21 @@ class UserController implements IController {
 
     private deleteUser = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
             await this.userService.delete(_id);
+            await this.locationService.delete(_id);
             res.status(204).send();
         } catch (error: any) {
-            next(new HttpException(404, error.message));
+            res.status(404).json(error.message)
         }
     };
 
     private getUserNext = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const longitude = Number(req.query.longitude);
@@ -568,14 +594,13 @@ class UserController implements IController {
             res.status(201).send(data);
         }
         catch (error: any) {
-            next(new HttpException(400, 'Cannot create get netUser: ' + error.message));
+            res.status(400).json(error.message)
         }
     }
 
     private deleteMusic = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -593,14 +618,13 @@ class UserController implements IController {
             }
 
         } catch (error: any) {
-            next(new HttpException(404, error.message));
+            res.status(404).json(error.message)
         }
     }
 
     private addMusic = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -616,28 +640,26 @@ class UserController implements IController {
             await this.userService.addMusic(_id, music);
             res.status(201).send({ music });
         } catch (error: any) {
-            next(new HttpException(400, error.message));
+            res.status(400).json(error.message)
         }
     }
 
     private getMusics = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const userId: string = req.user.id;
             const musics = await this.userService.getMusics(userId);
             return res.status(200).json({ musics });
         } catch (error: any) {
-            next(new HttpException(400, error.message));
+            res.status(400).json(error.message)
         }
     }
 
     private setName = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -652,14 +674,13 @@ class UserController implements IController {
 
             res.status(200).json({ message: 'Name updated successfully' });
         } catch (error: any) {
-            next(new HttpException(409, error.message));
+            res.status(409).json(error.message)
         }
     }
 
     private setEmail = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -674,14 +695,74 @@ class UserController implements IController {
 
             res.status(200).json({ message: 'Email updated successfully' });
         } catch (error: any) {
-            next(new HttpException(409, error.message));
+            res.status(409).json(error.message)
+        }
+    }
+
+    private setSpotify = async (
+        req: Request,
+        res: Response
+    ): Promise<Response | void> => {
+        let access_token;
+        let idAccount: string;
+        let image: string;
+        const { _id, idSpotify } = req.user;
+        const { tokenSpotify } = req.body;
+
+        if (!tokenSpotify) {
+            return res.status(400).json({ error: 'TokenSpotify is missing in the request.' });
+        }
+
+        const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080/api';
+        const refreshUrl = `${apiBaseUrl}/spotify/refresh?refresh_token=${tokenSpotify}`;
+        try {
+            const authOptions = {
+                method: 'GET',
+                url: refreshUrl,
+                json: true
+            };
+            const authResponse = await axios(authOptions);
+            if (authResponse.status === 200) {
+                access_token = authResponse.data.access_token;
+                const headers = {
+                    Authorization: `Bearer ${access_token}`,
+                };
+                const resp = await axios.get('https://api.spotify.com/v1/me', { headers });
+                if (resp.status == 200) {
+                    const images = resp.data.images;
+                    idAccount = resp.data.id;
+                    if (idSpotify === idAccount) {
+                        return res.status(400).json({ error: 'idSpotify cannot be the same as idAccount.' });
+                    }
+                    if (images && images.length > 0) {
+                        images.sort((a: any, b: any) => b.height - a.height);
+                        image = images[0].url;
+                    }
+                    else {
+                        const imagePath = './src/assets/images/default_user.png';
+                        const imageBuffer = fs.readFileSync(imagePath);
+                        const base64Image = 'data:image/png;base64,' + base64js.fromByteArray(imageBuffer);
+                        image = base64Image
+                    }
+                }
+            }
+        } catch (error: any) {
+            console.log(error);
+            res.status(500).send("Internal Server Error: Unable to authenticate with Spotify");
+            return;
+        }
+        try {
+            await this.userService.setSpotify(_id, tokenSpotify, idAccount, image);
+
+            res.status(200).json({ message: 'Spotify token updated successfully' });
+        } catch (error: any) {
+            res.status(409).json(error.message)
         }
     }
 
     private setImage = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -691,14 +772,13 @@ class UserController implements IController {
 
             res.status(200).json({ message: 'Image updated successfully' });
         } catch (error: any) {
-            next(new HttpException(500, error.message));
+            res.status(500).json(error.message)
         }
     }
 
     private setPassword = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<Response | void> => {
         try {
             const { _id } = req.user;
@@ -708,7 +788,7 @@ class UserController implements IController {
 
             res.status(200).json({ message: 'Password updated successfully' });
         } catch (error: any) {
-            next(new HttpException(500, error.message));
+            res.status(500).json(error.message)
         }
     }
 }

@@ -64,7 +64,7 @@ class UserService {
             if (validIds.length === 0) {
                 return [];
             }
-    
+
             return await this.user.find({ _id: { $in: validIds } })
                 .select('_id name image')
         } catch (error: any) {
@@ -123,6 +123,21 @@ class UserService {
             await this.user.findByIdAndUpdate(
                 userId,
                 { email: newEmail }
+            );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    public async setSpotify(userId: string, tokenSpotify: string, idSpotify: string, image: string): Promise<void | Error> {
+        try {
+            await this.user.findByIdAndUpdate(
+                userId,
+                {
+                    tokenSpotify: tokenSpotify,
+                    idSpotify: idSpotify,
+                    image: image
+                }
             );
         } catch (error) {
             throw new Error(error.message);

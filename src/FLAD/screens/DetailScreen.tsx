@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Share, Alert, Linking, FlatList, ActivityIndicator, Platform, SafeAreaView } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Share, Alert, Linking, FlatList, ActivityIndicator, Platform } from "react-native";
 import Animated, { interpolate, SensorType, useAnimatedSensor, useAnimatedStyle, withSpring } from "react-native-reanimated";
 import { Audio } from 'expo-av';
 import { useEffect, useState } from "react";

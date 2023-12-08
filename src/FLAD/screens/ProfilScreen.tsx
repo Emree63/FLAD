@@ -5,15 +5,17 @@ import { Svg, Path } from 'react-native-svg';
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
+import * as AuthSession from 'expo-auth-session';
 import normalize from '../components/Normalize';
 import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import { deleteUser } from '../redux/thunk/authThunk';
-import { setImage, setMail, setName, setPassword } from '../redux/thunk/userThunk';
+import { setImage, setMail, setName, setPassword, setSpotify } from '../redux/thunk/userThunk';
 import { setErrorUpdate } from '../redux/actions/userActions';
 import * as FileSystem from 'expo-file-system';
+import configs from '../constants/config';
 
 // @ts-ignore
 const DismissKeyboard = ({ children }) => (
@@ -84,6 +86,31 @@ export default function ProfilScreen() {
         });
         return `data:image/jpg;base64,${base64}`;
     };
+
+    const submitSpotify = async () => {
+        const token = await getSpotifyToken();
+        if (token !== undefined) {
+            //@ts-ignore
+            dispatch(setSpotify(token));
+        }
+    };
+
+    const getSpotifyToken = async () => {
+        try {
+            const redirectUri = AuthSession.makeRedirectUri();
+            const result: any = await AuthSession.startAsync({
+                authUrl: configs.API_URL + '/spotify/exchange?' + 'redirectUrl=' +
+                    encodeURIComponent(redirectUri)
+            })
+            const {
+                refresh_token: refresh_token,
+            } = result.params
+            return refresh_token;
+        } catch (error) {
+            Alert.alert("Erreur modification", "La connexion à Spotify à échouer.");
+            return;
+        }
+    }
 
     const submitUsername = () => {
         const isUsernameValid = /^\w+$/.test(username);
@@ -250,7 +277,7 @@ export default function ProfilScreen() {
             backgroundColor: style.Card,
             borderRadius: 13,
             alignItems: 'flex-start',
-            marginBottom: normalize(45)
+            marginBottom: normalize(35)
         },
         textOption: {
             fontSize: normalize(18),
@@ -269,6 +296,11 @@ export default function ProfilScreen() {
         textOptionPassword: {
             fontSize: normalize(18),
             color: '#1c77fb',
+            marginLeft: 12
+        },
+        textOptionSpotify: {
+            fontSize: normalize(18),
+            color: '#1DB954',
             marginLeft: 12
         },
         buttonDeleteOption: {
@@ -314,7 +346,22 @@ export default function ProfilScreen() {
             backgroundColor: style.Card,
             borderRadius: 13,
             alignItems: 'flex-start',
+            marginBottom: normalize(30)
+        },
+        spotifyOption: {
+            paddingVertical: 9,
+            paddingLeft: normalize(10),
+            backgroundColor: style.Card,
+            borderRadius: 13,
+            alignItems: 'flex-start',
             marginBottom: normalize(45)
+        },
+        spotifyView: {
+            backgroundColor: '#1DB954',
+            padding: 5,
+            paddingHorizontal: 5,
+            borderRadius: 10,
+            marginLeft: 10
         },
         passwordIcon: {
             backgroundColor: '#8e8d92',
@@ -322,6 +369,10 @@ export default function ProfilScreen() {
             paddingHorizontal: 8,
             borderRadius: 10,
             marginLeft: 10
+        },
+        spotifyIcon: {
+            width: 20,
+            height: 20
         },
         optionView: {
             flexDirection: 'row',
@@ -425,7 +476,7 @@ export default function ProfilScreen() {
                                 <TextInput placeholderTextColor='#828288' value={username}
                                     onChangeText={setUsername} placeholder={userCurrent.name} style={styles.textInputId} />
                                 {username.length >= 5 && (
-                                    <TouchableOpacity onPress={() => submitUsername()}>
+                                    <TouchableOpacity onPress={submitUsername}>
                                         <Image source={require("../assets/images/confirm_icon.png")} style={{ width: normalize(25), height: normalize(25) }} />
                                     </TouchableOpacity>
                                 )}
@@ -435,7 +486,7 @@ export default function ProfilScreen() {
                                 <TextInput placeholderTextColor='#828288' value={email}
                                     onChangeText={setEmail} placeholder={userCurrent.email} style={styles.textInputMail} />
                                 {email.length >= 7 && (
-                                    <TouchableOpacity onPress={() => submitEmail()}>
+                                    <TouchableOpacity onPress={submitEmail}>
                                         <Image source={require("../assets/images/confirm_icon.png")} style={{ width: normalize(25), height: normalize(25) }} />
                                     </TouchableOpacity>
                                 )}
@@ -455,13 +506,24 @@ export default function ProfilScreen() {
                             </TouchableOpacity>
                         </View>
 
+                        <View style={styles.spotifyOption}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={submitSpotify}>
+                                <View style={styles.spotifyView}>
+                                    <Image style={styles.spotifyIcon} source={require("../assets/images/spotify_icon.png")} />
+                                </View>
+                                <View style={styles.optionView}>
+                                    <Text style={styles.textOptionSpotify}>Changer de compte Spotify</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+
                         <View style={styles.deleteOption}>
                             <View style={styles.buttonDeleteOption}>
                                 <Svg width="20" height="20" viewBox="0 0 29 29">
                                     <Path d="M10.8157 22.6797C10.3586 22.6797 10.0657 22.4101 10.0422 21.9648L9.69067 9.0625C9.67895 8.62891 9.97192 8.34765 10.4407 8.34765C10.8743 8.34765 11.179 8.61719 11.1907 9.05078L11.5657 21.9648C11.5774 22.3984 11.2727 22.6797 10.8157 22.6797ZM14.3899 22.6797C13.9328 22.6797 13.6164 22.3984 13.6164 21.9648V9.0625C13.6164 8.62891 13.9328 8.34765 14.3899 8.34765C14.8469 8.34765 15.175 8.62891 15.175 9.0625V21.9648C15.175 22.3984 14.8469 22.6797 14.3899 22.6797ZM17.9758 22.6797C17.5188 22.6797 17.2141 22.3984 17.2258 21.9648L17.5891 9.0625C17.6008 8.61719 17.9055 8.34765 18.3391 8.34765C18.8078 8.34765 19.1008 8.62891 19.0891 9.0625L18.7375 21.9648C18.7141 22.4101 18.4211 22.6797 17.9758 22.6797ZM9.24536 5.5H11.1086V2.99219C11.1086 2.32422 11.5774 1.89062 12.2805 1.89062H16.4758C17.1789 1.89062 17.6477 2.32422 17.6477 2.99219V5.5H19.5109V2.875C19.5109 1.17578 18.4094 0.144531 16.6047 0.144531H12.1516C10.3469 0.144531 9.24536 1.17578 9.24536 2.875V5.5ZM3.92505 6.4375H24.8664C25.3469 6.4375 25.7336 6.02734 25.7336 5.54687C25.7336 5.06641 25.3469 4.66797 24.8664 4.66797H3.92505C3.4563 4.66797 3.04614 5.06641 3.04614 5.54687C3.04614 6.03906 3.4563 6.4375 3.92505 6.4375ZM9.0227 26.2422H19.7688C21.4445 26.2422 22.5695 25.1523 22.6516 23.4765L23.4719 6.19141H5.30786L6.13989 23.4883C6.22192 25.164 7.32348 26.2422 9.0227 26.2422Z" fill="white" fill-opacity="0.85" />
                                 </Svg>
                             </View>
-                            <TouchableOpacity onPress={() => deleteAccount()}>
+                            <TouchableOpacity onPress={deleteAccount}>
                                 <Text style={styles.textDeleteOption}>Supprimer le compte</Text>
                             </TouchableOpacity>
                         </View>
@@ -476,7 +538,7 @@ export default function ProfilScreen() {
                                     <Text style={styles.titlePassword}>Mot de passe</Text>
                                     <TouchableOpacity
                                         disabled={newPassword.length < 6 || newPassword !== confirmPassword || oldPassword.length < 6}
-                                        onPress={() => submitPassword()}>
+                                        onPress={submitPassword}>
                                         <View>
                                             <Text style={[styles.updateText, {
                                                 color: newPassword.length >= 6 && newPassword === confirmPassword && oldPassword.length >= 6 ? '#1c77fb' : '#404040',

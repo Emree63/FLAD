@@ -89,7 +89,6 @@ export default function RegisterScreen() {
           encodeURIComponent(redirectUri)
       })
       const {
-        access_token: access_token,
         refresh_token: refresh_token,
       } = result.params
       setSpotifyToken(refresh_token)
@@ -98,7 +97,6 @@ export default function RegisterScreen() {
       return;
     }
   }
-
 
   return (
     <DismissKeyboard>

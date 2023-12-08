@@ -1,6 +1,5 @@
 import IController from './interfaces/IController';
-import { Router, Request, Response, NextFunction } from 'express';
-import HttpException from '../exception/HttpException';
+import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -98,8 +97,7 @@ class SpotifyController implements IController {
 
   private login = async (
     req: Request,
-    res: Response,
-    next: NextFunction
+    res: Response
   ): Promise<Response | void> => {
     try {
       const redirectResponse = req.query.redirectUrl ? req.query.redirectUrl : req.headers.referer;
@@ -112,14 +110,13 @@ class SpotifyController implements IController {
           redirect_uri: this.CALLBACK,
         }));
     } catch (error) {
-      next(new HttpException(400, "Cannot connect: " + error.message));
+      res.status(400).send('Cannot connect: ' + error.message);
     }
   };
 
   private getRefreshToken = async (
     req: Request,
-    res: Response,
-    next: NextFunction
+    res: Response
   ): Promise<Response | void> => {
     const params = req.query.refresh_token;
     if (!req.query.refresh_token) {
@@ -158,8 +155,7 @@ class SpotifyController implements IController {
 
   private getAccessToken = async (
     req: Request,
-    res: Response,
-    next: NextFunction
+    res: Response
   ): Promise<Response | void> => {
     let code = req.query.code;
     let storedRedirectUri = req.cookies ? req.cookies[this.clientRedirect] : null;
@@ -192,7 +188,7 @@ class SpotifyController implements IController {
           }));
       }
     } catch (error) {
-      next(new HttpException(400, 'Error connection: ' + error.message));
+      res.status(400).send('Error connection: ' + error.message);
     }
   };
 }

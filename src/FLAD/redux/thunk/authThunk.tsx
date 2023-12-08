@@ -39,7 +39,18 @@ export const register = (registerCredential: RegisterCredentials) => {
           dispatch(setErrorSignup("Email non valide !"));
           break;
         case 409:
-          dispatch(setErrorSignup("Email, Spotify ou nom déjà utilisé !"));
+          const duplicateFields = error.response.data || [];
+          let errorMessage = "Email, Spotify ou nom déjà utilisé !";
+          if (duplicateFields.includes('idSpotify')) {
+            errorMessage = "Compte Spotify déjà utilisé !";
+          }
+          if (duplicateFields.includes('name')) {
+            errorMessage = "Nom déjà utilisé !";
+          }
+          if (duplicateFields.includes('email')) {
+            errorMessage = "Email déjà utilisé !";
+          }
+          dispatch(setErrorSignup(errorMessage));
           break;
         case 500:
           dispatch(setErrorSignup("Compte Spotify non autorisé !"));

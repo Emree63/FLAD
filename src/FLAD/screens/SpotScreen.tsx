@@ -90,11 +90,12 @@ export default function SpotScreen() {
     },
     header: {
       left: width / 11,
-      top: '2.5%',
+      top: '2.2%',
     },
     titleLabel: {
       fontStyle: 'normal',
       color: "#FFFFFF",
+      marginTop: 2,
       fontSize: normalize(40),
       fontWeight: "800",
     },

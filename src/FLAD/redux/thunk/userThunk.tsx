@@ -3,6 +3,7 @@ import configs from "../../constants/config";
 import { setDarkMode, setErrorUpdateMessage, userLogin } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
 import { UserMapper } from "../../models/mapper/UserMapper";
+import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 
 export const darkMode = (value: boolean) => {
     //@ts-ignore
@@ -112,6 +113,41 @@ export const setImage = (image: string) => {
             switch (error.response.status) {
                 case 413:
                     dispatch(setErrorUpdateMessage("Taille de l'image trop grande :\n" + image.length / 1000 + " Ko. Max 100 Ko."))
+                    break;
+                default:
+                    console.error("Error : " + error.message);
+                    break;
+            }
+        }
+    }
+}
+
+export const setSpotify = (tokenSpotify: string) => {
+    //@ts-ignore
+    return async dispatch => {
+        try {
+            let token: string | null = await SecureStore.getItemAsync(configs.key);
+            const headers = {
+                'Authorization': 'Bearer ' + token
+            };
+            await axios.put(configs.API_URL + '/user/spotify', { tokenSpotify }, { headers });
+
+            const user = await axios.get(
+                configs.API_URL + '/user',
+                { headers }
+            )
+            MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
+            dispatch(userLogin(UserMapper.toModel(user.data.data)));
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 400:
+                    dispatch(setErrorUpdateMessage("Ce compte Spotify est déjà associé à votre compte."))
+                    break;
+                case 409:
+                    dispatch(setErrorUpdateMessage("Compte Spotify déjà utilisé !"))
+                    break;
+                case 500:
+                    dispatch(setErrorUpdateMessage("Compte Spotify non autorisé !"));
                     break;
                 default:
                     console.error("Error : " + error.message);
