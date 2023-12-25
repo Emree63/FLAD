@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import normalize from './Normalize';
+import Message from '../models/Message';
 
 type FriendProps = {
     image: string;
     name: string;
-    lastMessage: string;
+    lastMessage: Message;
 }
 
 export default function Friend(props: FriendProps) {
@@ -67,14 +68,41 @@ export default function Friend(props: FriendProps) {
         }
     })
 
+    const getTimeDifferenceString = (date: Date): string => {
+        const now = new Date();
+        const differenceInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        const intervals = {
+            an: 31536000,
+            mois: 2592000,
+            sem: 604800,
+            jour: 86400,
+            heure: 3600,
+            min: 60,
+        };
+
+        for (const [intervalName, seconds] of Object.entries(intervals)) {
+            const intervalCount = Math.floor(differenceInSeconds / seconds);
+            if (intervalCount > 0) {
+                if (intervalName === 'mois' || intervalName === 'min') {
+                    return `il y a ${intervalCount} ${intervalName}`;
+                } else {
+                    return `il y a ${intervalCount} ${intervalName}${intervalCount !== 1 ? 's' : ''}`;
+                }
+            }
+        }
+
+        return 'À l’instant';
+    };
+
     return (
         <View style={styles.container}>
             <Image style={styles.image} source={source} />
             <View style={styles.profilContainer}>
                 <Text style={styles.name} numberOfLines={1}>{props.name}</Text>
                 <View style={styles.lastMessageContainer}>
-                    <Text style={styles.lastMessage} numberOfLines={1}>{props.lastMessage}</Text>
-                    <Text style={styles.time}> · 1sem</Text>
+                    <Text style={styles.lastMessage} numberOfLines={1}>{props.lastMessage.content}</Text>
+                    <Text style={styles.time}> · {getTimeDifferenceString(props.lastMessage.date)}</Text>
                 </View>
             </View>
             <Image style={styles.button} source={require('../assets/images/chevron_right_icon.png')} />

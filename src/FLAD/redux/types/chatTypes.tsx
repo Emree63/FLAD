@@ -1,0 +1,4 @@
+export const chatTypes = {
+    FETCH_CONVERSATIONS: 'FETCH_CONVERSATIONS',
+    FETCH_MESSAGES: 'FETCH_MESSAGES',
+}

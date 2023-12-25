@@ -1,4 +1,7 @@
+import Conversation from "../../models/Conversation";
+import Message from "../../models/Message";
 import { Spot } from "../../models/Spot";
+import { chatTypes } from "../types/chatTypes";
 import { favoritesTypes } from "../types/favoritesTypes";
 import { spotifyTypes } from "../types/spotifyTypes";
 import { spotTypes } from "../types/spotTypes";
@@ -10,6 +13,8 @@ const initialState = {
   userCurrentMusic: null,
   nbAddedFavoriteMusic: 0,
   oldSpot: [] as string[],
+  conversations: [] as Conversation[],
+  messages: [] as Message[]
 }
 
 const appReducer = (state = initialState, action: any) => {
@@ -23,6 +28,10 @@ const appReducer = (state = initialState, action: any) => {
       };
     case favoritesTypes.RESET_NB_ADDED_FAVORITE_MUSIC:
       return { ...state, nbAddedFavoriteMusic: 0 };
+    case chatTypes.FETCH_CONVERSATIONS:
+      return { ...state, conversations: action.payload };
+    case chatTypes.FETCH_MESSAGES:
+      return { ...state, messages: action.payload };
     case spotTypes.FETCH_SPOT:
       const uniqueSpots = action.payload.filter((spot: Spot) => {
         const spotKey = `${spot.user}_${spot.music.id}`;

@@ -3,7 +3,7 @@ import Music from '../models/Music';
 import normalize from './Normalize';
 
 export interface RenderCellProps {
-    music : Music;
+    music: Music;
 }
 export const SimilarMusic = (props: RenderCellProps) => {
     return (

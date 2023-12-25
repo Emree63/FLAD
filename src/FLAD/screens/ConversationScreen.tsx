@@ -1,25 +1,39 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
-import { useSelector } from "react-redux";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, RefreshControl } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { colorsDark } from '../constants/colorsDark';
 import { colorsLight } from '../constants/colorsLight';
 import Friend from "../components/FriendComponent";
 import normalize from '../components/Normalize';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useCallback, useEffect, useState } from "react";
+import { getConversations } from "../redux/thunk/chatThunk";
 
 export default function ConversationScreen() {
 
+    //@ts-ignore
+    const friends = useSelector(state => state.appReducer.conversations);
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(getConversations());
+    }, []);
+
+    const handleRefresh = () => {
+        setRefreshing(true);
+        //@ts-ignore
+        dispatch(getConversations());
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 700);
+    };
 
     const navigation = useNavigation();
-
-    const friends = [
-        { id: 1, name: "Lucas", lastMessage: "J'en ai marre de provot", source: "https://i1.sndcdn.com/artworks-ncJnbnDbNOFd-0-t500x500.jpg" },
-        { id: 2, name: "Louison", lastMessage: "Tu vien piscine ?", source: "https://i1.sndcdn.com/artworks-ncJnbnDbNOFd-0-t500x500.jpg" },
-        { id: 3, name: "Dave", lastMessage: "Ok c noté !", source: "https://img.lemde.fr/2019/04/05/0/0/960/960/664/0/75/0/18299d3_tUvp2AZPH_jnsIL2ypVFGUro.jpg" },
-        { id: 4, name: "Valentin", lastMessage: "Haha react native c incroyable !!!", source: "https://i1.sndcdn.com/artworks-ncJnbnDbNOFd-0-t500x500.jpg" },
-    ];
 
     const style = isDark ? colorsDark : colorsLight;
 
@@ -44,6 +58,18 @@ export default function ConversationScreen() {
             fontSize: normalize(20),
             color: '#787878',
             marginBottom: 5
+        },
+        body: {
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            flex: 1, 
+            marginHorizontal: "7%"
+        },
+        text: {
+            color: style.Text, 
+            fontSize: normalize(18), 
+            opacity: 0.8, 
+            textAlign: 'center'
         }
     })
 
@@ -53,18 +79,33 @@ export default function ConversationScreen() {
                 <Text style={styles.title}>Messages</Text>
                 <Text style={styles.description}>Retrouvez ici les discussions</Text>
             </View>
-            <FlatList
-                style={{ marginTop: 10 }}
-                data={friends}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
+            {friends.length === 0 ? (
+                <View style={styles.body}>
+                    <Text style={ styles.text }>
+                        Pas de conversations pour le moment. 🥲{'\n'}
+                        Va liker des musiques pour créer des conversations avec des gens dans le monde ! 🔥🎆
+                    </Text>
+                </View>
+            ) : (
+                <FlatList
+                    style={{ marginTop: 10 }}
+                    data={friends.sort((a: any, b: any) => b.lastMessage.date - a.lastMessage.date)}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
                         // @ts-ignore
-                        onPress={() => navigation.navigate('Chat')}>
-                        <Friend image={item.source} name={item.name} lastMessage={item.lastMessage} />
-                    </TouchableOpacity>
-                )}
-            />
+                        <TouchableOpacity onPress={() => navigation.navigate('Chat', { username: item.name, image: item.image, conversation: item.id })}>
+                            <Friend image={item.image} name={item.name} lastMessage={item.lastMessage} />
+                        </TouchableOpacity>
+                    )}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={handleRefresh}
+                            tintColor={style.Text}
+                        />
+                    }
+                />
+            )}
         </View>
     )
 }

@@ -19,9 +19,9 @@ import { colorsLight } from '../constants/colorsLight';
 export default function SpotScreen() {
   //@ts-ignore
   const spotReducer: Spot[] = useSelector(state => state.appReducer.spot)
-   // @ts-ignore
-   const isDark = useSelector(state => state.userReducer.dark);
-   const style = isDark ? colorsDark : colorsLight;
+  // @ts-ignore
+  const isDark = useSelector(state => state.userReducer.dark);
+  const style = isDark ? colorsDark : colorsLight;
 
   const [cards, setCards] = useState<Spot[]>(spotReducer);
   const [currentCard, setcurrentCard] = useState<Spot>(cards[cards.length - 1]);

@@ -136,7 +136,7 @@ export default function FavoriteScreen() {
                 <Text style={styles.description}>Retrouvez ici vos musiques favorites</Text>
             </View>
             <SectionList
-                style = {styles.collection}
+                style={styles.collection}
                 sections={groupByDate(favoriteMusic)}
                 refreshControl={
                     <RefreshControl

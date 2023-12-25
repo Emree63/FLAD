@@ -53,9 +53,11 @@ export default class SpotifyService implements IMusicService {
             },
         });
 
-        if (response.data.item === undefined) {
+        if (response.data.item === undefined || response.data.item === null) {
             return null;
         }
+
+
         return response.data.item.id
     }
 

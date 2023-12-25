@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Alert, Platform } from 'react-native';
 import { faUser, faEnvelope, faHeart, faMusic } from "@fortawesome/free-solid-svg-icons"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import FavoriteNavigation from './FavoriteNavigation';
 import SettingNavigation from './SettingNavigation';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -156,10 +156,15 @@ export default function HomeNavigation() {
             tabBarIcon: ({ color }) => <View><TabBarIcon name={faHeart} color={color} size={23} /></View>,
           }} />
         <BottomTabNavigator.Screen name="Messages" component={MessagingNavigation}
-          options={{
+          options={({ route }) => ({
             headerShown: false,
+            tabBarStyle: {
+              display: getFocusedRouteNameFromRoute(route) !== "Chat" ? "flex" : "none",
+              position: "absolute",
+              borderTopColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(50, 50, 50, 0.07)',
+            },
             tabBarIcon: ({ color }) => <View ><TabBarIcon name={faEnvelope} color={color} size={23} /></View>,
-          }} />
+          })} />
         <BottomTabNavigator.Screen name="Profil" component={SettingNavigation}
           options={{
             headerShown: false,

@@ -38,7 +38,7 @@ const userSchema = new Schema({
             userId: String,
             date: Date
         }],
-        default: [] 
+        default: []
     }
 },
     { timestamps: true }

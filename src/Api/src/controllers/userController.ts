@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import IController from './interfaces/IController';
 import User from '../models/User';
 import UserService from '../services/UserService';

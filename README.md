@@ -116,7 +116,7 @@ Une fois sur la page, saisissez votre nom, votre adresse e-mail, et votre mot de
 Pour accéder aux détails d'une musique, maintenez votre doigt appuyé sur un Spot ou rendez-vous sur la page des favoris. Vous pourrez écouter la musique :arrow_forward:, obtenir des informations sur l'artiste et la chanson, découvrir des musiques similaires, et même l'ajouter à votre playlist Spotify ou la partager.
 
 <br/>
-`Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ```Spotify```, que vous pouvez modifier à votre guise. Toutefois, ces modifications ne seront prises en compte que dans notre application. Vous pouvez également choisir le mode sombre (dark mode) dans les paramètres pour une expérience de navigation plus confortable.
+Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ```Spotify```, que vous pouvez modifier à votre guise. Toutefois, ces modifications ne seront prises en compte que dans notre application. Vous pouvez également choisir le mode sombre (dark mode) dans les paramètres pour une expérience de navigation plus confortable.
 <br/>
 
 ### Voici un petit récapitulatif 

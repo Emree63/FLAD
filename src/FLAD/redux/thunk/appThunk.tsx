@@ -28,6 +28,7 @@ export const getUserCurrentMusic = () => {
       const music = await MusicServiceProvider.musicService.getMusicById(idTrack);
       dispatch(setUserCurrentMusic(music))
     } catch (error: any) {
+      console.log(error);
       switch (error.response.status) {
         case 401:
           dispatch(logout);
