@@ -4,19 +4,19 @@ import ProfilScreen from '../screens/ProfilScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 export default function SettingNavigation() {
-  const Stack = createStackNavigator();
+  const SettingStack = createStackNavigator();
   return (
-    <Stack.Navigator initialRouteName="Setting">
-      <Stack.Screen
+    <SettingStack.Navigator initialRouteName="Setting">
+      <SettingStack.Screen
         name="Setting"
         component={SettingScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <SettingStack.Screen
         name="Account"
         component={ProfilScreen}
         options={{ headerShown: false }}
       />
-    </Stack.Navigator>
+    </SettingStack.Navigator>
   )
 }

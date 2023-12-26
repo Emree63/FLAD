@@ -2,13 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, useColorScheme } from 'react-native';
 import Svg, { G, Circle } from 'react-native-svg';
 import { AntDesign } from '@expo/vector-icons';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import normalize from './Normalize';
 
 // @ts-ignore
 export default function NextButton({ percentage, scrollTo }) {
-    const style = useColorScheme() == 'light' ? colorsLight : colorsDark;
+    const style: Theme = useColorScheme() == 'light' ? LightTheme : DarkTheme;
 
     const size = normalize(148);
     const strokeWidth = 2;

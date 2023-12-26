@@ -13,15 +13,14 @@ import Artist from '../models/Artist';
 import { addMusicToFavorite } from '../redux/thunk/appThunk';
 import { addToPlaylist, removeSpot } from '../redux/thunk/spotThunk';
 import UserInfoBadge from '../components/UserInfoBadgeComponent';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 
 export default function SpotScreen() {
   //@ts-ignore
   const spotReducer: Spot[] = useSelector(state => state.appReducer.spot)
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
-  const style = isDark ? colorsDark : colorsLight;
+  const style: Theme = isDark ? DarkTheme : LightTheme;
 
   const [cards, setCards] = useState<Spot[]>(spotReducer);
   const [currentCard, setcurrentCard] = useState<Spot>(cards[cards.length - 1]);

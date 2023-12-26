@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, useWindowDimensions, useColorScheme } from 'react-native';
 import normalize from './Normalize';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 
 // @ts-ignore
 export default function OnboardingComponent({ item }) {
-    const style = useColorScheme() == 'light' ? colorsLight : colorsDark;
+    const style: Theme = useColorScheme() == 'light' ? LightTheme : DarkTheme;
     const { width, height } = useWindowDimensions();
     const styles = StyleSheet.create({
         container: {

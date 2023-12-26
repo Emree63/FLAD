@@ -3,15 +3,14 @@ import ConversationScreen from '../screens/ConversationScreen'
 import { Image, View, Text, StyleSheet } from 'react-native';
 import ChatScreen from '../screens/ChatScreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import { colorsDark } from "../constants/colorsDark";
-import { colorsLight } from "../constants/colorsLight";
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import { useSelector } from 'react-redux';
 
 export default function MessagingNavigation() {
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
-  const style = isDark ? colorsDark : colorsLight;
-  const Stack = createStackNavigator();
+  const style: Theme = isDark ? DarkTheme : LightTheme;
+  const MessagingStack = createStackNavigator();
 
   const styles = StyleSheet.create({
     headerContainer: {
@@ -32,13 +31,13 @@ export default function MessagingNavigation() {
   });
 
   return (
-    <Stack.Navigator initialRouteName="Conversation">
-      <Stack.Screen
+    <MessagingStack.Navigator initialRouteName="Conversation">
+      <MessagingStack.Screen
         name="Conversation"
         component={ConversationScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <MessagingStack.Screen
         name="Chat"
         component={ChatScreen}
         options={({ route }) => ({
@@ -65,6 +64,6 @@ export default function MessagingNavigation() {
           },
         })}
       />
-    </Stack.Navigator>
+    </MessagingStack.Navigator>
   )
 }

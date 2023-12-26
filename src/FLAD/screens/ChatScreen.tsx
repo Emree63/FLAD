@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Bubble, GiftedChat, IMessage, InputToolbar, Send } from "react-native-gifted-chat";
 import { faFileImage, faMicrophone } from "@fortawesome/free-solid-svg-icons"
-import { colorsDark } from "../constants/colorsDark";
-import { colorsLight } from "../constants/colorsLight";
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,7 +19,7 @@ export default function Chat({ route }) {
 
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
-  const style = isDark ? colorsDark : colorsLight;
+  const style: Theme = isDark ? DarkTheme : LightTheme;
 
   const dispatch = useDispatch();
 

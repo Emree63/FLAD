@@ -1,12 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import Friend from "../components/FriendComponent";
 import normalize from '../components/Normalize';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getConversations } from "../redux/thunk/chatThunk";
 
 export default function ConversationScreen() {
@@ -35,7 +34,7 @@ export default function ConversationScreen() {
 
     const navigation = useNavigation();
 
-    const style = isDark ? colorsDark : colorsLight;
+    const style: Theme = isDark ? DarkTheme : LightTheme;
 
     const insets = useSafeAreaInsets();
 
@@ -60,15 +59,15 @@ export default function ConversationScreen() {
             marginBottom: 5
         },
         body: {
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            flex: 1, 
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
             marginHorizontal: "7%"
         },
         text: {
-            color: style.Text, 
-            fontSize: normalize(18), 
-            opacity: 0.8, 
+            color: style.Text,
+            fontSize: normalize(18),
+            opacity: 0.8,
             textAlign: 'center'
         }
     })
@@ -81,7 +80,7 @@ export default function ConversationScreen() {
             </View>
             {friends.length === 0 ? (
                 <View style={styles.body}>
-                    <Text style={ styles.text }>
+                    <Text style={styles.text}>
                         Pas de conversations pour le moment. 🥲{'\n'}
                         Va liker des musiques pour créer des conversations avec des gens dans le monde ! 🔥🎆
                     </Text>

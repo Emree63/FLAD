@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import normalize from './Normalize';
 import Music from '../models/Music';
 import Artist from '../models/Artist';
@@ -14,7 +13,7 @@ type CardMusicProps = {
 export default function CardMusic(props: CardMusicProps) {
   // @ts-ignore
   const isDark = useSelector(state => state.userReducer.dark);
-  const style = isDark ? colorsDark : colorsLight;
+  const style: Theme = isDark ? DarkTheme : LightTheme;
 
   const styles = StyleSheet.create({
     container: {

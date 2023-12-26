@@ -9,8 +9,7 @@ import { ScrollView, Switch, TextInput } from 'react-native-gesture-handler';
 import CardMusic from '../components/CardMusicComponent';
 import { logout } from '../redux/thunk/authThunk';
 import { darkMode } from '../redux/thunk/userThunk';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import { User } from '../models/User';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
@@ -40,7 +39,7 @@ export default function SettingScreen() {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
     const [locationPermission, setLocationPermission] = useState(false);
-    const style = isDark ? colorsDark : colorsLight;
+    const style: Theme = isDark ? DarkTheme : LightTheme;
 
     async function ChangeDarkMode() {
         const newValue = !isDark;

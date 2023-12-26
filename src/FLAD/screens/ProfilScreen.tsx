@@ -9,8 +9,7 @@ import * as AuthSession from 'expo-auth-session';
 import normalize from '../components/Normalize';
 import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import { deleteUser } from '../redux/thunk/authThunk';
 import { setImage, setMail, setName, setPassword, setSpotify } from '../redux/thunk/userThunk';
 import { setErrorUpdate } from '../redux/actions/userActions';
@@ -38,7 +37,7 @@ export default function ProfilScreen() {
     const [oldPassword, setOldPassword] = React.useState('');
     const [newPassword, setNewPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
-    const style = isDark ? colorsDark : colorsLight;
+    const style: Theme = isDark ? DarkTheme : LightTheme;
     const navigation = useNavigation();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const dispatch = useDispatch();

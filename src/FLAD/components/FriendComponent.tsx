@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import normalize from './Normalize';
 import Message from '../models/Message';
 
@@ -16,7 +15,7 @@ export default function Friend(props: FriendProps) {
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
 
-    const style = isDark ? colorsDark : colorsLight;
+    const style: Theme = isDark ? DarkTheme : LightTheme;
 
     const source = typeof props.image === 'string' ? { uri: props.image } : props.image;
 

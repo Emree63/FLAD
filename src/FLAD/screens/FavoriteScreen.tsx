@@ -6,8 +6,7 @@ import { Svg, Path } from 'react-native-svg';
 import FladyComponent from '../components/FladyComponent';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 import { getFavoriteMusic } from '../redux/thunk/appThunk';
 import { Spot } from '../models/Spot';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +16,7 @@ export default function FavoriteScreen() {
 
     // @ts-ignore
     const isDark = useSelector(state => state.userReducer.dark);
-    const style = isDark ? colorsDark : colorsLight;
+    const style: Theme = isDark ? DarkTheme : LightTheme;
     const [refreshing, setRefreshing] = useState(false);
 
     const images = [

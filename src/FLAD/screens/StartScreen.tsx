@@ -6,11 +6,10 @@ import OnboardingItem from '../components/OnboardingComponent';
 import Paginator from '../components/PaginatorComponent';
 import NextButton from '../components/NextButtonComponent';
 import slides from '../data/slides';
-import { colorsDark } from '../constants/colorsDark';
-import { colorsLight } from '../constants/colorsLight';
+import { LightTheme, DarkTheme, Theme } from "../constants/colors";
 
 export default function StartScreen() {
-    const style = useColorScheme() == 'light' ? colorsLight : colorsDark;
+    const style: Theme = useColorScheme() == 'light' ? LightTheme : DarkTheme;
     const [currentIndex, setCurrentIndex] = useState(0);
     const scrollX = useRef(new Animated.Value(0)).current;
     const slidesRef = useRef(null);

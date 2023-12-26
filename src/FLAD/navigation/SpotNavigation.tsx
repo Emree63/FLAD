@@ -4,19 +4,19 @@ import DetailScreen from '../screens/DetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 export default function SpotNavigation() {
-  const Stack = createStackNavigator();
+  const SpotStack = createStackNavigator();
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <SpotStack.Navigator>
+      <SpotStack.Screen
         name="Spot"
         component={SpotScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <SpotStack.Screen
         name="Detail"
         component={DetailScreen}
         options={{ headerShown: false }}
       />
-    </Stack.Navigator>
+    </SpotStack.Navigator>
   )
 }
