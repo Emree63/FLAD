@@ -1,60 +1,89 @@
-import { User } from "../../Model/User";
+import { User } from "../../models/User";
 import { userTypes } from "../types/userTypes";
 
-
-export interface Credentials {
+export interface LoginCredentials {
   email: string,
   password: string
 }
-export interface CredentialsRegister {
+
+export interface RegisterCredentials {
   email: string,
   password: string,
   name: string,
-  idFlad: string,
-  idSpotify: string
+  tokenSpotify: string
 }
-export const setLoginState = (userJson: any) => {
-  const user = new User(userJson.data.idFlad, userJson.data.idSpotify, userJson.data.email, new Date(), userJson.data.name, require('../../assets/images/jul.png'));
+
+export const userLogin = (user: User) => {
   return {
     type: userTypes.LOGIN,
     payload: user
   };
 }
 
-export const restoreToken = (token: string) => {
+export const restoreToken = () => {
   return {
-    type: userTypes.RESTORE_TOKEN,
-    payload: token
-  };
-}
-export const userSignUp = (user: User) => {
-  return {
-    type: userTypes.LOGIN,
-    payload: user
+    type: userTypes.RESTORE_TOKEN
   };
 }
 
-export const UserLogout = () => {
+export const userLogout = () => {
   return {
     type: userTypes.USER_LOGOUT,
   };
 }
 
-export const userChangeMode = (value: boolean) => {
+export const setDarkMode = (value: boolean) => {
   return {
-    type: userTypes.CHANGE_MODE,
+    type: userTypes.SET_DARK_MODE,
     payload: value
   };
 }
 
-export const ChangeErrorLogin = () => {
+export const setErrorLogin = (value: boolean) => {
   return {
-    type: userTypes.CHANGE_ERROR_LOGIN,
+    type: userTypes.SET_ERROR_LOGIN,
+    payload: value
   };
 }
 
-export const ChangeErrorSignup = () => {
+export const setErrorSignup = (value: string) => {
   return {
-    type: userTypes.CHANGE_ERROR_SIGNUP,
+    type: userTypes.SET_ERROR_SIGNUP,
+    payload: value
+  };
+}
+
+export const setErrorNetwork = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_NETWORK,
+    payload: value
+  };
+}
+
+export const setErrorEmptyMusic = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_EMPTY_MUSIC,
+    payload: value
+  };
+}
+
+export const setAccessError = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_ACCESS,
+    payload: value
+  };
+}
+
+export const setErrorUpdate = (value: boolean) => {
+  return {
+    type: userTypes.SET_ERROR_UPDATE,
+    payload: value
+  };
+}
+
+export const setErrorUpdateMessage = (value: string) => {
+  return {
+    type: userTypes.SET_ERROR_UPDATE_MESSAGE,
+    payload: value
   };
 }

@@ -1,31 +1,31 @@
 import React from 'react';
-import Login from '../screens/LoginPage';
-import Register from '../screens/Register';
-import Onboarding from '../components/Onboarding';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import StartScreen from '../screens/StartScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function StartNavigation() {
-  const Stack = createStackNavigator();
+  const StartStack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Onboarding}
+      <StartStack.Navigator>
+        <StartStack.Screen
+          name="Start"
+          component={StartScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        <StartStack.Screen
           name="Login"
-          component={Login}
+          component={LoginScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        <StartStack.Screen
           name="Register"
-          component={Register}
+          component={RegisterScreen}
           options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+      </StartStack.Navigator>
     </NavigationContainer>
 
   )

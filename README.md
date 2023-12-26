@@ -8,7 +8,6 @@
 
 ---
 
-&nbsp; ![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
 &nbsp; ![Docker](https://img.shields.io/badge/Docker-2496ED.svg?style=for-the-badge&logo=Docker&logoColor=white)
 &nbsp; ![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 &nbsp; ![Spotify Api](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)
@@ -34,9 +33,9 @@
 
 La racine de notre gitlab est composée de deux dossiers essentiels au projet:
 
-[**src**](src) : **Toute la partie codage de l'application mobile** (contient un dossier API pour l'API FLAD qui effectue les requêtes vers l'API SPOTIFY et la base de données, ainsi qu'un dossier FLAD qui contient toute la partie côté client de l'application)
+[**src**](src) : **Ensemble du code pour l'application mobile et les services web** (Application React Native, API Express en TypeScript, et messagerie MQTT)
 
-[**doc**](doc) : **Documentation de l'application** (contient les maquettes)
+[**doc**](doc) : **Documentation de l'application** (Inclut des diagrammes, des maquettes et des images)
 
 ## Fonctionnement
 
@@ -62,11 +61,11 @@ Pour la suite, il suffit seulement de vérifier que node.js est à jour et insta
 
 Maintenant vous pouvez à tout moment lancer l'application grâce à la commande : **npx expo start :sunglasses:**
 <br>
-:information_source: *Cliquer sur la touche 'w' si vous voulez le visualiser sur un navigateur (ce que je ne conseille pas) ou installer l'application 'Expo go' de votre téléphone et scanner le QR code proposer pour le visualiser (à noter que l'ordinateur dans lequel il se voit lancer doit être dans le même réseau local que votre téléphone)*
+:information_source: *N'oubliez pas d'installer 'Expo Go' depuis le store de votre téléphone.*
 
-- ### Comment le lancer à partir de l'iut d'Aubière ?
+- ### Comment le lancer à partir de l'IUT d'Aubière ?
 
-Cela est un peu plus difficile mais faisable !!!
+Cela est un peu plus difficile mais faisable !
 <br>
 Tout d'abord aller dans votre compte scratch : **cd home/scratch/compte**
 
@@ -89,36 +88,37 @@ Et entrer la commande : **export NODE_OPTIONS=--openssl-legacy-provider**
 
 Maintenant vous pouvez à tout moment lancer l'application grâce à la commande : **npx expo start :sunglasses:**
 <br>
-:information_source: *Cliquer sur la touche 'w' si vous voulez le visualiser sur un navigateur (ce que je ne conseille pas) ou installer l'application 'Expo go' de votre téléphone et scanner le QR code proposer pour le visualiser (à noter que l'ordinateur dans lequel il se voit lancer doit être dans le même réseau local que votre téléphone)*
 
 - ### Comment s'inscrire sur l'application ? 
 
-Tout d'abord, il faut fournir votre *adresse e-mail* et votre *nom Spotify* aux **techniciens de l'application** (voir plus bas). Ils s'occuperont de vous ajouter définitivement à l'application. Une fois que cela est fait, inscrivez-vous via la **page d'inscription** de l'application en cliquant d'abord sur le bouton 'lier mon compte':
+Tout d'abord, il faut fournir votre *adresse e-mail* et votre *nom Spotify* aux **techniciens de l'application** (voir plus bas). Ils s'occuperont de vous ajouter définitivement à l'application. Une fois que cela est fait, inscrivez-vous via la **page d'inscription** de l'application :
 
 <div align = center>
 
-<img src="doc/Images/Real_RegisterPage.png" width="250" >
+<img src="doc/Maquettes/RegisterPage.png" width="200" >
 
 </div>
 
 
-Vous serez normalement redirigé sur la page Spotify où vous devrez vous connecter. Une fois connecté, entrez votre nom, votre adresse e-mail et votre mot de passe en tant qu'utilisateur FLAD (n'oubliez pas ces informations car vous en aurez besoin pour vous connecter). Ensuite, cliquez sur le bouton ```suivant``` et bienvenue sur l'application !
+Une fois sur la page, saisissez votre nom, votre adresse e-mail, et votre mot de passe en tant qu'utilisateur FLAD (n'oubliez pas ces informations, vous en aurez besoin pour vous connecter). Pour lier votre compte à Spotify, vous serez automatiquement redirigé vers la page de connexion Spotify. Entrez vos identifiants Spotify, puis cliquez sur le bouton ```Suivant``` et bienvenue sur l'application !"
 
 ## Visuel de l'Application
 
 <div align = center>
 
-<img src="doc/Images/Real_HomePage.png" width="250" >
-<img src="doc/Images/Real_FavoritePage.png" width="250" >
-<img src="doc/Images/Real_ConversationPage.png" width="250" >
-<img src="doc/Images/Real_SettingPage.png" width="250" >
+<img src="doc/Images/Overview.png">
 
 </div>
 
 :information_source: Lorsque vous entrez dans notre application, la page d'accueil (**home**) vous permet de découvrir les musiques :notes: des utilisateurs autour de vous. Vous pouvez valider une musique soit en cliquant sur le bouton, soit en la glissant vers la droite :point_up_2:. Cette musique sera alors ajoutée à la page **favoris** :heart: et vous pourrez entamer une discussion avec l'utilisateur dans la page **chat** :speech_balloon:. 
 <br/>
+
+Pour accéder aux détails d'une musique, maintenez votre doigt appuyé sur un Spot ou rendez-vous sur la page des favoris. Vous pourrez écouter la musique :arrow_forward:, obtenir des informations sur l'artiste et la chanson, découvrir des musiques similaires, et même l'ajouter à votre playlist Spotify ou la partager.
+
+<br/>
 Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ```Spotify```, que vous pouvez modifier à votre guise. Toutefois, ces modifications ne seront prises en compte que dans notre application. Vous pouvez également choisir le mode sombre (dark mode) dans les paramètres pour une expérience de navigation plus confortable.
 <br/>
+
 ### Voici un petit récapitulatif 
 <div align="center">
   <table>
@@ -128,9 +128,9 @@ Dans la page **settings** ⚙️, vous avez accès à toutes vos informations ``
       <td align="center"><img src="doc/Images/Like_Img.png" alt="Button 3" width="100" height="100"></td>
     </tr>
     <tr>
-      <td align="center">Suprimer de la pile un spot</td>
-      <td align="center">Ajout Discover (pour l'instant il permet d'ajouter des spot suplémentaires dans la pile pour que vous puissiez vous amusez si il n'y aucun utilisateur à coté de vous)</td>
-      <td align="center">Like pour ajouter au favorie</td>
+      <td align="center">Supprimer de la pile un spot</td>
+      <td align="center">Ajout dans une playlist de votre compte Spotify (créée spécialement par l'application)</td>
+      <td align="center">Ajouter à vos favoris</td>
     </tr>
   </table>
 </div>
@@ -151,7 +151,7 @@ La composition pour le projet se voit réaliser par deux élèves de l'IUT d'Aub
 
 <div align="center">
 <a href = "https://codefirst.iut.uca.fr/git/emre.kartal">
-<img src="https://codefirst.iut.uca.fr/git/avatars/402cf312e853192f42c0135a888725c2?size=870" width="50" >
+<img src="https://codefirst.iut.uca.fr/git/avatars/1ff65c9c5ab0e8c8883fb48adbcf972f?size=72" width="50" >
 </a>
 <a href = "https://codefirst.iut.uca.fr/git/david.d_almeida">
 <img src="https://codefirst.iut.uca.fr/git/avatars/0f8eaaad1e26d3de644ca522eccaea7c?size=870" width="50" >
@@ -159,9 +159,11 @@ La composition pour le projet se voit réaliser par deux élèves de l'IUT d'Aub
 </div>
 
 <div align = center>
-© PM2 (Projet inspiré par nos très chers développeurs de la Dafl Team (S.O les Dafl dev))
+© FladDev
 </div>
 
-<hr>
+<div align = right>
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Licence Creative Commons Attribution - Pas d&#39;Utilisation Commerciale - Pas de Modification 4.0 International</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+
+</div>

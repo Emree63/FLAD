@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: FLAD
+name: FLAD-CLI
 
 trigger:
   event:
@@ -13,29 +13,6 @@ steps:
       - cd ./src/FLAD/
       - npm install
       - npm run
-      
-  - name: docker-build-and-push
-    image: plugins/docker
-    settings:
-      dockerfile: src/Api/Dockerfile
-      context: src/Api
-      registry: hub.codefirst.iut.uca.fr
-      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
-      username:
-        from_secret: SECRET_REGISTRY_USERNAME
-      password:
-        from_secret: SECRET_REGISTRY_PASSWORD
-
-  #container deployment
-  - name: deploy-container
-    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
-    environment:
-        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
-        CONTAINERNAME: flady-container
-        COMMAND: create
-        OVERWRITE: true
-        ADMINS: emrekartal,davidd_almeida,
-    depends_on: [ docker-build-and-push ]
 
   - name: code-analysis
     image: node:latest
@@ -51,5 +28,84 @@ steps:
       - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
       - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
       - export SONAR_SCANNER_OPTS="-server"
-      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=. -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
+      - sonar-scanner -D sonar.projectKey=FLAD -D sonar.sources=./src/FLAD -D sonar.host.url=https://codefirst.iut.uca.fr/sonar
     depends_on: [ app-build ]
+
+--- 
+
+kind: pipeline
+type: docker
+name: FLAD-API-MQTT
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: docker-build-and-push
+    image: plugins/docker
+    settings:
+      dockerfile: src/Api/Dockerfile
+      context: src/Api
+      registry: hub.codefirst.iut.uca.fr
+      repo: hub.codefirst.iut.uca.fr/emre.kartal/flad
+      username:
+        from_secret: SECRET_REGISTRY_USERNAME
+      password:
+        from_secret: SECRET_REGISTRY_PASSWORD
+      depends_on: [ app-build ]
+
+  - name: deploy-container
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+        IMAGENAME: hub.codefirst.iut.uca.fr/emre.kartal/flad:latest
+        CONTAINERNAME: flad
+        CODEFIRST_CLIENTDRONE_ENV_PORT: 80
+        CODEFIRST_CLIENTDRONE_ENV_MONGO_PASSWORD:
+           from_secret: MONGO_PASSWORD
+        CODEFIRST_CLIENTDRONE_ENV_CLIENT_ID_SPOTIFY:
+           from_secret: CLIENT_ID_SPOTIFY
+        CODEFIRST_CLIENTDRONE_ENV_CLIENT_SECRET_SPOTIFY:
+           from_secret: CLIENT_SECRET_SPOTIFY
+        COMMAND: create
+        OVERWRITE: true
+        ADMINS: emrekartal,davidd_almeida,
+    depends_on: [ docker-build-and-push ]
+
+  - name: docker-build-and-push-mqtt
+    image: plugins/docker
+    settings:
+      dockerfile: src/Mqtt/Dockerfile
+      context: src/Mqtt
+      registry: hub.codefirst.iut.uca.fr
+      repo: hub.codefirst.iut.uca.fr/david.d_almeida/flad
+      username:
+        from_secret: SECRET_REGISTRY_USERNAME_MQTT
+      password:
+        from_secret: SECRET_REGISTRY_PASSWORD_MQTT
+
+  - name: deploy-container-mqtt
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+        IMAGENAME: hub.codefirst.iut.uca.fr/david.d_almeida/flad:latest
+        CONTAINERNAME: mqtt
+        COMMAND: create
+        OVERWRITE: true
+        ADMINS: emrekartal,davidd_almeida
+    depends_on: [ docker-build-and-push-mqtt ]
+
+  - name: code-analysis
+    image: node:latest
+    environment:
+      SONAR_TOKEN:
+        from_secret: SONAR_TOKEN_API
+    settings:
+      sources: ./src/Api/ 
+    commands:
+      - export SONAR_SCANNER_VERSION=4.7.0.2747
+      - export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      - curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      - export SONAR_SCANNER_OPTS="-server"
+      - sonar-scanner -D sonar.projectKey=FLAD-API -D sonar.sources=./src/Api -D sonar.host.url=https://codefirst.iut.uca.fr/sonar

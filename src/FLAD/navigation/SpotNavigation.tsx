@@ -1,28 +1,22 @@
 import React from 'react';
+import SpotScreen from '../screens/SpotScreen'
+import DetailScreen from '../screens/DetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import SpotPage from '../screens/spot'
-import MusicDetail from '../screens/MusicDetail';
-
 
 export default function SpotNavigation() {
-  const Stack = createStackNavigator();
-
+  const SpotStack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{
-      gestureEnabled: false,
-      headerShown: false,
-      cardOverlayEnabled: true,
-
-    }}
-    >
-      <Stack.Screen
-        name="SpotsPage"
-        component={SpotPage}
+    <SpotStack.Navigator>
+      <SpotStack.Screen
+        name="Spot"
+        component={SpotScreen}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="DetailsSpot"
-        component={MusicDetail}
+      <SpotStack.Screen
+        name="Detail"
+        component={DetailScreen}
+        options={{ headerShown: false }}
       />
-    </Stack.Navigator>
+    </SpotStack.Navigator>
   )
 }

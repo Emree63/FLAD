@@ -1,58 +1,73 @@
 import axios from "axios";
-import { API_URL } from "../../fladConfig";
-import { Credentials, CredentialsRegister, restoreToken, setLoginState, UserLogout, userChangeMode, userSignUp, ChangeErrorLogin, ChangeErrorSignup } from "../actions/userActions";
+import configs from "../../constants/config";
+import { LoginCredentials, RegisterCredentials, restoreToken, userLogin, userLogout, setErrorLogin, setErrorSignup, setErrorNetwork } from "../actions/userActions";
 import * as SecureStore from 'expo-secure-store';
-import { UserFactory } from "../../Model/factory/UserFactory";
+import { UserMapper } from "../../models/mapper/UserMapper";
+import { MusicServiceProvider } from "../../models/MusicServiceProvider";
 
-const key = 'userToken';
+const keyRemember = 'rememberUser';
 
-export const registerUser = (resgisterCredential: CredentialsRegister) => {
+export const register = (registerCredential: RegisterCredentials) => {
   //@ts-ignore
   return async dispatch => {
     try {
-      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-
-      console.log(resgisterCredential);
-      console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       }
       const resp = await axios.post(
-        'https://flad-api-production.up.railway.app/api/users/register',
-        resgisterCredential,
+        configs.API_URL + '/auth/register',
+        registerCredential,
         config
       )
-
-      if (resp.data.token) {
-        console.log(resp.data.token);
-        const token = resp.data.token;
-        const headers = {
-          'Authorization': 'Bearer ' + token
-        };
-        const user = await axios.get(
-          "https://flad-api-production.up.railway.app/api/users",
-          { headers }
-        )
-        dispatch(userSignUp(UserFactory.JsonToModel(user.data)));
-      } else {
-        console.log('Login Failed', 'Username or Password is incorrect');
+      const token = resp.data.token;
+      await SecureStore.setItemAsync(configs.key, token);
+      await SecureStore.setItemAsync(keyRemember, 'true');
+      const headers = {
+        'Authorization': 'Bearer ' + token
+      };
+      const user = await axios.get(
+        configs.API_URL + '/user',
+        { headers }
+      )
+      MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
+      dispatch(userLogin(UserMapper.toModel(user.data.data)));
+    } catch (error: any) {
+      switch (error.response.status) {
+        case 400:
+          dispatch(setErrorSignup("Email non valide !"));
+          break;
+        case 409:
+          const duplicateFields = error.response.data || [];
+          let errorMessage = "Email, Spotify ou nom déjà utilisé !";
+          if (duplicateFields.includes('idSpotify')) {
+            errorMessage = "Compte Spotify déjà utilisé !";
+          }
+          if (duplicateFields.includes('name')) {
+            errorMessage = "Nom déjà utilisé !";
+          }
+          if (duplicateFields.includes('email')) {
+            errorMessage = "Email déjà utilisé !";
+          }
+          dispatch(setErrorSignup(errorMessage));
+          break;
+        case 500:
+          dispatch(setErrorSignup("Compte Spotify non autorisé !"));
+          break;
+        default:
+          console.error("Error : " + error.message);
+          dispatch(setErrorSignup("Erreur lors de l'inscription !"));
+          break;
       }
-
-    } catch (error) {
-      console.log('Login Failed'+ error.message + "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"); 
-      dispatch(ChangeErrorSignup())
     }
   }
 }
 
-export const userLogin = (loginCredential: Credentials) => {
+export const login = (loginCredential: LoginCredentials, remember: boolean) => {
   //@ts-ignore
   return async dispatch => {
     try {
-      console.log(loginCredential);
-
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -60,30 +75,37 @@ export const userLogin = (loginCredential: Credentials) => {
       }
 
       const resp = await axios.post(
-        "https://flad-api-production.up.railway.app/api/users/login",
+        configs.API_URL + '/auth/login',
         loginCredential,
         config
       )
-      if (resp.data.token) {
-        const token = resp.data.token;
-        await SecureStore.setItemAsync(key, token);
-        const headers = {
-          'Authorization': 'Bearer ' + token
-        };
 
-        const user = await axios.get(
-          "https://flad-api-production.up.railway.app/api/users",
-          { headers }
-        )
-        console.log(user.data);
-
-        dispatch(setLoginState(user.data));
-      } else {
-        console.log('Login Failed', 'Username or Password is incorrect');
+      const token = resp.data.token;
+      await SecureStore.setItemAsync(configs.key, token);
+      if (remember) {
+        await SecureStore.setItemAsync(keyRemember, remember.toString());
       }
 
-    } catch (error) {
-      dispatch(ChangeErrorLogin())
+      const headers = {
+        'Authorization': 'Bearer ' + token
+      };
+
+      const user = await axios.get(
+        configs.API_URL + '/user',
+        { headers }
+      )
+      MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
+      dispatch(userLogin(UserMapper.toModel(user.data.data)));
+    } catch (error: any) {
+      switch (error.response.status) {
+        case 400:
+          dispatch(setErrorLogin(true));
+          break;
+        default:
+          console.error("Error : " + error.message);
+          dispatch(setErrorNetwork(true));
+          break;
+      }
     }
   }
 }
@@ -91,45 +113,59 @@ export const userLogin = (loginCredential: Credentials) => {
 export const getRefreshToken = () => {
   //@ts-ignore
   return async dispatch => {
-    try {
-      let userToken: string | null = await SecureStore.getItemAsync(key);
-
-      if (userToken) {
-        dispatch(restoreToken(userToken));
+    let remember: string | null = await SecureStore.getItemAsync(keyRemember);
+    let token: string | null = await SecureStore.getItemAsync(configs.key);
+    if (token) {
+      if (remember) {
+        const headers = {
+          'Authorization': 'Bearer ' + token
+        };
+        try {
+          const user = await axios.get(
+            configs.API_URL + '/user',
+            { headers }
+          )
+          MusicServiceProvider.initSpotify(user.data.data.tokenSpotify, user.data.data.idSpotify);
+          await dispatch(userLogin(UserMapper.toModel(user.data.data)));
+        } catch (error: any) {
+          dispatch(logout());
+        }
       } else {
-        const empty = "";
-        dispatch(restoreToken(empty));
+        dispatch(logout());
       }
-    } catch (e) {
-      console.log('Error :', e);
+    }
+    dispatch(restoreToken());
+
+  }
+}
+
+export const deleteUser = () => {
+  //@ts-ignore
+  return async dispatch => {
+    let token: string | null = await SecureStore.getItemAsync(configs.key);
+    if (token) {
+      const headers = {
+        'Authorization': 'Bearer ' + token
+      };
+      try {
+        await axios.delete(
+          configs.API_URL + '/user',
+          { headers }
+        )
+        dispatch(logout());
+      } catch (error: any) {
+        console.error("Error deleting account : " + error.message);
+      }
     }
   }
 }
 
-
-export const DeleteToken = () => {
+export const logout = () => {
   //@ts-ignore
   return async dispatch => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-      dispatch(UserLogout());
-    } catch (e) {
-      console.log('Error deleting token', e);
-    }
-  }
-}
-
-export const ChangeMode = (value: boolean) => {
-  //@ts-ignore
-  return async dispatch => {
-    dispatch(userChangeMode(value));
-  }
-}
-
-export const ChangeImageUserCurrent = (value: ImagePicker) => {
-  //@ts-ignore
-  return async dispatch => {
-    //@ts-ignore
-    dispatch(userChangeImage(value));
+    await SecureStore.deleteItemAsync(configs.key);
+    await SecureStore.deleteItemAsync(keyRemember);
+    MusicServiceProvider.resetService();
+    dispatch(userLogout());
   }
 }

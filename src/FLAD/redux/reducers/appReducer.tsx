@@ -1,14 +1,20 @@
-import Music from "../../Model/Music";
-import { Spot } from "../../Model/Spot";
-import { discoveriesTypes } from "../types/discoverieTypes";
+import Conversation from "../../models/Conversation";
+import Message from "../../models/Message";
+import { Spot } from "../../models/Spot";
+import { chatTypes } from "../types/chatTypes";
 import { favoritesTypes } from "../types/favoritesTypes";
 import { spotifyTypes } from "../types/spotifyTypes";
 import { spotTypes } from "../types/spotTypes";
+import { userTypes } from "../types/userTypes";
 
 const initialState = {
   spot: [] as Spot[],
-  favoriteMusic: [] as Music[],
-  userCurrentMusic: null
+  favoriteMusic: [] as Spot[],
+  userCurrentMusic: null,
+  nbAddedFavoriteMusic: 0,
+  oldSpot: [] as string[],
+  conversations: [] as Conversation[],
+  messages: [] as Message[]
 }
 
 const appReducer = (state = initialState, action: any) => {
@@ -16,21 +22,32 @@ const appReducer = (state = initialState, action: any) => {
     case favoritesTypes.GET_FAVORITE_MUSICS:
       return { ...state, favoriteMusic: action.payload };
     case favoritesTypes.ADD_FAVORITE_MUSICS:
-      return { ...state, favoriteMusic: [action.payload, ...state.favoriteMusic] };
-    case favoritesTypes.REMOVE_FAVORITE_MUSICS:
-      return { ...state, favoriteMusic: state.favoriteMusic };
+      return {
+        ...state, favoriteMusic: [...state.favoriteMusic, action.payload],
+        nbAddedFavoriteMusic: state.nbAddedFavoriteMusic + 1
+      };
+    case favoritesTypes.RESET_NB_ADDED_FAVORITE_MUSIC:
+      return { ...state, nbAddedFavoriteMusic: 0 };
+    case chatTypes.FETCH_CONVERSATIONS:
+      return { ...state, conversations: action.payload };
+    case chatTypes.FETCH_MESSAGES:
+      return { ...state, messages: action.payload };
     case spotTypes.FETCH_SPOT:
-      const uniqueSpots = action.payload.filter((spot) => {
-        return !state.spot.some((s) => s.userSpotifyId === spot.userSpotifyId && s.music.id === spot.music.id);
+      const uniqueSpots = action.payload.filter((spot: Spot) => {
+        const spotKey = `${spot.user}_${spot.music.id}`;
+        return !state.oldSpot.includes(spotKey);
       });
+
       const updatedSpotList = [...uniqueSpots, ...state.spot];
-      return { ...state, spot: updatedSpotList };
+      const updatedOldSpotList = [...state.oldSpot, ...uniqueSpots.map((spot: Spot) => `${spot.user}_${spot.music.id}`)];
+
+      return { ...state, spot: updatedSpotList, oldSpot: updatedOldSpotList };
     case spotTypes.REMOVE_SPOT:
-      return { ...state, spot: state.spot.filter((spot) => spot.userSpotifyId !== action.payload.userSpotifyId && spot.music.id !== action.payload.music.id) };
-    case discoveriesTypes.FETCH_DISCOVERIES:
-      return;
+      return { ...state, spot: state.spot.filter((spot) => spot.user !== action.payload.user && spot.music.id !== action.payload.music.id) };
     case spotifyTypes.GET_USER_CURRENT_MUSIC:
       return { ...state, userCurrentMusic: action.payload };
+    case userTypes.USER_LOGOUT:
+      return { ...state, spot: [], favoriteMusic: [], userCurrentMusic: null, nbAddedFavoriteMusic: 0, oldSpot: [] };
     default:
       return state;
   }

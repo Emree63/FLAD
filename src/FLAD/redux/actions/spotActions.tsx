@@ -1,6 +1,4 @@
-import Music from "../../Model/Music";
-import { Spot } from "../../Model/Spot";
-import { spotifyTypes } from "../types/spotifyTypes";
+import { Spot } from "../../models/Spot";
 import { spotTypes } from "../types/spotTypes";
 
 export const setSpotList = (spotList: Spot[]) => {
@@ -9,23 +7,10 @@ export const setSpotList = (spotList: Spot[]) => {
     payload: spotList,
   };
 }
+
 export const removeFromSpotList = (spot: Spot) => {
   return {
       type: spotTypes.REMOVE_SPOT,
       payload: spot
   }
-}
-
-export const addSpotListMock = (spotList: Spot[]) => {
-  return {
-    type: spotTypes.ADD_SPOT_MOCK,
-    payload: spotList,
-  };
-}
-
-export const setUserCurrentMusic = (currentMusic: Music) => {
-  return {
-    type: spotifyTypes.GET_USER_CURRENT_MUSIC,
-    payload: currentMusic,
-  };
 }
