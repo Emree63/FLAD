@@ -154,7 +154,7 @@ La composition pour le projet se voit réaliser par deux élèves de l'IUT d'Aub
 <img src="https://codefirst.iut.uca.fr/git/avatars/1ff65c9c5ab0e8c8883fb48adbcf972f?size=72" width="50" >
 </a>
 <a href = "https://codefirst.iut.uca.fr/git/david.d_almeida">
-<img src="https://codefirst.iut.uca.fr/git/avatars/0f8eaaad1e26d3de644ca522eccaea7c?size=870" width="50" >
+<img src="https://codefirst.iut.uca.fr/git/avatars/a16fa2dc52ceae18d8923c91121caa66?size=870" width="50" >
 </a>
 </div>
 
